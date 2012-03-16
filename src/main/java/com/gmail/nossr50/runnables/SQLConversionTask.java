@@ -10,7 +10,8 @@ import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.config.LoadProperties;
 
 public class SQLConversionTask implements Runnable {
-    public SQLConversionTask() {}
+    public SQLConversionTask() {
+    }
 
     @Override
     public void run() {
@@ -209,8 +210,7 @@ public class SQLConversionTask implements Runnable {
                             + m.getInt(acrobaticsXP) + ", fishing = "
                             + m.getInt(fishingXP) + " WHERE user_id = "
                             + id);
-                }
-                else {
+                } else {
                     theCount++;
 
                     //Create the user in the DB
@@ -220,9 +220,9 @@ public class SQLConversionTask implements Runnable {
                             + playerName + "',"
                             + System.currentTimeMillis() / 1000 + ")");
                     id = mcMMO.database.getInt("SELECT id FROM "
-                                    + LoadProperties.MySQLtablePrefix
-                                    + "users WHERE user = '"
-                                    + playerName + "'");
+                            + LoadProperties.MySQLtablePrefix
+                            + "users WHERE user = '"
+                            + playerName + "'");
                     mcMMO.database.write("INSERT INTO "
                             + LoadProperties.MySQLtablePrefix
                             + "skills (user_id) VALUES (" + id + ")");
@@ -276,9 +276,9 @@ public class SQLConversionTask implements Runnable {
 
             System.out.println("[mcMMO] MySQL Updated from users file, " + theCount + " items added/updated to MySQL DB");
             in.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Bukkit.getLogger().severe("Exception while reading " + location + " (Are you sure you formatted it correctly?)" + e.toString());
         }
     }
+
 }

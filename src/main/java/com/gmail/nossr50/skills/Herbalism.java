@@ -20,7 +20,6 @@ import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.runnables.GreenThumbTimer;
 
 public class Herbalism {
-
     /**
      * Activate the Green Terra ability.
      *
@@ -34,19 +33,16 @@ public class Herbalism {
 
         if (!hasSeeds) {
             player.sendMessage("You need more seeds to spread Green Terra");
-        }
-        else if (hasSeeds && !block.getType().equals(Material.WHEAT)) {
+        } else if (hasSeeds && !block.getType().equals(Material.WHEAT)) {
             inventory.removeItem(new ItemStack(Material.SEEDS));
             player.updateInventory();
 
             if (m.blockBreakSimulate(block, player, false)) {
                 if (LoadProperties.enableSmoothToMossy && type.equals(Material.SMOOTH_BRICK)) {
                     block.setData((byte) 0x1); //Set type of the brick to mossy
-                }
-                else if (LoadProperties.enableDirtToGrass && type.equals(Material.DIRT)) {
+                } else if (LoadProperties.enableDirtToGrass && type.equals(Material.DIRT)) {
                     block.setType(Material.GRASS);
-                }
-                else if (LoadProperties.enableCobbleToMossy && type.equals(Material.COBBLESTONE)) {
+                } else if (LoadProperties.enableCobbleToMossy && type.equals(Material.COBBLESTONE)) {
                     block.setType(Material.MOSSY_COBBLESTONE);
                 }
             }
@@ -61,13 +57,13 @@ public class Herbalism {
      */
     public static Boolean makeMossy(Material type) {
         switch (type) {
-        case COBBLESTONE:
-        case DIRT:
-        case SMOOTH_BRICK:
-            return true;
+            case COBBLESTONE:
+            case DIRT:
+            case SMOOTH_BRICK:
+                return true;
 
-        default:
-            return false;
+            default:
+                return false;
         }
     }
 
@@ -77,24 +73,24 @@ public class Herbalism {
      * @param type The type of Block to check
      * @return true if the block is affected, false otherwise
      */
-    public static Boolean canBeGreenTerra(Material type){
+    public static Boolean canBeGreenTerra(Material type) {
         switch (type) {
-        case BROWN_MUSHROOM:
-        case CACTUS:
-        case CROPS:
-        case JACK_O_LANTERN:
-        case MELON_BLOCK:
-        case PUMPKIN:
-        case RED_MUSHROOM:
-        case RED_ROSE:
-        case SUGAR_CANE_BLOCK:
-        case VINE:
-        case WATER_LILY:
-        case YELLOW_FLOWER:
-            return true;
+            case BROWN_MUSHROOM:
+            case CACTUS:
+            case CROPS:
+            case JACK_O_LANTERN:
+            case MELON_BLOCK:
+            case PUMPKIN:
+            case RED_MUSHROOM:
+            case RED_ROSE:
+            case SUGAR_CANE_BLOCK:
+            case VINE:
+            case WATER_LILY:
+            case YELLOW_FLOWER:
+                return true;
 
-        default:
-            return false;
+            default:
+                return false;
         }
     }
 
@@ -122,125 +118,120 @@ public class Herbalism {
         int caneDrops = 0;
 
         switch (type) {
-        case BROWN_MUSHROOM:
-        case RED_MUSHROOM:
-            if (!block.hasMetadata("mcmmoPlacedBlock")) {
-                mat = Material.getMaterial(id);
-                xp = LoadProperties.mmushroom;
-            }
-            break;
+            case BROWN_MUSHROOM:
+            case RED_MUSHROOM:
+                if (!block.hasMetadata("mcmmoPlacedBlock")) {
+                    mat = Material.getMaterial(id);
+                    xp = LoadProperties.mmushroom;
+                }
+                break;
 
-        case CACTUS:
-            for (int y = 0;  y <= 2; y++) {
-                Block b = block.getRelative(0, y, 0);
-                if (b.getType().equals(Material.CACTUS)) {
-                    mat = Material.CACTUS;
-                    if (!b.hasMetadata("mcmmoPlacedBlock")) {
-                        if(herbLevel > MAX_BONUS_LEVEL || (Math.random() * 1000 <= herbLevel)) {
-                            catciDrops++;
+            case CACTUS:
+                for (int y = 0; y <= 2; y++) {
+                    Block b = block.getRelative(0, y, 0);
+                    if (b.getType().equals(Material.CACTUS)) {
+                        mat = Material.CACTUS;
+                        if (!b.hasMetadata("mcmmoPlacedBlock")) {
+                            if (herbLevel > MAX_BONUS_LEVEL || (Math.random() * 1000 <= herbLevel)) {
+                                catciDrops++;
+                            }
+                            xp += LoadProperties.mcactus;
                         }
-                        xp += LoadProperties.mcactus;
                     }
                 }
-            }
-            break;
+                break;
 
-        case CROPS:
-            if (data == CropState.RIPE.getData()) {
-                mat = Material.WHEAT;
-                xp = LoadProperties.mwheat;
+            case CROPS:
+                if (data == CropState.RIPE.getData()) {
+                    mat = Material.WHEAT;
+                    xp = LoadProperties.mwheat;
 
-                if (LoadProperties.wheatRegrowth) {
-                    greenThumbWheat(block, player, event, plugin);
-                }
-            }
-            break;
-
-        case MELON_BLOCK:
-            if (!block.hasMetadata("mcmmoPlacedBlock")) {
-                mat = Material.MELON;
-                xp = LoadProperties.mmelon;
-            }
-            break;
-
-        case NETHER_WARTS:
-            if (data == (byte) 0x3) {
-                mat = Material.NETHER_STALK;
-                xp = LoadProperties.mnetherwart;
-            }
-            break;
-
-        case PUMPKIN:
-        case JACK_O_LANTERN:
-            if (!block.hasMetadata("mcmmoPlacedBlock")) {
-                mat = Material.getMaterial(id);
-                xp = LoadProperties.mpumpkin;
-            }
-            break;
-
-        case RED_ROSE:
-        case YELLOW_FLOWER:
-            if (!block.hasMetadata("mcmmoPlacedBlock")) {
-                mat = Material.getMaterial(id);
-                xp = LoadProperties.mflower;
-            }
-            break;
-
-        case SUGAR_CANE_BLOCK:
-            for (int y = 0;  y <= 2; y++) {
-                Block b = block.getRelative(0, y, 0);
-                if (b.getType().equals(Material.SUGAR_CANE_BLOCK)) {
-                    mat = Material.SUGAR_CANE;
-                    if (!b.hasMetadata("mcmmoPlacedBlock")) {
-                        if(herbLevel > MAX_BONUS_LEVEL || (Math.random() * 1000 <= herbLevel)) {
-                            caneDrops++;
-                        }
-                        xp += LoadProperties.msugar;
+                    if (LoadProperties.wheatRegrowth) {
+                        greenThumbWheat(block, player, event, plugin);
                     }
                 }
-            }
-            break;
+                break;
 
-        case VINE:
-            if (!block.hasMetadata("mcmmoPlacedBlock")) {
-                mat = type;
-                xp = LoadProperties.mvines;
-            }
-            break;
+            case MELON_BLOCK:
+                if (!block.hasMetadata("mcmmoPlacedBlock")) {
+                    mat = Material.MELON;
+                    xp = LoadProperties.mmelon;
+                }
+                break;
 
-        case WATER_LILY:
-            if (!block.hasMetadata("mcmmoPlacedBlock")) {
-                mat = type;
-                xp = LoadProperties.mlilypad;
-            }
-            break;
+            case NETHER_WARTS:
+                if (data == (byte) 0x3) {
+                    mat = Material.NETHER_STALK;
+                    xp = LoadProperties.mnetherwart;
+                }
+                break;
 
-        default:
-            break;
+            case PUMPKIN:
+            case JACK_O_LANTERN:
+                if (!block.hasMetadata("mcmmoPlacedBlock")) {
+                    mat = Material.getMaterial(id);
+                    xp = LoadProperties.mpumpkin;
+                }
+                break;
+
+            case RED_ROSE:
+            case YELLOW_FLOWER:
+                if (!block.hasMetadata("mcmmoPlacedBlock")) {
+                    mat = Material.getMaterial(id);
+                    xp = LoadProperties.mflower;
+                }
+                break;
+
+            case SUGAR_CANE_BLOCK:
+                for (int y = 0; y <= 2; y++) {
+                    Block b = block.getRelative(0, y, 0);
+                    if (b.getType().equals(Material.SUGAR_CANE_BLOCK)) {
+                        mat = Material.SUGAR_CANE;
+                        if (!b.hasMetadata("mcmmoPlacedBlock")) {
+                            if (herbLevel > MAX_BONUS_LEVEL || (Math.random() * 1000 <= herbLevel)) {
+                                caneDrops++;
+                            }
+                            xp += LoadProperties.msugar;
+                        }
+                    }
+                }
+                break;
+
+            case VINE:
+                if (!block.hasMetadata("mcmmoPlacedBlock")) {
+                    mat = type;
+                    xp = LoadProperties.mvines;
+                }
+                break;
+
+            case WATER_LILY:
+                if (!block.hasMetadata("mcmmoPlacedBlock")) {
+                    mat = type;
+                    xp = LoadProperties.mlilypad;
+                }
+                break;
+
+            default:
+                break;
         }
 
         if (mat == null) {
             return;
-        }
-        else {
+        } else {
             ItemStack is = new ItemStack(mat);
 
             if (herbLevel > MAX_BONUS_LEVEL || (Math.random() * 1000 <= herbLevel)) {
                 if (type.equals(Material.CACTUS)) {
                     m.mcDropItems(loc, is, catciDrops);
-                }
-                else if (type.equals(Material.MELON_BLOCK)) {
+                } else if (type.equals(Material.MELON_BLOCK)) {
                     m.mcDropItems(loc, is, 3);
                     m.mcRandomDropItems(loc, is, 50, 4);
-                }
-                else if (type.equals(Material.NETHER_WARTS)) {
+                } else if (type.equals(Material.NETHER_WARTS)) {
                     m.mcDropItems(loc, is, 2);
                     m.mcRandomDropItems(loc, is, 50, 3);
-                }
-                else if (type.equals(Material.SUGAR_CANE_BLOCK)) {
+                } else if (type.equals(Material.SUGAR_CANE_BLOCK)) {
                     m.mcDropItems(loc, is, caneDrops);
-                }
-                else {
+                } else {
                     m.mcDropItem(loc, is);
                 }
             }
@@ -298,9 +289,9 @@ public class Herbalism {
 
         if (skillLevel > MAX_BONUS_LEVEL || Math.random() * 1500 <= skillLevel) {
             greenTerra(player, block);
-        }
-        else {
+        } else {
             player.sendMessage(mcLocale.getString("mcPlayerListener.GreenThumbFail"));
         }
     }
+
 }

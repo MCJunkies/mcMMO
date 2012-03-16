@@ -17,7 +17,6 @@ import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
 
 public class Axes {
-
     /**
      * Apply bonus to damage done by axes.
      *
@@ -29,7 +28,9 @@ public class Axes {
 
         int bonus = 0;
 
-        /* Add 1 DMG for every 50 skill levels */
+        /*
+         * Add 1 DMG for every 50 skill levels
+         */
         bonus += Users.getProfile(attacker).getSkillLevel(SkillType.AXES) / 50;
 
         if (bonus > MAX_BONUS) {
@@ -72,15 +73,14 @@ public class Axes {
         int skillLevel = PPa.getSkillLevel(SkillType.AXES);
         int skillCheck = m.skillCheck(skillLevel, MAX_BONUS_LEVEL);
 
-        if (Math.random() * 2000 <= skillCheck && !entity.isDead()){
+        if (Math.random() * 2000 <= skillCheck && !entity.isDead()) {
             int damage = event.getDamage();
 
-            if (entity instanceof Player){
+            if (entity instanceof Player) {
                 event.setDamage((int) (damage * PVP_MODIFIER));
                 Player player = (Player) entity;
                 player.sendMessage(mcLocale.getString("Axes.HitCritically"));
-            }
-            else {
+            } else {
                 event.setDamage(damage * PVE_MODIFIER);
             }
             attacker.sendMessage(mcLocale.getString("Axes.CriticalHit"));
@@ -97,26 +97,27 @@ public class Axes {
     public static void impact(Player attacker, LivingEntity target, EntityDamageByEntityEvent event) {
 
         /*
-         * TODO: Finish this skill. The idea is you will greatly damage an opponents armor.
-         * When they are unarmored, you have a proc that will stun them and deal additional damage.
+         * TODO: Finish this skill. The idea is you will greatly damage an
+         * opponents armor. When they are unarmored, you have a proc that will
+         * stun them and deal additional damage.
          */
         if (target instanceof Player) {
             Player targetPlayer = (Player) target;
             short durabilityDamage = 2; //Start with 2 durability damage
 
-            /* Every 60 Skill Levels you gain 1 durability damage */
-            durabilityDamage += Users.getProfile(attacker).getSkillLevel(SkillType.AXES)/60;
+            /*
+             * Every 60 Skill Levels you gain 1 durability damage
+             */
+            durabilityDamage += Users.getProfile(attacker).getSkillLevel(SkillType.AXES) / 60;
 
             if (!hasArmor(targetPlayer)) {
                 applyImpact(attacker, target, event);
-            }
-            else {
+            } else {
                 for (ItemStack armor : targetPlayer.getInventory().getArmorContents()) {
                     armor.setDurability((short) (armor.getDurability() + durabilityDamage)); //Damage armor piece
                 }
             }
-        }
-        else {
+        } else {
             applyImpact(attacker, target, event); //Since mobs are technically unarmored, this will always trigger
         }
     }
@@ -150,9 +151,9 @@ public class Axes {
 
         if (inventory.getBoots() != null || inventory.getChestplate() != null || inventory.getHelmet() != null || inventory.getLeggings() != null) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
+
 }

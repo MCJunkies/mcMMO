@@ -12,7 +12,9 @@ public class Users {
     private static volatile Users instance;
 
     String location = "plugins/mcMMO/FlatFileStuff/mcmmo.users";
+
     String directory = "plugins/mcMMO/FlatFileStuff/";
+
     String directoryb = "plugins/mcMMO/FlatFileStuff/Leaderboards/";
 
     public static HashMap<Player, PlayerProfile> players = new HashMap<Player, PlayerProfile>();
@@ -29,8 +31,7 @@ public class Users {
             try {
                 FileWriter writer = new FileWriter(theDir);
                 writer.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -57,7 +58,8 @@ public class Users {
     /**
      * Get all PlayerProfiles.
      *
-     * @return a HashMap containing the PlayerProfile of everyone in the database
+     * @return a HashMap containing the PlayerProfile of everyone in the
+     * database
      */
     public static HashMap<Player, PlayerProfile> getProfiles() {
         return players;
@@ -103,10 +105,9 @@ public class Users {
      * @return the player's profile
      */
     public static PlayerProfile getProfile(Player player) {
-        if(players.get(player) != null) {
+        if (players.get(player) != null) {
             return players.get(player);
-        }
-        else {
+        } else {
             players.put(player, new PlayerProfile(player.getName()));
             return players.get(player);
         }
@@ -133,4 +134,5 @@ public class Users {
         }
         return instance;
     }
+
 }

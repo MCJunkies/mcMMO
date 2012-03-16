@@ -15,7 +15,6 @@ import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
 
 public class Archery {
-
     /**
      * Track arrows fired for later retrieval.
      *
@@ -57,7 +56,9 @@ public class Archery {
         if (Math.random() * 100 <= IGNITION_CHANCE) {
             int ignition = 20;
 
-            /* Add 20 ticks for every 200 skill levels */
+            /*
+             * Add 20 ticks for every 200 skill levels
+             */
             ignition += (PPa.getSkillLevel(SkillType.ARCHERY) / 200) * 20;
 
             if (ignition > MAX_IGNITION_TICKS) {
@@ -72,8 +73,7 @@ public class Archery {
                     attacker.sendMessage(mcLocale.getString("Combat.Ignition"));
                     defender.sendMessage(mcLocale.getString("Combat.BurningArrowHit"));
                 }
-            }
-            else {
+            } else {
                 entity.setFireTicks(entity.getFireTicks() + ignition);
                 attacker.sendMessage(mcLocale.getString("Combat.Ignition"));
             }
@@ -95,8 +95,7 @@ public class Archery {
 
         if (Math.random() * 10 > 5) {
             loc.setPitch(90);
-        }
-        else {
+        } else {
             loc.setPitch(-90);
         }
 
@@ -120,4 +119,5 @@ public class Archery {
 
         plugin.misc.arrowTracker.remove(entity);
     }
+
 }

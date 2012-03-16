@@ -23,7 +23,6 @@ import com.gmail.nossr50.datatypes.treasure.ExcavationTreasure;
 import org.getspout.spoutapi.sound.SoundEffect;
 
 public class Excavation {
-
     /**
      * Check to see if a block can be broken by Giga Drill Breaker.
      *
@@ -32,16 +31,16 @@ public class Excavation {
      */
     public static boolean canBeGigaDrillBroken(Material type) {
         switch (type) {
-        case CLAY:
-        case DIRT:
-        case GRASS:
-        case GRAVEL:
-        case MYCEL:
-        case SAND:
-        case SOUL_SAND:
-            return true;
-        default:
-            return false;
+            case CLAY:
+            case DIRT:
+            case GRASS:
+            case GRAVEL:
+            case MYCEL:
+            case SAND:
+            case SOUL_SAND:
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -60,40 +59,40 @@ public class Excavation {
         ArrayList<ItemStack> is = new ArrayList<ItemStack>();
 
         List<ExcavationTreasure> treasures = new ArrayList<ExcavationTreasure>();
-        
+
         int xp = LoadProperties.mbase;
 
         switch (type) {
-        case DIRT:
-            treasures = LoadTreasures.excavationFromDirt;
-            break;
+            case DIRT:
+                treasures = LoadTreasures.excavationFromDirt;
+                break;
 
-        case GRASS:
-            treasures = LoadTreasures.excavationFromGrass;
-            break;
+            case GRASS:
+                treasures = LoadTreasures.excavationFromGrass;
+                break;
 
-        case SAND:
-            treasures = LoadTreasures.excavationFromSand;
-            break;
+            case SAND:
+                treasures = LoadTreasures.excavationFromSand;
+                break;
 
-        case GRAVEL:
-            treasures = LoadTreasures.excavationFromGravel;
-            break;
+            case GRAVEL:
+                treasures = LoadTreasures.excavationFromGravel;
+                break;
 
-        case CLAY:
-            treasures = LoadTreasures.excavationFromClay;
-            break;
+            case CLAY:
+                treasures = LoadTreasures.excavationFromClay;
+                break;
 
-        case MYCEL:
-            treasures = LoadTreasures.excavationFromMycel;
-            break;
+            case MYCEL:
+                treasures = LoadTreasures.excavationFromMycel;
+                break;
 
-        case SOUL_SAND:
-            treasures = LoadTreasures.excavationFromSoulSand;
-            break;
+            case SOUL_SAND:
+                treasures = LoadTreasures.excavationFromSoulSand;
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
 
         for (ExcavationTreasure treasure : treasures) {
@@ -138,4 +137,5 @@ public class Excavation {
             SpoutStuff.playSoundForPlayer(SoundEffect.POP, player, block.getLocation());
         }
     }
+
 }

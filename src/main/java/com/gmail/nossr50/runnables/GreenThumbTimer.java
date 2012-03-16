@@ -9,6 +9,7 @@ import com.gmail.nossr50.datatypes.SkillType;
 
 public class GreenThumbTimer implements Runnable {
     private Block block;
+
     private PlayerProfile PP;
 
     public GreenThumbTimer(Block block, PlayerProfile PP) {
@@ -24,19 +25,16 @@ public class GreenThumbTimer implements Runnable {
         if (!PP.getGreenTerraMode()) {
             if (PP.getSkillLevel(SkillType.HERBALISM) >= 600) {
                 block.setData(CropState.MEDIUM.getData());
-            }
-            else if (PP.getSkillLevel(SkillType.HERBALISM) >= 400) {
+            } else if (PP.getSkillLevel(SkillType.HERBALISM) >= 400) {
                 block.setData(CropState.SMALL.getData());
-            }
-            else if (PP.getSkillLevel(SkillType.HERBALISM) >= 200) {
+            } else if (PP.getSkillLevel(SkillType.HERBALISM) >= 200) {
                 block.setData(CropState.VERY_SMALL.getData());
-            }
-            else {
+            } else {
                 block.setData(CropState.GERMINATED.getData());
             }
-        }
-        else {
+        } else {
             block.setData(CropState.MEDIUM.getData());
         }
     }
+
 }

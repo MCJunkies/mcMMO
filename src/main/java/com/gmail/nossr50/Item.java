@@ -11,7 +11,6 @@ import com.gmail.nossr50.config.LoadProperties;
 import com.gmail.nossr50.datatypes.PlayerProfile;
 
 public class Item {
-
     /**
      * Check for item usage.
      *
@@ -45,19 +44,17 @@ public class Item {
 
                 if (player.getBedSpawnLocation() != null && player.getBedSpawnLocation().getBlock().getType().equals(Material.BED_BLOCK)) {
                     player.teleport(player.getBedSpawnLocation());
-                }
-                else {
+                } else {
                     player.teleport(player.getWorld().getSpawnLocation());
                 }
 
                 player.sendMessage(mcLocale.getString("Item.ChimaeraWingPass"));
-            }
-            else if (!Skills.cooldownOver(PP.getRecentlyHurt(), 60) && is.getAmount() >= LoadProperties.feathersConsumedByChimaeraWing) {
-                player.sendMessage(mcLocale.getString("Item.InjuredWait", new Object[] {Skills.calculateTimeLeft(PP.getRecentlyHurt(), 60)}));
-            }
-            else if (is.getAmount() <= LoadProperties.feathersConsumedByChimaeraWing) {
+            } else if (!Skills.cooldownOver(PP.getRecentlyHurt(), 60) && is.getAmount() >= LoadProperties.feathersConsumedByChimaeraWing) {
+                player.sendMessage(mcLocale.getString("Item.InjuredWait", new Object[]{Skills.calculateTimeLeft(PP.getRecentlyHurt(), 60)}));
+            } else if (is.getAmount() <= LoadProperties.feathersConsumedByChimaeraWing) {
                 player.sendMessage(mcLocale.getString("Item.NeedFeathers"));
             }
         }
     }
+
 }

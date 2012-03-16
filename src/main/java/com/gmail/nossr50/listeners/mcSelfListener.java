@@ -6,10 +6,10 @@ import org.bukkit.event.Listener;
 import com.gmail.nossr50.events.McMMOPlayerXpGainEvent;
 
 /**
- * Listener for listening to our own events, only really useful for catching errors
+ * Listener for listening to our own events, only really useful for catching
+ * errors
  */
 public class mcSelfListener implements Listener {
-
     /**
      * Monitor internal XP gain events.
      *
@@ -19,14 +19,14 @@ public class mcSelfListener implements Listener {
     public void onPlayerXpGain(McMMOPlayerXpGainEvent event) {
         int xp = event.getXpGained();
 
-        if(xp < 0) {
+        if (xp < 0) {
             try {
                 throw new Exception("Gained negative XP!");
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
                 e.printStackTrace();
             }
         }
     }
+
 }

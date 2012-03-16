@@ -13,27 +13,28 @@ import com.gmail.nossr50.mcPermissions;
 import com.gmail.nossr50.locale.mcLocale;
 
 public class MmoupdateCommand implements CommandExecutor {
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage("This command does not support console useage.");
-			return true;
-		}
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("This command does not support console useage.");
+            return true;
+        }
 
-		Player player = (Player) sender;
+        Player player = (Player) sender;
 
-		if (!mcPermissions.getInstance().admin(player)) {
-			player.sendMessage(ChatColor.YELLOW + "[mcMMO] " + ChatColor.DARK_RED + mcLocale.getString("mcPlayerListener.NoPermission"));
-			return true;
-		}
-		player.sendMessage(ChatColor.GRAY + "Starting conversion...");
-		Users.clearUsers();
-		m.convertToMySQL();
-		for (Player x : Bukkit.getServer().getOnlinePlayers()) {
-			Users.addUser(x);
-		}
-		player.sendMessage(ChatColor.GREEN + "Conversion finished!");
+        if (!mcPermissions.getInstance().admin(player)) {
+            player.sendMessage(ChatColor.YELLOW + "[mcMMO] " + ChatColor.DARK_RED + mcLocale.getString("mcPlayerListener.NoPermission"));
+            return true;
+        }
+        player.sendMessage(ChatColor.GRAY + "Starting conversion...");
+        Users.clearUsers();
+        m.convertToMySQL();
+        for (Player x : Bukkit.getServer().getOnlinePlayers()) {
+            Users.addUser(x);
+        }
+        player.sendMessage(ChatColor.GREEN + "Conversion finished!");
 
-		return true;
-	}
+        return true;
+    }
+
 }

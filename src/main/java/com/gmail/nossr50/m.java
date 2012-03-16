@@ -17,7 +17,6 @@ import com.gmail.nossr50.events.McMMOItemSpawnEvent;
 import com.gmail.nossr50.runnables.SQLConversionTask;
 
 public class m {
-
     /**
      * Gets a capitalized version of the target string.
      *
@@ -25,7 +24,7 @@ public class m {
      * @return the capitalized string
      */
     public static String getCapitalized(String target) {
-        String firstLetter = target.substring(0,1);
+        String firstLetter = target.substring(0, 1);
         String remainder = target.substring(1);
         String capitalized = firstLetter.toUpperCase() + remainder.toLowerCase();
 
@@ -41,8 +40,7 @@ public class m {
     public static int getInt(String string) {
         if (isInt(string)) {
             return Integer.parseInt(string);
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -57,13 +55,12 @@ public class m {
     public static boolean isInvincible(LivingEntity le, EntityDamageEvent event) {
 
         /*
-         * So apparently if you do more damage to a LivingEntity than its last damage int you bypass the invincibility.
-         * So yeah, this is for that.
+         * So apparently if you do more damage to a LivingEntity than its last
+         * damage int you bypass the invincibility. So yeah, this is for that.
          */
         if (le.getNoDamageTicks() > le.getMaximumNoDamageTicks() / 2.0F && event.getDamage() <= le.getLastDamage()) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -92,7 +89,8 @@ public class m {
      *
      * @param block The block to break
      * @param player The player breaking the block
-     * @param shouldArmSwing true if an armswing event should be fired, false otherwise
+     * @param shouldArmSwing true if an armswing event should be fired, false
+     * otherwise
      * @return true if the event wasn't cancelled, false otherwise
      */
     public static boolean blockBreakSimulate(Block block, Player player, Boolean shouldArmSwing) {
@@ -108,8 +106,7 @@ public class m {
 
         if (!event.isCancelled()) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -125,18 +122,15 @@ public class m {
 
         if (ItemChecks.isWoodTool(inHand)) {
             tier = 1;
-        }
-        else if (ItemChecks.isStoneTool(inHand)) {
+        } else if (ItemChecks.isStoneTool(inHand)) {
             tier = 2;
-        }
-        else if (ItemChecks.isIronTool(inHand)) {
+        } else if (ItemChecks.isIronTool(inHand)) {
             tier = 3;
-        }
-        else if(ItemChecks.isGoldTool(inHand)) {
+        } else if (ItemChecks.isGoldTool(inHand)) {
             tier = 1;
-        }
-        else if(ItemChecks.isDiamondTool(inHand))
+        } else if (ItemChecks.isDiamondTool(inHand)) {
             tier = 4;
+        }
 
         return tier;
     }
@@ -147,7 +141,10 @@ public class m {
      * @param first The first location
      * @param second The second location
      * @param maxDistance The max distance apart
-     * @return true if the distance between <code>first</code> and <code>second</code> is less than <code>maxDistance</code>, false otherwise
+     * @return true if the distance between
+     * <code>first</code> and
+     * <code>second</code> is less than
+     * <code>maxDistance</code>, false otherwise
      */
     public static boolean isNear(Location first, Location second, int maxDistance) {
         double relX = first.getX() - second.getX();
@@ -157,8 +154,7 @@ public class m {
 
         if (dist < maxDistance * maxDistance) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -173,8 +169,7 @@ public class m {
         try {
             Integer.parseInt(string);
             return true;
-        }
-        catch (NumberFormatException nFE) {
+        } catch (NumberFormatException nFE) {
             return false;
         }
     }
@@ -214,7 +209,7 @@ public class m {
      * @param quantity The amount of items to drop
      */
     public static void mcRandomDropItems(Location location, ItemStack is, int chance, int quantity) {
-        for(int i = 0; i < quantity; i++) {
+        for (int i = 0; i < quantity; i++) {
             mcRandomDropItem(location, is, chance);
         }
     }
@@ -233,8 +228,7 @@ public class m {
 
         if (event.isCancelled()) {
             return;
-        }
-        else {
+        } else {
             location.getWorld().dropItemNaturally(location, itemStack);
         }
     }
@@ -253,9 +247,9 @@ public class m {
     public static int skillCheck(int skillLevel, int maxLevel) {
         if (skillLevel > maxLevel) {
             return maxLevel;
-        }
-        else {
+        } else {
             return skillLevel;
         }
     }
+
 }

@@ -22,7 +22,6 @@ import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
 
 public class Swords {
-
     /**
      * Check for Bleed effect.
      *
@@ -61,14 +60,12 @@ public class Swords {
 
                 if (skillLevel >= 750) {
                     bleedTicks = 3;
-                }
-                else {
+                } else {
                     bleedTicks = 2;
                 }
 
                 Users.getProfile(target).addBleedTicks(bleedTicks);
-            }
-            else {
+            } else {
                 plugin.misc.addToBleedQue(entity);
             }
             attacker.sendMessage(mcLocale.getString("Swords.EnemyBleeding"));
@@ -112,109 +109,100 @@ public class Swords {
         }
     }
 
+    public static void slowEffect(EntityDamageByEntityEvent event) {
+        // Don't want to slow stuff that's not alive?
+        if (!(event.getDamager() instanceof LivingEntity)) {
+            return;
+        }
+
+        if (event instanceof EntityDamageByEntityEvent) {
+            Entity f = ((EntityDamageByEntityEvent) event).getDamager();
+            if (event.getEntity() instanceof Player) {
+                Player defender = (Player) event.getEntity();
+                Player attacker = (Player) event.getDamager();
+                PlayerProfile PPd = Users.getProfile(attacker);
+
+                if (ItemChecks.isSword(attacker.getItemInHand()) && mcPermissions.getInstance().swords(attacker)) {
+                    if (Math.random() * 2000 <= PPd.getSkillLevel(SkillType.SWORDS)) {
+                        // Check to make sure player and don't re-apply slow if already on.
+                        if (!defender.hasPotionEffect(PotionEffectType.SLOW)) {
+                            defender.sendMessage(mcLocale.getString("Swords.SlowEffect"));
+                            defender.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 0));
+                        }
+                        if (f instanceof Player && !defender.hasPotionEffect(PotionEffectType.SLOW)) {
+                            ((Player) f).sendMessage(mcLocale.getString("Swords.HitSlowEffect"));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Simulate a bleed.
      *
      * @param plugin mcMMO plugin instance
      */
     public static void bleedSimulate(mcMMO plugin) {
+        //Add items from Que list to BleedTrack list
 
-        /* Add items from Que list to BleedTrack list */
-        for (LivingEntity entity : plugin.misc.bleedQue) {
-            plugin.misc.bleedTracker.add(entity);
-    
-    public static void slowEffect(EntityDamageByEntityEvent event)
-    {   	
-    	// Don't want to slow stuff that's not alive?
-    	if(!(event.getDamager() instanceof LivingEntity))
-    		return;
-
-	    if(event instanceof EntityDamageByEntityEvent)
-	    {
-	    	Entity f = ((EntityDamageByEntityEvent) event).getDamager();
-		   	if(event.getEntity() instanceof Player)
-		   	{
-		   		Player defender = (Player)event.getEntity();
-		   		Player attacker = (Player)event.getDamager();
-		   		PlayerProfile PPd = Users.getProfile(attacker);
-		    	
-		   		if(ItemChecks.isSword(attacker.getItemInHand()) && mcPermissions.getInstance().swords(attacker))
-		   		{
-		    		if (Math.random() * 2000 <= PPd.getSkillLevel(SkillType.SWORDS))
-		    		{
-		    			// Check to make sure player and don't re-apply slow if already on.
-		    			if (!defender.hasPotionEffect(PotionEffectType.SLOW)){
-			    			defender.sendMessage(mcLocale.getString("Swords.SlowEffect"));
-		    				defender.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 0));
-		    			}
-		    			if(f instanceof Player && !defender.hasPotionEffect(PotionEffectType.SLOW))
-		    				((Player) f).sendMessage(mcLocale.getString("Swords.HitSlowEffect"));
-		    		}
-		    		}
-		   		}
-		   	}
-    	
-    }
-    
-    public static void bleedSimulate(mcMMO plugin)
-    {
-    	//Add items from Que list to BleedTrack list
-    	
-    	for(LivingEntity x : plugin.misc.bleedQue)
-    	{
-    		plugin.misc.bleedTracker.add(x);
-    	}
-    	
-    	//Clear list
-    	plugin.misc.bleedQue = new LivingEntity[plugin.misc.bleedQue.length];
-    	plugin.misc.bleedQuePos = 0;
-    	
-    	//Cleanup any dead entities from the list
-    	for(LivingEntity x : plugin.misc.bleedRemovalQue)
-    	{
-    		plugin.misc.bleedTracker.remove(x);
-    	}
-    	
-    	//Clear bleed removal list
-    	plugin.misc.bleedRemovalQue = new LivingEntity[plugin.misc.bleedRemovalQue.length];
-    	plugin.misc.bleedRemovalQuePos = 0;
-    	
-    	//Bleed monsters/animals
-        for(LivingEntity x : plugin.misc.bleedTracker)
-        {
-        	if(x == null || x.isDead())
-        	{
-        		plugin.misc.addToBleedRemovalQue(x);
-        		continue;
-        	}
-        	else
-        	{
-				Combat.dealDamage(x, 2);
-        	}
+        for (LivingEntity x : plugin.misc.bleedQue) {
+            plugin.misc.bleedTracker.add(x);
         }
 
-        /* Clear the BleedQue list */
+        //Clear list
         plugin.misc.bleedQue = new LivingEntity[plugin.misc.bleedQue.length];
         plugin.misc.bleedQuePos = 0;
 
-        /* Cleanup any dead entities from the list */
-        for(LivingEntity entity : plugin.misc.bleedRemovalQue) {
-            plugin.misc.bleedTracker.remove(entity);
+        //Cleanup any dead entities from the list
+        for (LivingEntity x : plugin.misc.bleedRemovalQue) {
+            plugin.misc.bleedTracker.remove(x);
         }
 
-        /* Clear bleed removal list */
+        //Clear bleed removal list
         plugin.misc.bleedRemovalQue = new LivingEntity[plugin.misc.bleedRemovalQue.length];
         plugin.misc.bleedRemovalQuePos = 0;
 
-        /* Bleed monsters/animals */
+        //Bleed monsters/animals
+        for (LivingEntity x : plugin.misc.bleedTracker) {
+            if (x == null || x.isDead()) {
+                plugin.misc.addToBleedRemovalQue(x);
+                continue;
+            } else {
+                Combat.dealDamage(x, 2);
+            }
+        }
+
+        /*
+         * Clear the BleedQue list
+         */
+        plugin.misc.bleedQue = new LivingEntity[plugin.misc.bleedQue.length];
+        plugin.misc.bleedQuePos = 0;
+
+        /*
+         * Cleanup any dead entities from the list
+         */
+        for (LivingEntity entity : plugin.misc.bleedRemovalQue) {
+            plugin.misc.bleedTracker.remove(entity);
+        }
+
+        /*
+         * Clear bleed removal list
+         */
+        plugin.misc.bleedRemovalQue = new LivingEntity[plugin.misc.bleedRemovalQue.length];
+        plugin.misc.bleedRemovalQuePos = 0;
+
+        /*
+         * Bleed monsters/animals
+         */
         for (LivingEntity entity : plugin.misc.bleedTracker) {
             if (entity == null || entity.isDead()) {
                 plugin.misc.addToBleedRemovalQue(entity);
                 continue;
-            }
-            else {
+            } else {
                 Combat.dealDamage(entity, 2);
             }
         }
     }
+
 }

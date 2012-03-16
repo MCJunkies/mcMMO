@@ -21,7 +21,6 @@ import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.locale.mcLocale;
 
 public class Taming {
-
     /**
      * Apply the Fast Food Service ability.
      *
@@ -29,7 +28,7 @@ public class Taming {
      * @param theWolf The wolf using the ability
      * @param event The event to modify
      */
-    public static void fastFoodService (PlayerProfile PPo, Wolf theWolf, EntityDamageEvent event) {
+    public static void fastFoodService(PlayerProfile PPo, Wolf theWolf, EntityDamageEvent event) {
         final int SKILL_ACTIVATION_LEVEL = 50;
         final int ACTIVATION_CHANCE = 50;
 
@@ -42,8 +41,7 @@ public class Taming {
                 if (Math.random() * 100 < ACTIVATION_CHANCE) {
                     if (health + damage <= maxHealth) {
                         theWolf.setHealth(health + damage);
-                    }
-                    else {
+                    } else {
                         theWolf.setHealth(maxHealth);
                     }
                 }
@@ -86,9 +84,8 @@ public class Taming {
 
                 target.sendMessage(mcLocale.getString("Combat.StruckByGore"));
                 Users.getProfile(target).setBleedTicks(2);
-            }
-            else {
-                plugin.misc.addToBleedQue((LivingEntity)entity);
+            } else {
+                plugin.misc.addToBleedQue((LivingEntity) entity);
             }
 
             master.sendMessage(mcLocale.getString("Combat.Gore"));
@@ -99,7 +96,8 @@ public class Taming {
      * Get the name of a wolf's owner.
      *
      * @param theWolf The wolf whose owner's name to get
-     * @return the name of the wolf's owner, or "Offline Master" if the owner is offline
+     * @return the name of the wolf's owner, or "Offline Master" if the owner is
+     * offline
      */
     public static String getOwnerName(Wolf theWolf) {
         AnimalTamer tamer = theWolf.getOwner();
@@ -107,8 +105,7 @@ public class Taming {
         if (tamer instanceof Player) {
             Player owner = (Player) tamer;
             return owner.getName();
-        }
-        else {
+        } else {
             return "Offline Master";
         }
     }
@@ -133,50 +130,56 @@ public class Taming {
 
         switch (cause) {
 
-        /* Environmentally Aware */
-        case CONTACT:
-        case LAVA:
-        case FIRE:
-            if (skillLevel >= ENVIRONMENTALLY_AWARE_LEVEL) {
-                if (event.getDamage() >= wolf.getHealth()) {
-                    return;
+            /*
+             * Environmentally Aware
+             */
+            case CONTACT:
+            case LAVA:
+            case FIRE:
+                if (skillLevel >= ENVIRONMENTALLY_AWARE_LEVEL) {
+                    if (event.getDamage() >= wolf.getHealth()) {
+                        return;
+                    }
+
+                    wolf.teleport(master.getLocation());
+                    master.sendMessage(mcLocale.getString("mcEntityListener.WolfComesBack"));
                 }
+                break;
 
-                wolf.teleport(master.getLocation());
-                master.sendMessage(mcLocale.getString("mcEntityListener.WolfComesBack"));
-            }
-            break;
+            case FALL:
+                if (skillLevel >= ENVIRONMENTALLY_AWARE_LEVEL) {
+                    event.setCancelled(true);
+                }
+                break;
 
-        case FALL:
-            if (skillLevel >= ENVIRONMENTALLY_AWARE_LEVEL) {
-                event.setCancelled(true);
-            }
-            break;
+            /*
+             * Thick Fur
+             */
+            case FIRE_TICK:
+                if (skillLevel >= THICK_FUR_LEVEL) {
+                    wolf.setFireTicks(0);
+                }
+                break;
 
-        /* Thick Fur */
-        case FIRE_TICK:
-            if(skillLevel >= THICK_FUR_LEVEL) {
-                wolf.setFireTicks(0);
-            }
-            break;
+            case ENTITY_ATTACK:
+            case PROJECTILE:
+                if (skillLevel >= THICK_FUR_LEVEL) {
+                    event.setDamage(event.getDamage() / THICK_FUR_MODIFIER);
+                }
+                break;
 
-        case ENTITY_ATTACK:
-        case PROJECTILE:
-            if (skillLevel >= THICK_FUR_LEVEL) {
-                event.setDamage(event.getDamage() / THICK_FUR_MODIFIER);
-            }
-            break;
+            /*
+             * Shock Proof
+             */
+            case ENTITY_EXPLOSION:
+            case BLOCK_EXPLOSION:
+                if (skillLevel >= SHOCK_PROOF_LEVEL) {
+                    event.setDamage(event.getDamage() / SHOCK_PROOF_MODIFIER);
+                }
+                break;
 
-        /* Shock Proof */
-        case ENTITY_EXPLOSION:
-        case BLOCK_EXPLOSION:
-            if (skillLevel >= SHOCK_PROOF_LEVEL) {
-                event.setDamage(event.getDamage() / SHOCK_PROOF_MODIFIER);
-            }
-            break;
-
-        default:
-            break;
+            default:
+                break;
         }
     }
 
@@ -192,18 +195,18 @@ public class Taming {
         int summonAmount = 0;
 
         switch (type) {
-        case WOLF:
-            summonItem = Material.BONE;
-            summonAmount = LoadProperties.bonesConsumedByCOTW;
-            break;
+            case WOLF:
+                summonItem = Material.BONE;
+                summonAmount = LoadProperties.bonesConsumedByCOTW;
+                break;
 
-        case OCELOT:
-            summonItem = Material.RAW_FISH;
-            summonAmount = LoadProperties.fishConsumedByCOTW;
-            break;
+            case OCELOT:
+                summonItem = Material.RAW_FISH;
+                summonAmount = LoadProperties.fishConsumedByCOTW;
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
 
         if (item.getType().equals(summonItem) && item.getAmount() >= summonAmount) {
@@ -221,4 +224,5 @@ public class Taming {
             player.sendMessage(mcLocale.getString("m.TamingSummon"));
         }
     }
+
 }

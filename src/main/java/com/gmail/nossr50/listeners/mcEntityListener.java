@@ -65,15 +65,17 @@ public class mcEntityListener implements Listener {
                 return;
             }
 
-            if (Party.getInstance().inSameParty((Player)defender, (Player)attacker)) {
+            if (Party.getInstance().inSameParty((Player) defender, (Player) attacker)) {
                 event.setCancelled(true);
                 return;
             }
         }
 
-        /* Check for invincibility */
+        /*
+         * Check for invincibility
+         */
         if (defender instanceof LivingEntity) {
-            LivingEntity livingDefender = (LivingEntity)defender;
+            LivingEntity livingDefender = (LivingEntity) defender;
 
             if (!m.isInvincible(livingDefender, event)) {
                 Combat.combatChecks(event, plugin);
@@ -95,43 +97,44 @@ public class mcEntityListener implements Listener {
         Entity entity = event.getEntity();
         EntityType type = entity.getType();
         DamageCause cause = event.getCause();
-        
-        switch(type) {
-        case PLAYER:
 
-            /* Check for invincibility */
-            Player player = (Player) entity;
-            PlayerProfile PP = Users.getProfile(player);
+        switch (type) {
+            case PLAYER:
 
-            if (PP.getGodMode()) {
-                event.setCancelled(true);
-                return;
-            }
+                /*
+                 * Check for invincibility
+                 */
+                Player player = (Player) entity;
+                PlayerProfile PP = Users.getProfile(player);
 
-            if (!m.isInvincible(player, event)) {
-                if (cause == DamageCause.FALL && mcPermissions.getInstance().acrobatics(player)) {
-                    Acrobatics.acrobaticsCheck(player, event);
-                }
-                else if (cause == DamageCause.BLOCK_EXPLOSION && mcPermissions.getInstance().blastMining(player)) {
-                    BlastMining.demolitionsExpertise(player, event);
+                if (PP.getGodMode()) {
+                    event.setCancelled(true);
+                    return;
                 }
 
-                if (event.getDamage() >= 1) {
-                    PP.setRecentlyHurt(System.currentTimeMillis());
+                if (!m.isInvincible(player, event)) {
+                    if (cause == DamageCause.FALL && mcPermissions.getInstance().acrobatics(player)) {
+                        Acrobatics.acrobaticsCheck(player, event);
+                    } else if (cause == DamageCause.BLOCK_EXPLOSION && mcPermissions.getInstance().blastMining(player)) {
+                        BlastMining.demolitionsExpertise(player, event);
+                    }
+
+                    if (event.getDamage() >= 1) {
+                        PP.setRecentlyHurt(System.currentTimeMillis());
+                    }
                 }
-            }
-            break;
+                break;
 
-        case WOLF:
-            Wolf wolf = (Wolf) entity;
+            case WOLF:
+                Wolf wolf = (Wolf) entity;
 
-            if ((!m.isInvincible(wolf, event)) && wolf.isTamed() && (wolf.getOwner() instanceof Player)) {
-                Taming.preventDamage(event);
-            }
-            break;
+                if ((!m.isInvincible(wolf, event)) && wolf.isTamed() && (wolf.getOwner() instanceof Player)) {
+                    Taming.preventDamage(event);
+                }
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
 
@@ -140,20 +143,22 @@ public class mcEntityListener implements Listener {
      *
      * @param event The event to monitor
      */
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDeath(EntityDeathEvent event) {
         LivingEntity x = event.getEntity();
         x.setFireTicks(0);
 
-        /* Remove bleed track */
-        if(plugin.misc.bleedTracker.contains(x)) {
+        /*
+         * Remove bleed track
+         */
+        if (plugin.misc.bleedTracker.contains(x)) {
             plugin.misc.addToBleedRemovalQue(x);
         }
 
         Archery.arrowRetrievalCheck(x, plugin);
 
         if (x instanceof Player) {
-            Users.getProfile((Player)x).setBleedTicks(0);
+            Users.getProfile((Player) x).setBleedTicks(0);
         }
     }
 
@@ -162,7 +167,7 @@ public class mcEntityListener implements Listener {
      *
      * @param event The event to monitor
      */
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         if (event.getSpawnReason().equals(SpawnReason.SPAWNER) && !LoadProperties.xpGainsMobSpawners) {
             event.getEntity().setMetadata("mcmmoFromMobSpawner", new FixedMetadataValue(plugin, true));
@@ -174,7 +179,7 @@ public class mcEntityListener implements Listener {
      *
      * @param event The event to monitor
      */
-    @EventHandler (priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOW)
     public void onExplosionPrime(ExplosionPrimeEvent event) {
         Entity entity = event.getEntity();
 
@@ -193,7 +198,7 @@ public class mcEntityListener implements Listener {
      *
      * @param event The event to monitor
      */
-    @EventHandler (priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOW)
     public void onEnitityExplode(EntityExplodeEvent event) {
         Entity entity = event.getEntity();
 
@@ -213,7 +218,7 @@ public class mcEntityListener implements Listener {
      *
      * @param event The event to monitor
      */
-    @EventHandler (priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOW)
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
         if (LoadProperties.herbalismHungerBonus) {
             if (event.getEntity() instanceof Player) {
@@ -222,10 +227,11 @@ public class mcEntityListener implements Listener {
                 int currentFoodLevel = player.getFoodLevel();
                 int newFoodLevel = event.getFoodLevel();
 
-                /* Some foods have 3 ranks
-                 * Some foods have 5 ranks
-                 * The number of ranks is based on how 'common' the item is
-                 * We can adjust this quite easily if we find something is giving too much of a bonus
+                /*
+                 * Some foods have 3 ranks Some foods have 5 ranks The number of
+                 * ranks is based on how 'common' the item is We can adjust this
+                 * quite easily if we find something is giving too much of a
+                 * bonus
                  */
 
                 if (newFoodLevel > currentFoodLevel) {
@@ -235,28 +241,40 @@ public class mcEntityListener implements Listener {
                     int rankChange = 0;
 
                     switch (food) {
-                    case BREAD:
-                        /* BREAD RESTORES 2 1/2 HUNGER - RESTORES 5 HUNGER @ 1000 */
-                        rankChange = 200;
-                        break;
+                        case BREAD:
+                            /*
+                             * BREAD RESTORES 2 1/2 HUNGER - RESTORES 5 HUNGER @
+                             * 1000
+                             */
+                            rankChange = 200;
+                            break;
 
-                    case COOKIE:
-                        /* COOKIE RESTORES 1/2 HUNGER - RESTORES 2 HUNGER @ 1000 */
-                        rankChange = 400;
-                        break;
+                        case COOKIE:
+                            /*
+                             * COOKIE RESTORES 1/2 HUNGER - RESTORES 2 HUNGER @
+                             * 1000
+                             */
+                            rankChange = 400;
+                            break;
 
-                    case MELON:
-                        /* MELON RESTORES  1 HUNGER - RESTORES 2 1/2 HUNGER @ 1000 */
-                        rankChange = 400;
-                        break;
+                        case MELON:
+                            /*
+                             * MELON RESTORES 1 HUNGER - RESTORES 2 1/2 HUNGER @
+                             * 1000
+                             */
+                            rankChange = 400;
+                            break;
 
-                    case MUSHROOM_SOUP:
-                        /* MUSHROOM SOUP RESTORES 4 HUNGER - RESTORES 6 1/2 HUNGER @ 1000 */
-                        rankChange = 200;
-                        break;
+                        case MUSHROOM_SOUP:
+                            /*
+                             * MUSHROOM SOUP RESTORES 4 HUNGER - RESTORES 6 1/2
+                             * HUNGER @ 1000
+                             */
+                            rankChange = 200;
+                            break;
 
-                    default:
-                        return;
+                        default:
+                            return;
                     }
 
                     for (int i = 200; i <= 1000; i += rankChange) {
@@ -265,12 +283,13 @@ public class mcEntityListener implements Listener {
                         }
                     }
 
-                    /* Make sure we don't go over the max value */
+                    /*
+                     * Make sure we don't go over the max value
+                     */
                     newFoodLevel = currentFoodLevel + foodChange;
                     if (newFoodLevel > 20) {
                         event.setFoodLevel(20);
-                    }
-                    else {
+                    } else {
                         event.setFoodLevel(newFoodLevel);
                     }
                 }
@@ -283,7 +302,7 @@ public class mcEntityListener implements Listener {
      *
      * @param event The event to watch
      */
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityTame(EntityTameEvent event) {
         Player player = (Player) event.getOwner();
 
@@ -293,20 +312,21 @@ public class mcEntityListener implements Listener {
             int xp = 0;
 
             switch (type) {
-            case WOLF:
-                xp = LoadProperties.mtameWolf;
-                break;
+                case WOLF:
+                    xp = LoadProperties.mtameWolf;
+                    break;
 
-            case OCELOT:
-                xp = LoadProperties.mtameOcelot;
-                break;
+                case OCELOT:
+                    xp = LoadProperties.mtameOcelot;
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
             }
 
             PP.addXP(SkillType.TAMING, xp, player);
             Skills.XpCheckSkill(SkillType.TAMING, player);
         }
     }
+
 }

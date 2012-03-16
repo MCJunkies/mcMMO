@@ -9,10 +9,15 @@ import com.gmail.nossr50.skills.Skills;
 
 public class GainXp implements Runnable {
     private Player player = null;
+
     private PlayerProfile PP = null;
+
     private double baseXp = 0;
+
     private SkillType skillType = null;
+
     private LivingEntity target = null;
+
     private int baseHealth = 0;
 
     public GainXp(Player player, PlayerProfile PP, SkillType skillType, double baseXp, LivingEntity target) {
@@ -27,7 +32,7 @@ public class GainXp implements Runnable {
     @Override
     public void run() {
         int health = target.getHealth();
-        int damage =  baseHealth - health;
+        int damage = baseHealth - health;
 
         //May avoid negative xp, we don't know what other plugins do with the entity health
         if (damage <= 0) {
@@ -42,4 +47,5 @@ public class GainXp implements Runnable {
         PP.addXP(skillType, (int) (damage * baseXp), player);
         Skills.XpCheckSkill(skillType, player);
     }
+
 }

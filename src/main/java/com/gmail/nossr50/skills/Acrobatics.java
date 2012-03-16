@@ -13,7 +13,6 @@ import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
 
 public class Acrobatics {
-
     /**
      * Check for fall damage reduction.
      *
@@ -48,7 +47,9 @@ public class Acrobatics {
                 newDamage = 0;
             }
 
-            /* Check for death */
+            /*
+             * Check for death
+             */
             if (health - damage >= 1) {
                 PP.addXP(SkillType.ACROBATICS, damage * ROLL_XP_MODIFIER, player);
                 Skills.XpCheckSkill(SkillType.ACROBATICS, player);
@@ -61,13 +62,11 @@ public class Acrobatics {
 
                 if (gracefulRoll) {
                     player.sendMessage(mcLocale.getString("Acrobatics.GracefulRoll"));
-                }
-                else {
+                } else {
                     player.sendMessage(mcLocale.getString("Acrobatics.Roll"));
                 }
             }
-        }
-        else if (health - damage >= 1) {
+        } else if (health - damage >= 1) {
             PP.addXP(SkillType.ACROBATICS, event.getDamage() * FALL_XP_MODIFIER, player);
             Skills.XpCheckSkill(SkillType.ACROBATICS, player);
         }
@@ -86,7 +85,9 @@ public class Acrobatics {
         PlayerProfile PPd = Users.getProfile(defender);
         int damage = event.getDamage();
 
-        /* PARTY CHECK */
+        /*
+         * PARTY CHECK
+         */
         if (event.getDamager() instanceof Player) {
             Player attacker = (Player) event.getDamager();
 
@@ -111,11 +112,11 @@ public class Acrobatics {
 
                 if (newDamage <= 0) {
                     event.setDamage(1);
-                }
-                else {
+                } else {
                     event.setDamage(newDamage);
                 }
             }
         }
     }
+
 }

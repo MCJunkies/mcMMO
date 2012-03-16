@@ -13,11 +13,11 @@ import com.gmail.nossr50.spout.SpoutStuff;
 public class mcSpoutListener implements Listener {
     //Why do we have this here? We never use it...
     mcMMO plugin = null;
-    
+
     public mcSpoutListener(mcMMO pluginx) {
         plugin = pluginx;
     }
-    
+
     /**
      * Monitor SpoutCraftEnable events.
      *
@@ -32,4 +32,5 @@ public class mcSpoutListener implements Listener {
             Users.getProfile(sPlayer).toggleSpoutEnabled();
         }
     }
+
 }

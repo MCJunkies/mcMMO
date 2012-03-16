@@ -24,7 +24,6 @@ import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.locale.mcLocale;
 
 public class BlastMining {
-
     /**
      * Handler for what blocks drop from the explosion.
      *
@@ -66,8 +65,9 @@ public class BlastMining {
             while (iterator3.hasNext()) {
                 Block temp = iterator3.next();
 
-                if ((float) Math.random() < (yield - debrisReduction))
+                if ((float) Math.random() < (yield - debrisReduction)) {
                     Mining.miningDrops(temp);
+                }
             }
         }
 
@@ -104,8 +104,7 @@ public class BlastMining {
 
             if (BlockChecks.isOre(temp.getType())) {
                 ores.add(temp);
-            }
-            else {
+            } else {
                 debris.add(temp);
             }
         }
@@ -120,39 +119,25 @@ public class BlastMining {
         //Triple Drops, No debris, +70% ores
         if (skillLevel >= RANK_8_LEVEL) {
             xp = explosionYields(ores, debris, yield, .70f, .30f, 3);
-        }
-
-        //Triple Drops, No debris, +65% ores
+        } //Triple Drops, No debris, +65% ores
         else if (skillLevel >= RANK_7_LEVEL) {
             xp = explosionYields(ores, debris, yield, .65f, .30f, 3);
-        }
-
-        //Double Drops, No Debris, +60% ores
+        } //Double Drops, No Debris, +60% ores
         else if (skillLevel >= RANK_6_LEVEL) {
             xp = explosionYields(ores, debris, yield, .60f, .30f, 2);
-        }
-
-        //Double Drops, No Debris, +55% ores
+        } //Double Drops, No Debris, +55% ores
         else if (skillLevel >= RANK_5_LEVEL) {
             xp = explosionYields(ores, debris, yield, .55f, .30f, 2);
-        }
-
-        //No debris, +50% ores
+        } //No debris, +50% ores
         else if (skillLevel >= RANK_4_LEVEL) {
             xp = explosionYields(ores, debris, yield, .50f, .30f, 1);
-        }
-
-        //No debris, +45% ores
+        } //No debris, +45% ores
         else if (skillLevel >= RANK_3_LEVEL) {
             xp = explosionYields(ores, debris, yield, .45f, .30f, 1);
-        }
-
-        //+40% ores, -20% debris
+        } //+40% ores, -20% debris
         else if (skillLevel >= RANK_2_LEVEL) {
             xp = explosionYields(ores, debris, yield, .40f, .20f, 1);
-        }
-
-        //+35% ores, -10% debris
+        } //+35% ores, -10% debris
         else if (skillLevel >= RANK_1_LEVEL) {
             xp = explosionYields(ores, debris, yield, .35f, .10f, 1);
         }
@@ -222,12 +207,10 @@ public class BlastMining {
 
         if (skill >= RANK_3_LEVEL) {
             damage = 0;
-        }
-        else if (skill >= RANK_2_LEVEL) {
+        } else if (skill >= RANK_2_LEVEL) {
             damage = damage / 2;
-        }
-        else if (skill >= RANK_1_LEVEL) {
-            damage = damage/4;
+        } else if (skill >= RANK_1_LEVEL) {
+            damage = damage / 4;
         }
 
         event.setDamage(damage);
@@ -251,22 +234,28 @@ public class BlastMining {
             final int MAX_DISTANCE_AWAY = 10;
             AbilityType ability = AbilityType.BLAST_MINING;
 
-            /* Check Cooldown */
-            if(!Skills.cooldownOver(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown())) {
+            /*
+             * Check Cooldown
+             */
+            if (!Skills.cooldownOver(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown())) {
                 player.sendMessage(mcLocale.getString("Skills.TooTired") + ChatColor.YELLOW + " (" + Skills.calculateTimeLeft(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown()) + "s)");
                 return;
             }
 
-            /* Send message to nearby players */
-            for(Player y : player.getWorld().getPlayers()) {
-                if(y != player && m.isNear(player.getLocation(), y.getLocation(), MAX_DISTANCE_AWAY)) {
+            /*
+             * Send message to nearby players
+             */
+            for (Player y : player.getWorld().getPlayers()) {
+                if (y != player && m.isNear(player.getLocation(), y.getLocation(), MAX_DISTANCE_AWAY)) {
                     y.sendMessage(ability.getAbilityPlayer(player));
                 }
             }
 
             player.sendMessage(mcLocale.getString("BlastMining.Boom"));
 
-            /* Create the TNT entity */
+            /*
+             * Create the TNT entity
+             */
             TNTPrimed tnt = player.getWorld().spawn(block.getLocation(), TNTPrimed.class);
             plugin.misc.tntTracker.put(tnt.getEntityId(), player);
             block.setType(Material.AIR);
@@ -276,4 +265,5 @@ public class BlastMining {
             PP.setBlastMiningInformed(false);
         }
     }
+
 }

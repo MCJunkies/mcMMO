@@ -44,30 +44,37 @@ import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.player.FileManager;
 
 public class mcMMO extends JavaPlugin {
-
     public static String maindirectory = "plugins" + File.separator + "mcMMO";
+
     public static File file = new File(maindirectory + File.separator + "config.yml");
+
     public static File versionFile = new File(maindirectory + File.separator + "VERSION");
 
     private final mcPlayerListener playerListener = new mcPlayerListener(this);
+
     private final mcBlockListener blockListener = new mcBlockListener(this);
+
     private final mcEntityListener entityListener = new mcEntityListener(this);
 
     //Queue for block data change for R2+ fix
     public ArrayDeque<Block> changeQueue = new ArrayDeque<Block>();
+
     public ArrayDeque<Block> fastChangeQueue = new ArrayDeque<Block>();
 
     private Runnable mcMMO_Timer = new mcTimer(this); //BLEED AND REGENERATION
+
     private Runnable mcMMO_SaveTimer = new mcSaveTimer(this); //Periodic saving of Player Data
 
     //Alias - Command
     public HashMap<String, String> aliasMap = new HashMap<String, String>();
 
     public static Database database = null;
+
     public Misc misc = new Misc(this);
 
     //Config file stuff
     LoadProperties config;
+
     LoadTreasures config2;
 
     //Jar stuff
@@ -83,17 +90,14 @@ public class mcMMO extends JavaPlugin {
 
         if (!versionFile.exists()) {
             updateVersion();
-        }
-        else {
+        } else {
             String vnum = readVersion();
 
             //This will be changed to whatever version preceded when we actually need updater code.
             //Version 1.0.48 is the first to implement this, no checking before that version can be done.
             if (vnum.equalsIgnoreCase("1.0.48")) {
                 updateFrom(1);
-            }
-
-            //Just add in more else if blocks for versions that need updater code.  Increment the updateFrom age int as we do so.
+            } //Just add in more else if blocks for versions that need updater code.  Increment the updateFrom age int as we do so.
             //Catch all for versions not matching and no specific code being needed
             else if (!vnum.equalsIgnoreCase(this.getDescription().getVersion())) {
                 updateFrom(-1);
@@ -117,8 +121,7 @@ public class mcMMO extends JavaPlugin {
 
         if (pm.getPlugin("Spout") != null) {
             LoadProperties.spoutEnabled = true;
-        }
-        else {
+        } else {
             LoadProperties.spoutEnabled = false;
         }
 
@@ -133,8 +136,7 @@ public class mcMMO extends JavaPlugin {
         if (LoadProperties.useMySQL) {
             database = new Database(this);
             database.createStructure();
-        }
-        else {
+        } else {
             Leaderboard.makeLeaderboards();
         }
 
@@ -142,7 +144,7 @@ public class mcMMO extends JavaPlugin {
             Users.addUser(player); //In case of reload add all users back into PlayerProfile
         }
 
-        System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
+        System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 
         //Periodic save timer (Saves every 10 minutes)
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, mcMMO_SaveTimer, 0, LoadProperties.saveInterval * 1200);
@@ -172,19 +174,17 @@ public class mcMMO extends JavaPlugin {
 
                         // 'this' in this context is the Plugin object
                         metrics.beginMeasuringPlugin(thisPlugin);
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         System.out.println("Failed to submit stats.");
                     }
                 }
+
             }).start();
         }
     }
 
     /**
-     * Get profile of the player.
-     * </br>
-     * This function is designed for API usage.
+     * Get profile of the player. </br> This function is designed for API usage.
      *
      * @param player Player whose profile to get
      * @return the PlayerProfile object
@@ -194,9 +194,7 @@ public class mcMMO extends JavaPlugin {
     }
 
     /**
-     * Check the XP of a player.
-     * </br>
-     * This function is designed for API usage.
+     * Check the XP of a player. </br> This function is designed for API usage.
      *
      * @param player
      * @param skillType
@@ -204,16 +202,14 @@ public class mcMMO extends JavaPlugin {
     public void checkXp(Player player, SkillType skillType) {
         if (skillType == SkillType.ALL) {
             Skills.XpCheckAll(player);
-        }
-        else {
+        } else {
             Skills.XpCheckSkill(skillType, player);
         }
     }
 
     /**
-     * Check if two players are in the same party.
-     * </br>
-     * This function is designed for API usage.
+     * Check if two players are in the same party. </br> This function is
+     * designed for API usage.
      *
      * @param playera The first player to check
      * @param playerb The second player to check
@@ -223,20 +219,17 @@ public class mcMMO extends JavaPlugin {
         if (Users.getProfile(playera).inParty() && Users.getProfile(playerb).inParty()) {
             if (Users.getProfile(playera).getParty().equals(Users.getProfile(playerb).getParty())) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     /**
-     * Get a list of all current party names.
-     * </br>
-     * This function is designed for API usage.
+     * Get a list of all current party names. </br> This function is designed
+     * for API usage.
      *
      * @return the list of parties.
      */
@@ -251,7 +244,7 @@ public class mcMMO extends JavaPlugin {
             BufferedReader in = new BufferedReader(file);
             String line = "";
 
-            while((line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
                 String[] character = line.split(":");
                 String theparty = null;
 
@@ -265,17 +258,15 @@ public class mcMMO extends JavaPlugin {
                 }
             }
             in.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Bukkit.getLogger().severe("Exception while reading " + location + " (Are you sure you formatted it correctly?)" + e.toString());
         }
         return parties;
     }
 
     /**
-     * Get the name of the party a player is in.
-     * </br>
-     * This function is designed for API usage.
+     * Get the name of the party a player is in. </br> This function is designed
+     * for API usage.
      *
      * @param player The player to check the party name of
      * @return the name of the player's party
@@ -286,9 +277,8 @@ public class mcMMO extends JavaPlugin {
     }
 
     /**
-     * Checks if a player is in a party.
-     * </br>
-     * This function is designed for API usage.
+     * Checks if a player is in a party. </br> This function is designed for API
+     * usage.
      *
      * @param player The player to check
      * @return true if the player is in a party, false otherwise
@@ -437,12 +427,11 @@ public class mcMMO extends JavaPlugin {
     }
 
     /**
-     * Update mcMMO from a given version
-     * </p>
-     * It is important to always assume that you are updating from the lowest possible version.
-     * Thus, every block of updater code should be complete and self-contained; finishing all 
-     * SQL transactions and closing all file handlers, such that the next block of updater code
-     * if called will handle updating as expected.
+     * Update mcMMO from a given version </p> It is important to always assume
+     * that you are updating from the lowest possible version. Thus, every block
+     * of updater code should be complete and self-contained; finishing all SQL
+     * transactions and closing all file handlers, such that the next block of
+     * updater code if called will handle updating as expected.
      *
      * @param age Specifies which updater code to run
      */
@@ -461,7 +450,6 @@ public class mcMMO extends JavaPlugin {
 
         //If we are updating from age 1 but we need more to reach age 2, this will run too.
         if (age <= 2) {
-
         }
         updateVersion();
     }
@@ -475,11 +463,9 @@ public class mcMMO extends JavaPlugin {
             BufferedWriter vout = new BufferedWriter(new FileWriter(versionFile));
             vout.write(this.getDescription().getVersion());
             vout.close();
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
-        }
-        catch (SecurityException ex) {
+        } catch (SecurityException ex) {
             ex.printStackTrace();
         }
     }
@@ -496,19 +482,16 @@ public class mcMMO extends JavaPlugin {
         try {
             f = new BufferedInputStream(new FileInputStream(versionFile));
             f.read(buffer);
-        }
-        catch (FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {
             ex.printStackTrace();
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
-        }
-        finally {
+        } finally {
             if (f != null) {
                 try {
                     f.close();
-                    }
-                catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
             }
         }
         return new String(buffer);
@@ -517,8 +500,8 @@ public class mcMMO extends JavaPlugin {
     /*
      * Boilerplate Custom Config Stuff
      */
-
     private FileConfiguration treasuresConfig = null;
+
     private File treasuresConfigFile = null;
 
     /**
@@ -561,9 +544,9 @@ public class mcMMO extends JavaPlugin {
 
         try {
             treasuresConfig.save(treasuresConfigFile);
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             Bukkit.getLogger().severe("Could not save config to " + treasuresConfigFile + ex.toString());
         }
     }
+
 }

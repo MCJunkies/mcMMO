@@ -124,7 +124,7 @@ public class mcPermissions {
     public boolean repair(Player player) {
         return player.hasPermission("mcmmo.skills.repair");
     }
-    
+
     public boolean repairArcaneBypass(Player player) {
         return player.hasPermission(("mcmmo.skills.repair.arcanebypass"));
     }
@@ -156,4 +156,5 @@ public class mcPermissions {
     public boolean acrobatics(Player player) {
         return player.hasPermission("mcmmo.skills.acrobatics");
     }
+
 }

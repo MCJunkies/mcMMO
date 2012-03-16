@@ -11,33 +11,35 @@ import com.gmail.nossr50.config.LoadProperties;
 import com.gmail.nossr50.locale.mcLocale;
 
 public class McmmoCommand implements CommandExecutor {
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("This command does not support console useage.");
+            return true;
+        }
 
-		if (!(sender instanceof Player)) {
-			sender.sendMessage("This command does not support console useage.");
-			return true;
-		}
+        Player player = (Player) sender;
 
-		Player player = (Player) sender;
+        String description = mcLocale.getString("mcMMO.Description", new Object[]{"mcc"});
+        String[] mcSplit = description.split(",");
 
-		String description = mcLocale.getString("mcMMO.Description", new Object[] { "mcc" });
-		String[] mcSplit = description.split(",");
+        for (String x : mcSplit) {
+            player.sendMessage(x);
+        }
 
-		for (String x : mcSplit) {
-			player.sendMessage(x);
-		}
+        if (LoadProperties.spoutEnabled && player instanceof SpoutPlayer) {
+            SpoutPlayer sPlayer = (SpoutPlayer) player;
+            if (LoadProperties.donateMessage) {
+                sPlayer.sendMessage(ChatColor.YELLOW + "[mcMMO]" + ChatColor.GOLD + " Donate! Paypal " + ChatColor.GREEN + "theno1yeti@gmail.com");
+            }
+        } else {
+            if (LoadProperties.donateMessage) {
+                player.sendMessage(ChatColor.YELLOW + "[mcMMO]" + ChatColor.GOLD + " Donate! Paypal " + ChatColor.GREEN + "theno1yeti@gmail.com");
+            }
+        }
 
-		if (LoadProperties.spoutEnabled && player instanceof SpoutPlayer) {
-			SpoutPlayer sPlayer = (SpoutPlayer) player;
-			if (LoadProperties.donateMessage)
-				sPlayer.sendMessage(ChatColor.YELLOW + "[mcMMO]"+ChatColor.GOLD+" Donate! Paypal "+ChatColor.GREEN+"theno1yeti@gmail.com");
-		} else {
-			if (LoadProperties.donateMessage)
-			    player.sendMessage(ChatColor.YELLOW + "[mcMMO]"+ChatColor.GOLD+" Donate! Paypal "+ChatColor.GREEN+"theno1yeti@gmail.com");
-		}
+        return true;
+    }
 
-		return true;
-	}
 }

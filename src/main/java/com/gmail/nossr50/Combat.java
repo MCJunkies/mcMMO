@@ -32,7 +32,6 @@ import com.gmail.nossr50.skills.Taming;
 import com.gmail.nossr50.skills.Unarmed;
 
 public class Combat {
-
     /**
      * Apply combat modifiers and process and XP gain.
      *
@@ -51,92 +50,90 @@ public class Combat {
         EntityType targetType = target.getType();
 
         switch (damagerType) {
-        case PLAYER:
-            Player attacker = (Player) event.getDamager();
-            ItemStack itemInHand = attacker.getItemInHand();
-            PlayerProfile PPa = Users.getProfile(attacker);
+            case PLAYER:
+                Player attacker = (Player) event.getDamager();
+                ItemStack itemInHand = attacker.getItemInHand();
+                PlayerProfile PPa = Users.getProfile(attacker);
 
-            combatAbilityChecks(attacker);
+                combatAbilityChecks(attacker);
 
-            if (ItemChecks.isSword(itemInHand) && mcPermissions.getInstance().swords(attacker)) {
-                if (!plugin.misc.bleedTracker.contains(target)) {
-                    Swords.bleedCheck(attacker, target, plugin);
-            	// Apply our slow!
-            	Swords.slowEffect(event);
-                if (!pluginx.misc.bleedTracker.contains(target)) {
-                    Swords.bleedCheck(attacker, target, pluginx);
+                if (ItemChecks.isSword(itemInHand) && mcPermissions.getInstance().swords(attacker)) {
+                    if (!plugin.misc.bleedTracker.contains(target)) {
+                        Swords.bleedCheck(attacker, target, plugin);
+                        // Apply our slow!
+                        Swords.slowEffect(event);
+                        if (!plugin.misc.bleedTracker.contains(target)) {
+                            Swords.bleedCheck(attacker, target, plugin);
+                        }
+
+                        if (PPa.getSerratedStrikesMode()) {
+                            applyAbilityAoE(attacker, target, damage, plugin, SkillType.SWORDS);
+                        }
+
+                        startGainXp(attacker, PPa, target, SkillType.SWORDS, plugin);
+                    } else if (ItemChecks.isAxe(itemInHand) && mcPermissions.getInstance().axes(attacker)) {
+                        Axes.axesBonus(attacker, event);
+                        Axes.axeCriticalCheck(attacker, event);
+                        Axes.impact(attacker, target, event);
+
+                        if (PPa.getSkullSplitterMode()) {
+                            applyAbilityAoE(attacker, target, damage, plugin, SkillType.AXES);
+                        }
+
+                        startGainXp(attacker, PPa, target, SkillType.AXES, plugin);
+                    } else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
+                        Unarmed.unarmedBonus(attacker, event);
+
+                        if (PPa.getBerserkMode()) {
+                            event.setDamage(damage + (damage / 2));
+                        }
+
+                        if (targetType.equals(EntityType.PLAYER)) {
+                            Unarmed.disarmProcCheck(attacker, (Player) target);
+                        }
+
+                        startGainXp(attacker, PPa, target, SkillType.UNARMED, plugin);
+                    } else if (itemInHand.getType().equals(Material.BONE) && mcPermissions.getInstance().taming(attacker) && targetType.equals(EntityType.WOLF)) {
+                        Wolf wolf = (Wolf) target;
+                        String message = mcLocale.getString("Combat.BeastLore") + " ";
+                        int health = wolf.getHealth();
+                        event.setCancelled(true);
+
+                        if (wolf.isTamed()) {
+                            message = message.concat(mcLocale.getString("Combat.BeastLoreOwner", new Object[]{Taming.getOwnerName(wolf)}) + " ");
+                            message = message.concat(mcLocale.getString("Combat.BeastLoreHealthWolfTamed", new Object[]{health}));
+                        } else {
+                            message = message.concat(mcLocale.getString("Combat.BeastLoreHealthWolf", new Object[]{health}));
+                        }
+
+                        attacker.sendMessage(message);
+                    }
                 }
+                break;
 
-                if (PPa.getSerratedStrikesMode()) {
-                    applyAbilityAoE(attacker, target, damage, plugin, SkillType.SWORDS);
+
+            case WOLF:
+                Wolf wolf = (Wolf) damager;
+
+                if (wolf.isTamed() && wolf.getOwner() instanceof Player) {
+                    Player master = (Player) wolf.getOwner();
+                    PlayerProfile PPo = Users.getProfile(master);
+
+                    if (mcPermissions.getInstance().taming(master)) {
+                        Taming.fastFoodService(PPo, wolf, event);
+                        Taming.sharpenedClaws(PPo, event);
+                        Taming.gore(PPo, event, master, plugin);
+                        startGainXp(master, PPo, target, SkillType.TAMING, plugin);
+                    }
                 }
+                break;
 
-                startGainXp(attacker, PPa, target, SkillType.SWORDS, plugin);
-            }
-            else if (ItemChecks.isAxe(itemInHand) && mcPermissions.getInstance().axes(attacker)) {
-                Axes.axesBonus(attacker, event);
-                Axes.axeCriticalCheck(attacker, event);
-                Axes.impact(attacker, target, event);
+            case ARROW:
+                archeryCheck((EntityDamageByEntityEvent) event, plugin);
+                break;
 
-                if (PPa.getSkullSplitterMode()) {
-                    applyAbilityAoE(attacker, target, damage, plugin, SkillType.AXES);
-                }
-
-                startGainXp(attacker, PPa, target, SkillType.AXES, plugin);
-            }
-            else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
-                Unarmed.unarmedBonus(attacker, event);
-
-                if (PPa.getBerserkMode()) {
-                    event.setDamage(damage + (damage / 2));
-                }
-
-                if (targetType.equals(EntityType.PLAYER)) {
-                    Unarmed.disarmProcCheck(attacker, (Player) target);
-                }
-
-                startGainXp(attacker, PPa, target, SkillType.UNARMED, plugin);
-            }
-            else if (itemInHand.getType().equals(Material.BONE) && mcPermissions.getInstance().taming(attacker) && targetType.equals(EntityType.WOLF)) {
-                Wolf wolf = (Wolf) target;
-                String message = mcLocale.getString("Combat.BeastLore") + " ";
-                int health = wolf.getHealth();
-                event.setCancelled(true);
-
-                if (wolf.isTamed()) {
-                    message = message.concat(mcLocale.getString("Combat.BeastLoreOwner", new Object[] {Taming.getOwnerName(wolf)}) + " ");
-                    message = message.concat(mcLocale.getString("Combat.BeastLoreHealthWolfTamed", new Object[] {health}));
-                }
-                else {
-                    message = message.concat(mcLocale.getString("Combat.BeastLoreHealthWolf", new Object[] {health}));
-                }
-
-                attacker.sendMessage(message);
-            }
-            break;
-
-        case WOLF:
-            Wolf wolf = (Wolf) damager;
-
-            if (wolf.isTamed() && wolf.getOwner() instanceof Player) {
-                Player master = (Player) wolf.getOwner();
-                PlayerProfile PPo = Users.getProfile(master);
-
-                if (mcPermissions.getInstance().taming(master)) {
-                    Taming.fastFoodService(PPo, wolf, event);
-                    Taming.sharpenedClaws(PPo, event);
-                    Taming.gore(PPo, event, master, plugin);
-                    startGainXp(master, PPo, target, SkillType.TAMING, plugin);
-                }
-            }
-            break;
-
-        case ARROW:
-            archeryCheck((EntityDamageByEntityEvent) event, plugin);
-            break;
-
-        default:
-            break;
+            default:
+                break;
         }
 
         if (targetType.equals(EntityType.PLAYER)) {
@@ -155,11 +152,9 @@ public class Combat {
 
         if (PPa.getAxePreparationMode()) {
             Skills.abilityCheck(attacker, SkillType.AXES);
-        }
-        else if (PPa.getSwordsPreparationMode()) {
+        } else if (PPa.getSwordsPreparationMode()) {
             Skills.abilityCheck(attacker, SkillType.SWORDS);
-        }
-        else if (PPa.getFistsPreparationMode()) {
+        } else if (PPa.getFistsPreparationMode()) {
             Skills.abilityCheck(attacker, SkillType.UNARMED);
         }
     }
@@ -183,8 +178,7 @@ public class Combat {
             if (mcPermissions.getInstance().unarmed(defender) && defender.getItemInHand().getType().equals(Material.AIR)) {
                 if (PPd.getSkillLevel(SkillType.UNARMED) >= 1000 && (Math.random() * 1000 <= 500)) {
                     deflect = true;
-                }
-                else if (Math.random() * 1000 <= (PPd.getSkillLevel(SkillType.UNARMED) / 2)) {
+                } else if (Math.random() * 1000 <= (PPd.getSkillLevel(SkillType.UNARMED) / 2)) {
                     deflect = true;
                 }
 
@@ -249,14 +243,14 @@ public class Combat {
             }
 
             target.damage(ede.getDamage());
-        }
-        else {
+        } else {
             target.damage(dmg);
         }
     }
 
     /**
-     * Attempt to damage target for value dmg with reason ENTITY_ATTACK with damager attacker
+     * Attempt to damage target for value dmg with reason ENTITY_ATTACK with
+     * damager attacker
      *
      * @param target LivingEntity which to attempt to damage
      * @param dmg Amount of damage to attempt to do
@@ -272,8 +266,7 @@ public class Combat {
             }
 
             target.damage(ede.getDamage());
-        }
-        else {
+        } else {
             target.damage(dmg);
         }
     }
@@ -293,8 +286,7 @@ public class Combat {
 
         if (type.equals(SkillType.AXES)) {
             damageAmount = damage / 2;
-        }
-        else if (type.equals(SkillType.SWORDS)) {
+        } else if (type.equals(SkillType.SWORDS)) {
             damageAmount = damage / 4;
         }
 
@@ -346,8 +338,7 @@ public class Combat {
 
                         if (type.equals(SkillType.AXES)) {
                             message = mcLocale.getString("Axes.HitByCleave");
-                        }
-                        else if (type.equals(SkillType.SWORDS)) {
+                        } else if (type.equals(SkillType.SWORDS)) {
                             message = mcLocale.getString("Swords.HitBySerratedStrikes");
                         }
 
@@ -360,8 +351,7 @@ public class Combat {
 
                         numberOfTargets--;
                     }
-                }
-                else {
+                } else {
                     LivingEntity livingEntity = (LivingEntity) entity;
 
                     if (type.equals(SkillType.SWORDS) && !plugin.misc.bleedTracker.contains(entity)) {
@@ -398,69 +388,67 @@ public class Combat {
             if (System.currentTimeMillis() >= (PPd.getRespawnATS() * 1000) + 5000 && ((PPd.getLastLogin() + 5) * 1000) < System.currentTimeMillis() && defender.getHealth() >= 1) {
                 baseXP = 20 * LoadProperties.pvpxprewardmodifier;
             }
-        }
-        else if (!target.hasMetadata("mcmmoFromMobSpawner")) {
+        } else if (!target.hasMetadata("mcmmoFromMobSpawner")) {
             if (target instanceof Animals && !target.hasMetadata("mcmmoSummoned")) {
                 baseXP = LoadProperties.animalXP;
-            }
-            else {
+            } else {
                 EntityType type = target.getType();
 
                 switch (type) {
-                case BLAZE:
-                    baseXP = LoadProperties.blazeXP;
-                    break;
+                    case BLAZE:
+                        baseXP = LoadProperties.blazeXP;
+                        break;
 
-                case CAVE_SPIDER:
-                    baseXP = LoadProperties.cavespiderXP;
-                    break;
+                    case CAVE_SPIDER:
+                        baseXP = LoadProperties.cavespiderXP;
+                        break;
 
-                case CREEPER:
-                    baseXP = LoadProperties.creeperXP;
-                    break;
+                    case CREEPER:
+                        baseXP = LoadProperties.creeperXP;
+                        break;
 
-                case ENDER_DRAGON:
-                    baseXP = LoadProperties.enderdragonXP;
-                    break;
+                    case ENDER_DRAGON:
+                        baseXP = LoadProperties.enderdragonXP;
+                        break;
 
-                case ENDERMAN:
-                    baseXP = LoadProperties.endermanXP;
-                    break;
+                    case ENDERMAN:
+                        baseXP = LoadProperties.endermanXP;
+                        break;
 
-                case GHAST:
-                    baseXP = LoadProperties.ghastXP;
-                    break;
+                    case GHAST:
+                        baseXP = LoadProperties.ghastXP;
+                        break;
 
-                case MAGMA_CUBE:
-                    baseXP = LoadProperties.magmacubeXP;
-                    break;
+                    case MAGMA_CUBE:
+                        baseXP = LoadProperties.magmacubeXP;
+                        break;
 
-                case PIG_ZOMBIE:
-                    baseXP = LoadProperties.pigzombieXP;
-                    break;
+                    case PIG_ZOMBIE:
+                        baseXP = LoadProperties.pigzombieXP;
+                        break;
 
-                case SILVERFISH:
-                    baseXP = LoadProperties.silverfishXP;
-                    break;
+                    case SILVERFISH:
+                        baseXP = LoadProperties.silverfishXP;
+                        break;
 
-                case SKELETON:
-                    baseXP = LoadProperties.skeletonXP;
-                    break;
+                    case SKELETON:
+                        baseXP = LoadProperties.skeletonXP;
+                        break;
 
-                case SLIME:
-                    baseXP = LoadProperties.slimeXP;
-                    break;
+                    case SLIME:
+                        baseXP = LoadProperties.slimeXP;
+                        break;
 
-                case SPIDER:
-                    baseXP = LoadProperties.spiderXP;
-                    break;
+                    case SPIDER:
+                        baseXP = LoadProperties.spiderXP;
+                        break;
 
-                case ZOMBIE:
-                    baseXP = LoadProperties.zombieXP;
-                    break;
+                    case ZOMBIE:
+                        baseXP = LoadProperties.zombieXP;
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
                 }
             }
 
@@ -471,4 +459,5 @@ public class Combat {
             Bukkit.getScheduler().scheduleSyncDelayedTask(pluginx, new GainXp(attacker, PP, skillType, baseXP, target), 0);
         }
     }
+
 }

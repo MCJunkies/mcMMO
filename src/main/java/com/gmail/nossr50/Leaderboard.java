@@ -51,8 +51,7 @@ public class Leaderboard {
                 //Prevent the same player from being added multiple times
                 if (players.contains(p)) {
                     continue;
-                }
-                else {
+                } else {
                     players.add(p);
                 }
 
@@ -119,8 +118,7 @@ public class Leaderboard {
                 PowerLevel.add(p, powerLevel);
             }
             in.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Bukkit.getLogger().severe(("Exception while reading " + location + " (Are you sure you formatted it correctly?)" + e.toString()));
         }
 
@@ -148,7 +146,7 @@ public class Leaderboard {
      */
     private static void leaderWrite(PlayerStat[] ps, SkillType skillType) {
         String theLocation = "plugins/mcMMO/FlatFileStuff/Leaderboards/" + skillType + ".mcmmo";
-        File theDir = new File(theLocation); 
+        File theDir = new File(theLocation);
 
         //CHECK IF THE FILE EXISTS
         if (!theDir.exists()) {
@@ -156,22 +154,18 @@ public class Leaderboard {
 
             try {
                 writer = new FileWriter(theLocation);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Bukkit.getLogger().severe(("Exception while creating " + theLocation + e.toString()));
-            }
-            finally {
+            } finally {
                 try {
                     if (writer != null) {
                         writer.close();
                     }
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     Bukkit.getLogger().severe("Exception while closing writer for " + theLocation + e.toString());
                 }
             }
-        }
-        else {
+        } else {
             try {
                 FileReader file = new FileReader(theLocation);
                 BufferedReader in = new BufferedReader(file);
@@ -194,8 +188,7 @@ public class Leaderboard {
                 FileWriter out = new FileWriter(theLocation);
                 out.write(writer.toString());
                 out.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Bukkit.getLogger().severe("Exception while writing to " + theLocation + " (Are you sure you formatted it correctly?)" + e.toString());
             }
         }
@@ -231,8 +224,7 @@ public class Leaderboard {
 
             in.close();
             return info;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Bukkit.getLogger().severe("Exception while reading " + theLocation + " (Are you sure you formatted it correctly?)" + e.toString());
         }
 
@@ -273,7 +265,7 @@ public class Leaderboard {
                 }
             }
 
-            if(!inserted) {
+            if (!inserted) {
                 writer.append(ps.name + ":" + ps.statVal).append("\r\n");
             }
 
@@ -283,9 +275,9 @@ public class Leaderboard {
             FileWriter out = new FileWriter(theLocation);
             out.write(writer.toString());
             out.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Bukkit.getLogger().severe("Exception while writing to " + theLocation + " (Are you sure you formatted it correctly?)" + e.toString());
         }
     }
+
 }

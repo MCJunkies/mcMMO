@@ -24,8 +24,8 @@ import com.gmail.nossr50.events.McMMOPlayerLevelUpEvent;
 import com.gmail.nossr50.locale.mcLocale;
 
 public class Skills {
-
     private final static int TIME_CONVERSION_FACTOR = 1000;
+
     private final static int MAX_DISTANCE_AWAY = 10;
 
     /**
@@ -35,13 +35,12 @@ public class Skills {
      * @param cooldown The amount of time that must pass between uses
      * @return true if the cooldown is over, false otherwise
      */
-    public static boolean cooldownOver(long oldTime, int cooldown){
+    public static boolean cooldownOver(long oldTime, int cooldown) {
         long currentTime = System.currentTimeMillis();
 
         if (currentTime - oldTime >= (cooldown * TIME_CONVERSION_FACTOR)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -88,13 +87,17 @@ public class Skills {
         ToolType tool = skill.getTool();
         ItemStack inHand = player.getItemInHand();
 
-        /* Check if any abilities are active */
+        /*
+         * Check if any abilities are active
+         */
         if (!PP.getAbilityUse() || PP.getSuperBreakerMode() || PP.getSerratedStrikesMode() || PP.getTreeFellerMode() || PP.getGreenTerraMode() || PP.getBerserkMode() || PP.getGigaDrillBreakerMode()) {
             return;
         }
 
-        /* Woodcutting & Axes need to be treated differently.
-         * Basically the tool always needs to ready and we check to see if the cooldown is over when the user takes action
+        /*
+         * Woodcutting & Axes need to be treated differently. Basically the tool
+         * always needs to ready and we check to see if the cooldown is over
+         * when the user takes action
          */
         if (skill == SkillType.WOODCUTTING || skill == SkillType.AXES) {
             if (tool.inHand(inHand) && !tool.getToolMode(PP)) {
@@ -105,8 +108,7 @@ public class Skills {
                 tool.setToolATS(PP, System.currentTimeMillis());
                 tool.setToolMode(PP, true);
             }
-        }
-        else if (ability.getPermissions(player) && tool.inHand(inHand) && !tool.getToolMode(PP)) {
+        } else if (ability.getPermissions(player) && tool.inHand(inHand) && !tool.getToolMode(PP)) {
             if (!ability.getMode(PP) && !cooldownOver(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown())) {
                 player.sendMessage(mcLocale.getString("Skills.TooTired") + ChatColor.YELLOW + " (" + calculateTimeLeft(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown()) + "s)");
                 return;
@@ -167,8 +169,7 @@ public class Skills {
 
         if (skillType != SkillType.ALL) {
             ps.statVal = PP.getSkillLevel(skillType);
-        }
-        else {
+        } else {
             ps.statVal = m.getPowerLevel(player, PP);
         }
 
@@ -187,7 +188,7 @@ public class Skills {
 
         if (PP.getSkillXpLevel(skillType) >= PP.getXpToLevel(skillType)) {
             int skillups = 0;
-            
+
             while (PP.getSkillXpLevel(skillType) >= PP.getXpToLevel(skillType)) {
                 if (skillType.getMaxLevel() >= PP.getSkillLevel(skillType) + 1) {
                     skillups++;
@@ -196,8 +197,7 @@ public class Skills {
 
                     McMMOPlayerLevelUpEvent eventToFire = new McMMOPlayerLevelUpEvent(player, skillType);
                     Bukkit.getPluginManager().callEvent(eventToFire);
-                }
-                else {
+                } else {
                     PP.removeXP(skillType, PP.getXpToLevel(skillType));
                 }
             }
@@ -209,7 +209,9 @@ public class Skills {
 
             String capitalized = m.getCapitalized(skillType.toString());
 
-            /* Spout Stuff */
+            /*
+             * Spout Stuff
+             */
             if (LoadProperties.spoutEnabled && player instanceof SpoutPlayer) {
                 SpoutPlayer sPlayer = SpoutManager.getPlayer(player);
 
@@ -219,13 +221,11 @@ public class Skills {
                     }
 
                     SpoutStuff.levelUpNotification(skillType, sPlayer);
+                } else {
+                    player.sendMessage(mcLocale.getString("Skills." + capitalized + "Up", new Object[]{String.valueOf(skillups), PP.getSkillLevel(skillType)}));
                 }
-                else {
-                    player.sendMessage(mcLocale.getString("Skills."+capitalized+"Up", new Object[] {String.valueOf(skillups), PP.getSkillLevel(skillType)}));
-                }
-            }
-            else {
-                player.sendMessage(mcLocale.getString("Skills."+capitalized+"Up", new Object[] {String.valueOf(skillups), PP.getSkillLevel(skillType)}));
+            } else {
+                player.sendMessage(mcLocale.getString("Skills." + capitalized + "Up", new Object[]{String.valueOf(skillups), PP.getSkillLevel(skillType)}));
             }
         }
     }
@@ -254,8 +254,9 @@ public class Skills {
      */
     public static SkillType getSkillType(String skillName) {
         for (SkillType x : SkillType.values()) {
-            if (x.toString().equals(skillName.toUpperCase()))
+            if (x.toString().equals(skillName.toUpperCase())) {
                 return x;
+            }
         }
         return null;
     }
@@ -269,14 +270,14 @@ public class Skills {
     public static boolean isSkill(String skillName) {
         if (getSkillType(skillName) != null) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
-    
+
     /**
-     * Get the format string for 
+     * Get the format string for
+     *
      * @param skillname
      * @param level
      * @param XP
@@ -291,7 +292,7 @@ public class Skills {
         ChatColor LvlColor = ChatColor.GREEN;
         ChatColor skillColor = ChatColor.YELLOW;
 
-        return skillColor + skillname + LvlColor + level + parColor +" XP" + "(" + xpColor + XP + parColor + "/" + xpColor + XPToLevel + parColor + ")";
+        return skillColor + skillname + LvlColor + level + parColor + " XP" + "(" + xpColor + XP + parColor + "/" + xpColor + XPToLevel + parColor + ")";
     }
 
     /**
@@ -307,8 +308,7 @@ public class Skills {
                 || mcPermissions.getInstance().taming(player)
                 || mcPermissions.getInstance().unarmed(player)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -326,8 +326,7 @@ public class Skills {
                 || mcPermissions.getInstance().mining(player)
                 || mcPermissions.getInstance().woodcutting(player)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -341,8 +340,7 @@ public class Skills {
     public static boolean hasMiscSkills(Player player) {
         if (mcPermissions.getInstance().acrobatics(player) || mcPermissions.getInstance().repair(player)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -376,8 +374,9 @@ public class Skills {
                 type.getTool().setToolMode(PP, false);
             }
 
-            /* Axes and Woodcutting are odd because they share the same tool.
-             * We show them the too tired message when they take action.
+            /*
+             * Axes and Woodcutting are odd because they share the same tool. We
+             * show them the too tired message when they take action.
              */
             if (type == SkillType.WOODCUTTING || type == SkillType.AXES) {
                 if (!ability.getMode(PP) && !cooldownOver(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown())) {
@@ -397,7 +396,7 @@ public class Skills {
                     }
                 }
 
-                PP.setSkillDATS(ability, System.currentTimeMillis()+(ticks * TIME_CONVERSION_FACTOR));
+                PP.setSkillDATS(ability, System.currentTimeMillis() + (ticks * TIME_CONVERSION_FACTOR));
                 ability.setMode(PP, true);
             }
         }
@@ -420,28 +419,31 @@ public class Skills {
         }
 
         switch (ability) {
-        case BERSERK:
-        case GIGA_DRILL_BREAKER:
-        case SUPER_BREAKER:
-        case LEAF_BLOWER:
-            if (!m.blockBreakSimulate(block, player, true)) {
+            case BERSERK:
+            case GIGA_DRILL_BREAKER:
+            case SUPER_BREAKER:
+            case LEAF_BLOWER:
+                if (!m.blockBreakSimulate(block, player, true)) {
+                    activate = false;
+                    break;
+                }
+            /*
+             * FALLS THROUGH
+             */
+
+            case GREEN_TERRA:
+                if (!ability.blockCheck(block.getType())) {
+                    activate = false;
+                    break;
+                }
+                break;
+
+            default:
                 activate = false;
                 break;
-            }
-            /* FALLS THROUGH */
-
-        case GREEN_TERRA:
-            if (!ability.blockCheck(block.getType())) {
-                activate = false;
-                break;
-            }
-            break;
-
-        default:
-            activate = false;
-            break;
         }
 
         return activate;
     }
+
 }

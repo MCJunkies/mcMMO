@@ -38,11 +38,11 @@ public class mcSpoutInputListener implements Listener {
                 SpoutStuff.playerScreens.put(sPlayer, mmoPop);
                 sPlayer.getMainScreen().attachPopupScreen(SpoutStuff.playerScreens.get(sPlayer));
                 sPlayer.getMainScreen().setDirty(true);
-            }
-            else {
+            } else {
                 sPlayer.getMainScreen().attachPopupScreen(SpoutStuff.playerScreens.get(sPlayer));
                 sPlayer.getMainScreen().setDirty(true);
             }
         }
     }
+
 }

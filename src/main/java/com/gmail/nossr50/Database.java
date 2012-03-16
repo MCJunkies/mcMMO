@@ -15,9 +15,10 @@ import com.gmail.nossr50.config.LoadProperties;
 import com.gmail.nossr50.datatypes.DatabaseUpdate;
 
 public class Database {
-
     private String connectionString = "jdbc:mysql://" + LoadProperties.MySQLserverName + ":" + LoadProperties.MySQLport + "/" + LoadProperties.MySQLdbName + "?user=" + LoadProperties.MySQLuserName + "&password=" + LoadProperties.MySQLdbPass;
+
     private boolean isConnected;
+
     private Connection conn = null;
 
     public Database(mcMMO instance) {
@@ -27,11 +28,9 @@ public class Database {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             DriverManager.getConnection(connectionString);
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             Bukkit.getLogger().warning(e.getLocalizedMessage());
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             Bukkit.getLogger().warning(ex.getLocalizedMessage());
             printErrors(ex);
         }
@@ -49,8 +48,7 @@ public class Database {
             conn = DriverManager.getConnection(connectionString, conProperties);
             isConnected = true;
             System.out.println("[mcMMO] Connection to MySQL established!");
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             isConnected = false;
             ex.printStackTrace();
             printErrors(ex);
@@ -111,9 +109,9 @@ public class Database {
                 + "`acrobatics` int(10) unsigned NOT NULL DEFAULT '0',"
                 + "PRIMARY KEY (`user_id`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
 
-        write("DROP TABLE IF EXISTS `"+LoadProperties.MySQLtablePrefix+"skills2`");
-        write("DROP TABLE IF EXISTS `"+LoadProperties.MySQLtablePrefix+"experience2`");
-        write("DROP TABLE IF EXISTS `"+LoadProperties.MySQLtablePrefix+"spawn`");
+        write("DROP TABLE IF EXISTS `" + LoadProperties.MySQLtablePrefix + "skills2`");
+        write("DROP TABLE IF EXISTS `" + LoadProperties.MySQLtablePrefix + "experience2`");
+        write("DROP TABLE IF EXISTS `" + LoadProperties.MySQLtablePrefix + "spawn`");
 
         checkDatabaseStructure(DatabaseUpdate.FISHING);
         checkDatabaseStructure(DatabaseUpdate.BLAST_MINING);
@@ -130,14 +128,14 @@ public class Database {
         HashMap<Integer, ArrayList<String>> Rows = new HashMap<Integer, ArrayList<String>>();
 
         switch (update) {
-        case BLAST_MINING:
-            sql = "SELECT * FROM  `"+LoadProperties.MySQLtablePrefix+"cooldowns` ORDER BY  `"+LoadProperties.MySQLtablePrefix+"cooldowns`.`blast_mining` ASC LIMIT 0 , 30";
-            break;
-        case FISHING:
-            sql = "SELECT * FROM  `"+LoadProperties.MySQLtablePrefix+"experience` ORDER BY  `"+LoadProperties.MySQLtablePrefix+"experience`.`fishing` ASC LIMIT 0 , 30";
-            break;
-        default:
-            break;
+            case BLAST_MINING:
+                sql = "SELECT * FROM  `" + LoadProperties.MySQLtablePrefix + "cooldowns` ORDER BY  `" + LoadProperties.MySQLtablePrefix + "cooldowns`.`blast_mining` ASC LIMIT 0 , 30";
+                break;
+            case FISHING:
+                sql = "SELECT * FROM  `" + LoadProperties.MySQLtablePrefix + "experience` ORDER BY  `" + LoadProperties.MySQLtablePrefix + "experience`.`fishing` ASC LIMIT 0 , 30";
+                break;
+            default:
+                break;
         }
 
         try {
@@ -153,16 +151,14 @@ public class Database {
                     Rows.put(rs.getRow(), Col);
                 }
             }
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             if (update.equals(DatabaseUpdate.BLAST_MINING)) {
                 System.out.println("Updating mcMMO MySQL tables for Blast Mining...");
-                write("ALTER TABLE `"+LoadProperties.MySQLtablePrefix + "cooldowns` ADD `blast_mining` int(32) NOT NULL DEFAULT '0' ;");
-            }
-            else if (update.equals(DatabaseUpdate.FISHING)) {
+                write("ALTER TABLE `" + LoadProperties.MySQLtablePrefix + "cooldowns` ADD `blast_mining` int(32) NOT NULL DEFAULT '0' ;");
+            } else if (update.equals(DatabaseUpdate.FISHING)) {
                 System.out.println("Updating mcMMO MySQL tables for Fishing...");
-                write("ALTER TABLE `"+LoadProperties.MySQLtablePrefix + "skills` ADD `fishing` int(10) NOT NULL DEFAULT '0' ;");
-                write("ALTER TABLE `"+LoadProperties.MySQLtablePrefix + "experience` ADD `fishing` int(10) NOT NULL DEFAULT '0' ;");
+                write("ALTER TABLE `" + LoadProperties.MySQLtablePrefix + "skills` ADD `fishing` int(10) NOT NULL DEFAULT '0' ;");
+                write("ALTER TABLE `" + LoadProperties.MySQLtablePrefix + "experience` ADD `fishing` int(10) NOT NULL DEFAULT '0' ;");
             }
         }
     }
@@ -179,19 +175,16 @@ public class Database {
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.executeUpdate();
                 return true;
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 printErrors(ex);
                 return false;
             }
-        }
-        else {
+        } else {
             isConnected = false;
             connect(); //Attempt to reconnect
             if (isConnected) {
                 write(sql); //Try the same operation again now that we are connected
-            }
-            else {
+            } else {
                 System.out.println("[mcMMO] Unable to connect to MySQL! Make sure the SQL server is online!");
             }
         }
@@ -217,23 +210,19 @@ public class Database {
                     rs = stmt.getResultSet();
                     if (rs.next()) {
                         result = rs.getInt(1);
-                    }
-                    else {
+                    } else {
                         result = 0;
                     }
                 }
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 printErrors(ex);
             }
-        }
-        else {
+        } else {
             isConnected = false;
             connect(); //Attempt to reconnect
             if (isConnected) {
                 getInt(sql); //Try the same operation again now that we are connected
-            }
-            else {
+            } else {
                 System.out.println("[mcMMO] Unable to connect to MySQL! Make sure the SQL server is online!");
             }
         }
@@ -264,18 +253,15 @@ public class Database {
                         Rows.put(rs.getRow(), Col);
                     }
                 }
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 printErrors(ex);
             }
-        }
-        else {
+        } else {
             isConnected = false;
             connect(); //Attempt to reconnect
             if (isConnected) {
                 read(sql); //Attempt the same operation again now that we are connected
-            }
-            else {
+            } else {
                 System.out.println("[mcMMO] Unable to connect to MySQL! Make sure the SQL server is online!");
             }
         }
@@ -287,4 +273,5 @@ public class Database {
         System.out.println("SQLState: " + ex.getSQLState());
         System.out.println("VendorError: " + ex.getErrorCode());
     }
+
 }

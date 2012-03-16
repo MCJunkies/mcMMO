@@ -34,41 +34,39 @@ public class mcSpoutScreenListener implements Listener {
     public void onButtonClick(ButtonClickEvent event) {
         SpoutPlayer sPlayer = event.getPlayer();
         PlayerProfile PP = Users.getProfile(sPlayer);
-        
+
         if (event.getButton() instanceof ButtonHUDStyle) {
             if (SpoutStuff.playerHUDs.containsKey(sPlayer)) {
                 SpoutStuff.playerHUDs.get(sPlayer).resetHUD();
                 SpoutStuff.playerHUDs.remove(sPlayer);
-                
+
                 switch (PP.getHUDType()) {
-                case RETRO:
-                    PP.setHUDType(HUDType.STANDARD);
-                    break;
+                    case RETRO:
+                        PP.setHUDType(HUDType.STANDARD);
+                        break;
 
-                case STANDARD:
-                    PP.setHUDType(HUDType.SMALL);
-                    break;
+                    case STANDARD:
+                        PP.setHUDType(HUDType.SMALL);
+                        break;
 
-                case SMALL:
-                    PP.setHUDType(HUDType.DISABLED);
-                    break;
+                    case SMALL:
+                        PP.setHUDType(HUDType.DISABLED);
+                        break;
 
-                case DISABLED:
-                    PP.setHUDType(HUDType.RETRO);
-                    break;
+                    case DISABLED:
+                        PP.setHUDType(HUDType.RETRO);
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
                 }
 
                 SpoutStuff.playerHUDs.put(sPlayer, new HUDmmo(sPlayer));
                 SpoutStuff.playerScreens.get(sPlayer).updateButtons(PP);
             }
-        }
-        else if (event.getButton() instanceof ButtonEscape) {
+        } else if (event.getButton() instanceof ButtonEscape) {
             sPlayer.getMainScreen().closePopup();
-        }
-        else if (event.getButton() instanceof ButtonPartyToggle) {
+        } else if (event.getButton() instanceof ButtonPartyToggle) {
             PP.togglePartyHUD();
             ButtonPartyToggle bpt = (ButtonPartyToggle) event.getButton();
             bpt.updateText(PP);
@@ -88,4 +86,5 @@ public class mcSpoutScreenListener implements Listener {
             SpoutStuff.playerScreens.remove(event.getPlayer());
         }
     }
+
 }

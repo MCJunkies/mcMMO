@@ -29,7 +29,6 @@ import com.gmail.nossr50.datatypes.treasure.FishingTreasure;
 import com.gmail.nossr50.locale.mcLocale;
 
 public class Fishing {
-
     /**
      * Get the player's current fishing loot tier.
      *
@@ -42,18 +41,14 @@ public class Fishing {
 
         if (level >= LoadProperties.fishingTier5) {
             fishingTier = 5;
-        }
-        else if (level >= LoadProperties.fishingTier4) {
+        } else if (level >= LoadProperties.fishingTier4) {
             fishingTier = 4;
-        }
-        else if (level >= LoadProperties.fishingTier3) {
-            fishingTier =  3;
-        }
-        else if (level >= LoadProperties.fishingTier2) {
-            fishingTier =  2;
-        }
-        else {
-            fishingTier =  1;
+        } else if (level >= LoadProperties.fishingTier3) {
+            fishingTier = 3;
+        } else if (level >= LoadProperties.fishingTier2) {
+            fishingTier = 2;
+        } else {
+            fishingTier = 1;
         }
 
         return fishingTier;
@@ -71,28 +66,28 @@ public class Fishing {
         Item theCatch = (Item) event.getCaught();
 
         switch (getFishingLootTier(PP)) {
-        case 1:
-            rewards = LoadTreasures.fishingRewardsTier1;
-            break;
+            case 1:
+                rewards = LoadTreasures.fishingRewardsTier1;
+                break;
 
-        case 2:
-            rewards = LoadTreasures.fishingRewardsTier2;
-            break;
+            case 2:
+                rewards = LoadTreasures.fishingRewardsTier2;
+                break;
 
-        case 3:
-            rewards = LoadTreasures.fishingRewardsTier3;
-            break;
+            case 3:
+                rewards = LoadTreasures.fishingRewardsTier3;
+                break;
 
-        case 4:
-            rewards = LoadTreasures.fishingRewardsTier4;
-            break;
+            case 4:
+                rewards = LoadTreasures.fishingRewardsTier4;
+                break;
 
-        case 5:
-            rewards = LoadTreasures.fishingRewardsTier5;
-            break;
+            case 5:
+                rewards = LoadTreasures.fishingRewardsTier5;
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
 
         if (LoadProperties.fishingDrops) {
@@ -102,8 +97,7 @@ public class Fishing {
                 Users.getProfile(player).addXP(SkillType.FISHING, treasure.getXp(), player);
                 theCatch.setItemStack(treasure.getDrop());
             }
-        }
-        else {
+        } else {
             theCatch.setItemStack(new ItemStack(Material.RAW_FISH));
         }
 
@@ -124,7 +118,7 @@ public class Fishing {
         PlayerProfile PP = Users.getProfile(player);
 
         getFishingResults(player, event);
-        Item theCatch = (Item)event.getCaught();
+        Item theCatch = (Item) event.getCaught();
 
         if (theCatch.getItemStack().getType() != Material.RAW_FISH) {
             final int ENCHANTMENT_CHANCE = 10;
@@ -144,7 +138,10 @@ public class Fishing {
                                 }
                             }
 
-                            /* Actual chance to have an enchantment is related to your fishing skill */
+                            /*
+                             * Actual chance to have an enchantment is related
+                             * to your fishing skill
+                             */
                             if (Math.random() * 15 < Fishing.getFishingLootTier(PP)) {
                                 enchanted = true;
                                 int randomEnchantLevel = (int) (Math.random() * newEnchant.getMaxLevel()) + 1;
@@ -179,153 +176,140 @@ public class Fishing {
         Location loc = le.getLocation();
 
         switch (type) {
-        case BLAZE:
-            m.mcDropItem(loc, new ItemStack(Material.BLAZE_ROD));
-            break;
+            case BLAZE:
+                m.mcDropItem(loc, new ItemStack(Material.BLAZE_ROD));
+                break;
 
-        case CAVE_SPIDER:
-            if (DROP_NUMBER > 50) {
-                m.mcDropItem(loc, new ItemStack(Material.SPIDER_EYE));
-            }
-            else {
-                m.mcDropItem(loc, new ItemStack(Material.STRING));
-            }
-            break;
-
-        case CHICKEN:
-            if (DROP_NUMBER > 66) {
-                m.mcDropItem(loc, new ItemStack(Material.FEATHER));
-            }
-            else if (DROP_NUMBER > 33) {
-                m.mcDropItem(loc, new ItemStack(Material.RAW_CHICKEN));
+            case CAVE_SPIDER:
+                if (DROP_NUMBER > 50) {
+                    m.mcDropItem(loc, new ItemStack(Material.SPIDER_EYE));
+                } else {
+                    m.mcDropItem(loc, new ItemStack(Material.STRING));
                 }
-            else {
-                m.mcDropItem(loc, new ItemStack(Material.EGG));
-            }
-            break;
+                break;
 
-        case COW:
-            if (DROP_NUMBER > 99) {
-                m.mcDropItem(loc, new ItemStack(Material.MILK_BUCKET));
-            }
-            else if (DROP_NUMBER > 50) {
-                m.mcDropItem(loc, new ItemStack(Material.LEATHER));
-            }
-            else {
-                m.mcDropItem(loc, new ItemStack(Material.RAW_BEEF));
-            }
-            break;
+            case CHICKEN:
+                if (DROP_NUMBER > 66) {
+                    m.mcDropItem(loc, new ItemStack(Material.FEATHER));
+                } else if (DROP_NUMBER > 33) {
+                    m.mcDropItem(loc, new ItemStack(Material.RAW_CHICKEN));
+                } else {
+                    m.mcDropItem(loc, new ItemStack(Material.EGG));
+                }
+                break;
 
-        case CREEPER:
-            m.mcDropItem(loc, new ItemStack(Material.SULPHUR));
-            break;
+            case COW:
+                if (DROP_NUMBER > 99) {
+                    m.mcDropItem(loc, new ItemStack(Material.MILK_BUCKET));
+                } else if (DROP_NUMBER > 50) {
+                    m.mcDropItem(loc, new ItemStack(Material.LEATHER));
+                } else {
+                    m.mcDropItem(loc, new ItemStack(Material.RAW_BEEF));
+                }
+                break;
 
-        case ENDERMAN:
-            m.mcDropItem(loc, new ItemStack(Material.ENDER_PEARL));
-            break;
-
-        case GHAST:
-            if (DROP_NUMBER > 50) {
+            case CREEPER:
                 m.mcDropItem(loc, new ItemStack(Material.SULPHUR));
-            }
-            else {
-                m.mcDropItem(loc, new ItemStack(Material.GHAST_TEAR));
-            }
-            break;
+                break;
 
-        case MAGMA_CUBE:
-            m.mcDropItem(loc, new ItemStack(Material.MAGMA_CREAM));
-            break;
+            case ENDERMAN:
+                m.mcDropItem(loc, new ItemStack(Material.ENDER_PEARL));
+                break;
 
-        case MUSHROOM_COW:
-            if (DROP_NUMBER > 99) {
-                m.mcDropItem(loc, new ItemStack(Material.MILK_BUCKET));
-            }
-            else if (DROP_NUMBER > 98) {
-                m.mcDropItem(loc, new ItemStack(Material.MUSHROOM_SOUP));
-            }
-            else if (DROP_NUMBER > 66) {
-                m.mcDropItem(loc, new ItemStack(Material.LEATHER));
-            }
-            else if (DROP_NUMBER > 33) {
-                m.mcDropItem(loc, new ItemStack(Material.RAW_BEEF));
-            }
-            else {
-                m.mcDropItems(loc, new ItemStack(Material.RED_MUSHROOM), 3);
-            }
-            break;
+            case GHAST:
+                if (DROP_NUMBER > 50) {
+                    m.mcDropItem(loc, new ItemStack(Material.SULPHUR));
+                } else {
+                    m.mcDropItem(loc, new ItemStack(Material.GHAST_TEAR));
+                }
+                break;
 
-        case PIG:
-            m.mcDropItem(loc, new ItemStack(Material.PORK));
-            break;
+            case MAGMA_CUBE:
+                m.mcDropItem(loc, new ItemStack(Material.MAGMA_CREAM));
+                break;
 
-        case PIG_ZOMBIE:
-            if (DROP_NUMBER > 50) {
+            case MUSHROOM_COW:
+                if (DROP_NUMBER > 99) {
+                    m.mcDropItem(loc, new ItemStack(Material.MILK_BUCKET));
+                } else if (DROP_NUMBER > 98) {
+                    m.mcDropItem(loc, new ItemStack(Material.MUSHROOM_SOUP));
+                } else if (DROP_NUMBER > 66) {
+                    m.mcDropItem(loc, new ItemStack(Material.LEATHER));
+                } else if (DROP_NUMBER > 33) {
+                    m.mcDropItem(loc, new ItemStack(Material.RAW_BEEF));
+                } else {
+                    m.mcDropItems(loc, new ItemStack(Material.RED_MUSHROOM), 3);
+                }
+                break;
+
+            case PIG:
+                m.mcDropItem(loc, new ItemStack(Material.PORK));
+                break;
+
+            case PIG_ZOMBIE:
+                if (DROP_NUMBER > 50) {
+                    m.mcDropItem(loc, new ItemStack(Material.ROTTEN_FLESH));
+                } else {
+                    m.mcDropItem(loc, new ItemStack(Material.GOLD_NUGGET));
+                }
+                break;
+
+            case SHEEP:
+                Sheep sheep = (Sheep) le;
+
+                if (!sheep.isSheared()) {
+                    Wool wool = new Wool();
+                    wool.setColor(sheep.getColor());
+
+                    ItemStack theWool = wool.toItemStack();
+                    theWool.setAmount((int) (Math.random() * 6));
+
+                    m.mcDropItem(loc, theWool);
+                    sheep.setSheared(true);
+                }
+                break;
+
+            case SKELETON:
+                if (DROP_NUMBER > 50) {
+                    m.mcDropItem(loc, new ItemStack(Material.BONE));
+                } else {
+                    m.mcDropItems(loc, new ItemStack(Material.ARROW), 3);
+                }
+                break;
+
+            case SLIME:
+                m.mcDropItem(loc, new ItemStack(Material.SLIME_BALL));
+                break;
+
+            case SNOWMAN:
+                if (DROP_NUMBER > 99) {
+                    m.mcDropItem(loc, new ItemStack(Material.PUMPKIN));
+                } else {
+                    m.mcDropItems(loc, new ItemStack(Material.SNOW_BALL), 5);
+                }
+                break;
+
+            case SPIDER:
+                if (DROP_NUMBER > 50) {
+                    m.mcDropItem(loc, new ItemStack(Material.SPIDER_EYE));
+                } else {
+                    m.mcDropItem(loc, new ItemStack(Material.STRING));
+                }
+                break;
+
+            case SQUID:
+                m.mcDropItem(loc, new ItemStack(Material.INK_SACK, 1, (short) 0, DyeColor.BLACK.getData()));
+                break;
+
+            case ZOMBIE:
                 m.mcDropItem(loc, new ItemStack(Material.ROTTEN_FLESH));
-            }
-            else {
-                m.mcDropItem(loc, new ItemStack(Material.GOLD_NUGGET));
-            }
-            break;
+                break;
 
-        case SHEEP:
-            Sheep sheep = (Sheep) le;
-            
-            if (!sheep.isSheared()) {
-                Wool wool = new Wool();
-                wool.setColor(sheep.getColor());
-
-                ItemStack theWool = wool.toItemStack();
-                theWool.setAmount((int)(Math.random() * 6));
-
-                m.mcDropItem(loc, theWool);
-                sheep.setSheared(true);
-            }
-            break;
-
-        case SKELETON:
-            if (DROP_NUMBER > 50) {
-                m.mcDropItem(loc, new ItemStack(Material.BONE));
-            }
-            else {
-                m.mcDropItems(loc, new ItemStack(Material.ARROW), 3);
-            }
-            break;
-
-        case SLIME:
-            m.mcDropItem(loc, new ItemStack(Material.SLIME_BALL));
-            break;
-
-        case SNOWMAN:
-            if (DROP_NUMBER > 99) {
-                m.mcDropItem(loc, new ItemStack(Material.PUMPKIN));
-            }
-            else {
-                m.mcDropItems(loc, new ItemStack(Material.SNOW_BALL), 5);
-            }
-            break;
-
-        case SPIDER:
-            if (DROP_NUMBER > 50) {
-                m.mcDropItem(loc, new ItemStack(Material.SPIDER_EYE));
-            }
-            else {
-                m.mcDropItem(loc, new ItemStack(Material.STRING));
-            }
-            break;
-
-        case SQUID:
-            m.mcDropItem(loc, new ItemStack(Material.INK_SACK, 1, (short) 0, DyeColor.BLACK.getData()));
-            break;
-
-        case ZOMBIE:
-            m.mcDropItem(loc, new ItemStack(Material.ROTTEN_FLESH));
-            break;
-
-        default:
-            break;
+            default:
+                break;
         }
 
         Combat.dealDamage(le, 1);
     }
+
 }
