@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import com.gmail.nossr50.BlockChecks;
 import com.gmail.nossr50.Combat;
 import com.gmail.nossr50.Item;
+import com.gmail.nossr50.ItemChecks;
 import com.gmail.nossr50.Users;
 import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.mcPermissions;
@@ -64,6 +65,13 @@ public class mcPlayerListener implements Listener {
             if (!mcPermissions.getInstance().mcgod(player)) {
                 PP.toggleGodMode();
                 player.sendMessage(mcLocale.getString("GodMode.Forbidden"));
+            }
+        }
+
+        if (PP.inParty()) {
+            if (!mcPermissions.getInstance().party(player)) {
+                PP.removeParty();
+                player.sendMessage(mcLocale.getString("Party.Forbidden"));
             }
         }
     }
@@ -194,8 +202,8 @@ public class mcPlayerListener implements Listener {
         case RIGHT_CLICK_BLOCK:
 
             /* REPAIR CHECKS */
-            if (mcPermissions.getInstance().repair(player) && block.getTypeId() == LoadProperties.anvilID && (Repair.isTools(is) || Repair.isArmor(is))) {
-                Repair.repairCheck(player, is, event.getClickedBlock());
+            if (mcPermissions.getInstance().repair(player) && block.getTypeId() == LoadProperties.anvilID && (ItemChecks.isTool(is) || ItemChecks.isArmor(is))) {
+                Repair.repairCheck(player, is);
                 event.setCancelled(true);
                 player.updateInventory();
             }
@@ -260,10 +268,10 @@ public class mcPlayerListener implements Listener {
             /* CALL OF THE WILD CHECKS */
             if (player.isSneaking() && mcPermissions.getInstance().taming(player)) {
                 if (is.getType().equals(Material.RAW_FISH)) {
-                    Taming.animalSummon(EntityType.OCELOT, player);
+                    Taming.animalSummon(EntityType.OCELOT, player, plugin);
                 }
                 else if (is.getType().equals(Material.BONE)) {
-                    Taming.animalSummon(EntityType.WOLF, player);
+                    Taming.animalSummon(EntityType.WOLF, player, plugin);
                 }
             }
 
