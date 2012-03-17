@@ -58,6 +58,7 @@ public class Combat {
                 combatAbilityChecks(attacker);
 
                 if (ItemChecks.isSword(itemInHand) && mcPermissions.getInstance().swords(attacker)) {
+                    Swords.heroicStrike(attacker);
                     if (!plugin.misc.bleedTracker.contains(target)) {
                         Swords.bleedCheck(attacker, target, plugin);
                     }
