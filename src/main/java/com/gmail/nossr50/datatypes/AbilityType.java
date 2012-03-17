@@ -11,6 +11,7 @@ import com.gmail.nossr50.skills.Herbalism;
 import com.gmail.nossr50.skills.Mining;
 
 public enum AbilityType {
+
     BERSERK(LoadProperties.berserkCooldown, mcLocale.getString("Skills.BerserkOn"), mcLocale.getString("Skills.BerserkOff"), "Skills.BerserkPlayer", mcLocale.getString("Skills.YourBerserk"), "Skills.BerserkPlayerOff"),
     SUPER_BREAKER(LoadProperties.superBreakerCooldown, mcLocale.getString("Skills.SuperBreakerOn"), mcLocale.getString("Skills.SuperBreakerOff"), "Skills.SuperBreakerPlayer", mcLocale.getString("Skills.YourSuperBreaker"), "Skills.SuperBreakerPlayerOff"),
     GIGA_DRILL_BREAKER(LoadProperties.gigaDrillBreakerCooldown, mcLocale.getString("Skills.GigaDrillBreakerOn"), mcLocale.getString("Skills.GigaDrillBreakerOff"), "Skills.GigaDrillBreakerPlayer", mcLocale.getString("Skills.YourGigaDrillBreaker"), "Skills.GigaDrillBreakerPlayerOff"),
@@ -20,17 +21,11 @@ public enum AbilityType {
     SERRATED_STRIKES(LoadProperties.skullSplitterCooldown, mcLocale.getString("Skills.SerratedStrikesOn"), mcLocale.getString("Skills.SerratedStrikesOff"), "Skills.SerratedStrikesPlayer", mcLocale.getString("Skills.YourSerratedStrikes"), "Skills.SerratedStrikesPlayerOff"),
     BLAST_MINING(LoadProperties.blastMiningCooldown, null, null, "Skills.BlastMiningPlayer", mcLocale.getString("Skills.YourBlastMining"), null),
     LEAF_BLOWER(0, null, null, null, null, null);
-
     private int cooldown;
-
     private String abilityOn;
-
     private String abilityOff;
-
     private String abilityPlayer;
-
     private String abilityRefresh;
-
     private String abilityPlayerOff;
 
     private AbilityType(int cooldown, String abilityOn, String abilityOff, String abilityPlayer, String abilityRefresh, String abilityPlayerOff) {
@@ -205,5 +200,4 @@ public enum AbilityType {
                 return false;
         }
     }
-
 }

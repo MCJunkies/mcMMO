@@ -1,0 +1,11 @@
+New Weapon
+-HOE-
+Abilities:
+Plague - (Active) Let players cleave and hit multiple enemies similar to Skull Splitter on the axe however instead of transferring damage it will tranfer weakness. (Area of Effect Weakness)
+Slow - (Passive) Applies Slowness II to target for 10seconds. Max of 20% chance on hit.
+Critical Strikes - (Passive) For every skill level in hoes you gain .1% chance to deal a Critical Strike causing double damage to opponets (or only 65% more damage in PvP) This caps out at 75% chance. (Axes has similiar ability, however its only 50% damage in PvP)
+
+Change
+-Swords-
+Abilities:
+Heroic Strike - (Passive) Chance to regenerate health. Max of 20% chance on hit. Lasts 10 seconds equivalent healing to Potion of Regeneration.

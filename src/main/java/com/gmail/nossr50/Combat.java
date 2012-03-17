@@ -58,58 +58,60 @@ public class Combat {
                 combatAbilityChecks(attacker);
 
                 if (ItemChecks.isSword(itemInHand) && mcPermissions.getInstance().swords(attacker)) {
+                    // Apply our slow!
+                    Swords.slowEffect(event);
                     if (!plugin.misc.bleedTracker.contains(target)) {
                         Swords.bleedCheck(attacker, target, plugin);
-                        // Apply our slow!
-                        Swords.slowEffect(event);
-                        if (!plugin.misc.bleedTracker.contains(target)) {
-                            Swords.bleedCheck(attacker, target, plugin);
-                        }
-
-                        if (PPa.getSerratedStrikesMode()) {
-                            applyAbilityAoE(attacker, target, damage, plugin, SkillType.SWORDS);
-                        }
-
-                        startGainXp(attacker, PPa, target, SkillType.SWORDS, plugin);
-                    } else if (ItemChecks.isAxe(itemInHand) && mcPermissions.getInstance().axes(attacker)) {
-                        Axes.axesBonus(attacker, event);
-                        Axes.axeCriticalCheck(attacker, event);
-                        Axes.impact(attacker, target, event);
-
-                        if (PPa.getSkullSplitterMode()) {
-                            applyAbilityAoE(attacker, target, damage, plugin, SkillType.AXES);
-                        }
-
-                        startGainXp(attacker, PPa, target, SkillType.AXES, plugin);
-                    } else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
-                        Unarmed.unarmedBonus(attacker, event);
-
-                        if (PPa.getBerserkMode()) {
-                            event.setDamage(damage + (damage / 2));
-                        }
-
-                        if (targetType.equals(EntityType.PLAYER)) {
-                            Unarmed.disarmProcCheck(attacker, (Player) target);
-                        }
-
-                        startGainXp(attacker, PPa, target, SkillType.UNARMED, plugin);
-                    } else if (itemInHand.getType().equals(Material.BONE) && mcPermissions.getInstance().taming(attacker) && targetType.equals(EntityType.WOLF)) {
-                        Wolf wolf = (Wolf) target;
-                        String message = mcLocale.getString("Combat.BeastLore") + " ";
-                        int health = wolf.getHealth();
-                        event.setCancelled(true);
-
-                        if (wolf.isTamed()) {
-                            message = message.concat(mcLocale.getString("Combat.BeastLoreOwner", new Object[]{Taming.getOwnerName(wolf)}) + " ");
-                            message = message.concat(mcLocale.getString("Combat.BeastLoreHealthWolfTamed", new Object[]{health}));
-                        } else {
-                            message = message.concat(mcLocale.getString("Combat.BeastLoreHealthWolf", new Object[]{health}));
-                        }
-
-                        attacker.sendMessage(message);
                     }
+                    if (!plugin.misc.bleedTracker.contains(target)) {
+                        Swords.bleedCheck(attacker, target, plugin);
+                    }
+
+                    if (PPa.getSerratedStrikesMode()) {
+                        applyAbilityAoE(attacker, target, damage, plugin, SkillType.SWORDS);
+                    }
+
+                    startGainXp(attacker, PPa, target, SkillType.SWORDS, plugin);
+                } else if (ItemChecks.isAxe(itemInHand) && mcPermissions.getInstance().axes(attacker)) {
+                    Axes.axesBonus(attacker, event);
+                    Axes.axeCriticalCheck(attacker, event);
+                    Axes.impact(attacker, target, event);
+
+                    if (PPa.getSkullSplitterMode()) {
+                        applyAbilityAoE(attacker, target, damage, plugin, SkillType.AXES);
+                    }
+
+                    startGainXp(attacker, PPa, target, SkillType.AXES, plugin);
+                } else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
+                    Unarmed.unarmedBonus(attacker, event);
+
+                    if (PPa.getBerserkMode()) {
+                        event.setDamage(damage + (damage / 2));
+                    }
+
+                    if (targetType.equals(EntityType.PLAYER)) {
+                        Unarmed.disarmProcCheck(attacker, (Player) target);
+                    }
+
+                    startGainXp(attacker, PPa, target, SkillType.UNARMED, plugin);
+                } else if (itemInHand.getType().equals(Material.BONE) && mcPermissions.getInstance().taming(attacker) && targetType.equals(EntityType.WOLF)) {
+                    Wolf wolf = (Wolf) target;
+                    String message = mcLocale.getString("Combat.BeastLore") + " ";
+                    int health = wolf.getHealth();
+                    event.setCancelled(true);
+
+                    if (wolf.isTamed()) {
+                        message = message.concat(mcLocale.getString("Combat.BeastLoreOwner", new Object[]{Taming.getOwnerName(wolf)}) + " ");
+                        message = message.concat(mcLocale.getString("Combat.BeastLoreHealthWolfTamed", new Object[]{health}));
+                    } else {
+                        message = message.concat(mcLocale.getString("Combat.BeastLoreHealthWolf", new Object[]{health}));
+                    }
+
+                    attacker.sendMessage(message);
                 }
                 break;
+
+
 
 
             case WOLF:
@@ -140,6 +142,7 @@ public class Combat {
             Swords.counterAttackChecks(event);
             Acrobatics.dodgeChecks(event);
         }
+
     }
 
     /**
