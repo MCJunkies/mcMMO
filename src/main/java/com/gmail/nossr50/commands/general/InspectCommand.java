@@ -85,6 +85,9 @@ public class InspectCommand implements CommandExecutor {
             if (mcPermissions.getInstance().unarmed(target)) {
                 sender.sendMessage(Skills.getSkillStats(mcLocale.getString("mcPlayerListener.UnarmedSkill"), PPt.getSkillLevel(SkillType.UNARMED), PPt.getSkillXpLevel(SkillType.UNARMED), PPt.getXpToLevel(SkillType.UNARMED)));
             }
+            if (mcPermissions.getInstance().hoes(target)) {
+                sender.sendMessage(Skills.getSkillStats(mcLocale.getString("mcPlayerListener.HoesSkill"), PPt.getSkillLevel(SkillType.HOES), PPt.getSkillXpLevel(SkillType.HOES), PPt.getXpToLevel(SkillType.HOES)));
+            }
 
             sender.sendMessage(ChatColor.GOLD + "-=MISC SKILLS=-");
             if (mcPermissions.getInstance().acrobatics(target)) {
@@ -125,6 +128,7 @@ public class InspectCommand implements CommandExecutor {
             sender.sendMessage(Skills.getSkillStats(mcLocale.getString("mcPlayerListener.SwordsSkill"), PPt.getSkillLevel(SkillType.SWORDS), PPt.getSkillXpLevel(SkillType.SWORDS), PPt.getXpToLevel(SkillType.SWORDS)));
             sender.sendMessage(Skills.getSkillStats(mcLocale.getString("mcPlayerListener.TamingSkill"), PPt.getSkillLevel(SkillType.TAMING), PPt.getSkillXpLevel(SkillType.TAMING), PPt.getXpToLevel(SkillType.TAMING)));
             sender.sendMessage(Skills.getSkillStats(mcLocale.getString("mcPlayerListener.UnarmedSkill"), PPt.getSkillLevel(SkillType.UNARMED), PPt.getSkillXpLevel(SkillType.UNARMED), PPt.getXpToLevel(SkillType.UNARMED)));
+            sender.sendMessage(Skills.getSkillStats(mcLocale.getString("mcPlayerListener.HoesSkill"), PPt.getSkillLevel(SkillType.HOES), PPt.getSkillXpLevel(SkillType.HOES), PPt.getXpToLevel(SkillType.HOES)));
 
             sender.sendMessage(ChatColor.GOLD + "-=MISC SKILLS=-");
             sender.sendMessage(Skills.getSkillStats(mcLocale.getString("mcPlayerListener.AcrobaticsSkill"), PPt.getSkillLevel(SkillType.ACROBATICS), PPt.getSkillXpLevel(SkillType.ACROBATICS), PPt.getXpToLevel(SkillType.ACROBATICS)));

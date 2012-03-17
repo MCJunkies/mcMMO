@@ -1099,6 +1099,9 @@ public class PlayerProfile {
                 case FISHING:
                     xp = (int) (xp / LoadProperties.fishingxpmodifier);
                     break;
+                case HOES:
+                    xp = (int) (xp / LoadProperties.hoesxpmodifier);
+                    break;
             }
             xp = xp * LoadProperties.xpGainMultiplier;
 
@@ -1196,6 +1199,7 @@ public class PlayerProfile {
             skills.put(SkillType.EXCAVATION, skills.get(SkillType.EXCAVATION) + levels);
             skills.put(SkillType.AXES, skills.get(SkillType.AXES) + levels);
             skills.put(SkillType.FISHING, skills.get(SkillType.FISHING) + levels);
+            skills.put(SkillType.HOES, skills.get(SkillType.HOES) + levels);
 
             skillsXp.put(SkillType.TAMING, 0);
             skillsXp.put(SkillType.MINING, 0);
@@ -1209,6 +1213,7 @@ public class PlayerProfile {
             skillsXp.put(SkillType.EXCAVATION, 0);
             skillsXp.put(SkillType.AXES, 0);
             skillsXp.put(SkillType.FISHING, 0);
+            skillsXp.put(SkillType.HOES, 0);
         } else {
             skills.put(skillType, skills.get(skillType) + levels);
             skillsXp.put(skillType, 0);

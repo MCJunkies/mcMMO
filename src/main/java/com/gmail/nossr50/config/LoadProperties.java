@@ -63,7 +63,7 @@ public class LoadProperties {
             miningxpmodifier, repairxpmodifier, woodcuttingxpmodifier,
             fishingxpmodifier, unarmedxpmodifier, herbalismxpmodifier,
             excavationxpmodifier, archeryxpmodifier, swordsxpmodifier,
-            axesxpmodifier, acrobaticsxpmodifier, animalXP, creeperXP, skeletonXP, spiderXP, ghastXP, slimeXP,
+            axesxpmodifier, acrobaticsxpmodifier, hoesxpmodifier, animalXP, creeperXP, skeletonXP, spiderXP, ghastXP, slimeXP,
             zombieXP, pigzombieXP, endermanXP, cavespiderXP, silverfishXP, blazeXP, magmacubeXP, enderdragonXP;
 
     public static HUDType defaulthud;
