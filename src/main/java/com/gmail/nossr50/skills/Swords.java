@@ -117,6 +117,7 @@ public class Swords {
     public static void heroicStrike(Player attacker) {
         if (Math.random() * 100.0 <= 20.0) {
             attacker.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10, 0));
+            attacker.sendMessage(mcLocale.getString("Swords.HeroicStrike"));
         }
     }
 
