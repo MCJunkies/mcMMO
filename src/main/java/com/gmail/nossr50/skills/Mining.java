@@ -2,7 +2,6 @@ package com.gmail.nossr50.skills;
 
 import org.bukkit.Bukkit;
 import org.bukkit.CoalType;
-import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
