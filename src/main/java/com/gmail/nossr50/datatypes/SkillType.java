@@ -18,7 +18,8 @@ public enum SkillType {
     SWORDS(AbilityType.SERRATED_STRIKES, LoadProperties.levelCapSwords, ToolType.SWORD),
     TAMING(LoadProperties.levelCapTaming),
     UNARMED(AbilityType.BERSERK, LoadProperties.levelCapUnarmed, ToolType.FISTS),
-    WOODCUTTING(AbilityType.TREE_FELLER, LoadProperties.levelCapWoodcutting, ToolType.AXE);
+    WOODCUTTING(AbilityType.TREE_FELLER, LoadProperties.levelCapWoodcutting, ToolType.AXE),
+    HOES(AbilityType.PLAGUE, LoadProperties.levelCapHoes, ToolType.HOE);
 
     private AbilityType ability;
 
@@ -72,6 +73,8 @@ public enum SkillType {
                 return mcPermissions.getInstance().fishing(player);
             case HERBALISM:
                 return mcPermissions.getInstance().herbalism(player);
+            case HOES:
+                return mcPermissions.getInstance().hoes(player);
             case MINING:
                 return mcPermissions.getInstance().mining(player);
             case REPAIR:

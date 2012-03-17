@@ -35,7 +35,7 @@ public class LoadProperties {
             mglowstone, mcoal, mstone, MySQLport, xpGainMultiplier,
             superBreakerCooldown, blastMiningCooldown, greenTerraCooldown, gigaDrillBreakerCooldown,
             treeFellerCooldown, berserkCooldown, serratedStrikeCooldown,
-            skullSplitterCooldown, abilityDurabilityLoss,
+            skullSplitterCooldown, plagueCooldown, abilityDurabilityLoss,
             feathersConsumedByChimaeraWing, bonesConsumedByCOTW,
             repairdiamondlevel, rWood, rStone, rIron, rGold, rDiamond, rString,
             rLeather, downgradeRank1, downgradeRank2, downgradeRank3,
@@ -44,7 +44,7 @@ public class LoadProperties {
             mvines, mlilypad, mendstone, mmossstone,
             levelCapAcrobatics, levelCapArchery, levelCapAxes, levelCapExcavation,
             levelCapFishing, levelCapHerbalism, levelCapMining, levelCapRepair,
-            levelCapSwords, levelCapTaming, levelCapUnarmed, levelCapWoodcutting,
+            levelCapSwords, levelCapTaming, levelCapUnarmed, levelCapWoodcutting, levelCapHoes,
             anvilID, saveInterval, fishingTier1, fishingTier2, fishingTier3, fishingTier4, fishingTier5,
             repairStoneLevel, repairIronLevel, repairGoldLevel, arcaneRank1, arcaneRank2, arcaneRank3, arcaneRank4,
             detonatorID, fishConsumedByCOTW, dAxe, dHoe, dShovel, dSword, dPickaxe, gAxe, gHoe, gShovel, gSword, gPickaxe,
@@ -252,6 +252,7 @@ public class LoadProperties {
         serratedStrikeCooldown = readInteger("Abilities.Cooldowns.Serrated_Strikes", 240);
         skullSplitterCooldown = readInteger("Abilities.Cooldowns.Skull_Splitter", 240);
         blastMiningCooldown = readInteger("Abilities.Cooldowns.Blast_Mining", 60);
+        plagueCooldown = readInteger("Abilities.Cooldowns.Plague", 60);
 
         MySQLserverName = readString("MySQL.Server.Address", "localhost");
         if (readString("MySQL.Database.User.Password", null) != null) {

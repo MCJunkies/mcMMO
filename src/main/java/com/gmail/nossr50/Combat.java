@@ -80,18 +80,19 @@ public class Combat {
                         applyAbilityAoE(attacker, target, damage, plugin, SkillType.AXES);
                     }
 
-                startGainXp(attacker, PPa, target, SkillType.AXES, plugin);
-            }
-            else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
-                Unarmed.unarmedBonus(PPa, event);
+                    startGainXp(attacker, PPa, target, SkillType.AXES, plugin);
+                } else if (ItemChecks.isHoe(itemInHand) && mcPermissions.getInstance().hoes(attacker)) {
+                    
+                } else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
+                    Unarmed.unarmedBonus(PPa, event);
 
                     if (PPa.getBerserkMode()) {
                         event.setDamage(damage + (damage / 2));
                     }
 
-                if (targetType.equals(EntityType.PLAYER)) {
-                    Unarmed.disarmProcCheck(PPa, (Player) target);
-                }
+                    if (targetType.equals(EntityType.PLAYER)) {
+                        Unarmed.disarmProcCheck(PPa, (Player) target);
+                    }
 
                     startGainXp(attacker, PPa, target, SkillType.UNARMED, plugin);
                 } else if (itemInHand.getType().equals(Material.BONE) && mcPermissions.getInstance().taming(attacker) && targetType.equals(EntityType.WOLF)) {

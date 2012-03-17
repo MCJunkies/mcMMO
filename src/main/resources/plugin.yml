@@ -202,6 +202,7 @@ permissions:
             mcmmo.skills.axes: true 
             mcmmo.skills.acrobatics: true
             mcmmo.skills.blastmining: true
+            mcmmo.skills.hoes: true
     mcmmo.skills.taming:
         description: Allows access to the Taming skill
     mcmmo.skills.mining:
@@ -222,6 +223,8 @@ permissions:
         description: Allows access to the Excavation skill
     mcmmo.skills.swords:
         description: Allows access to the Swords skill
+    mcmmo.skills.hoes:
+        description: Allows access to the Hoes skill
     mcmmo.skills.axes:
         description: Allows access to the Axes skill
     mcmmo.skills.acrobatics:

@@ -20,7 +20,9 @@ public enum AbilityType {
     TREE_FELLER(LoadProperties.treeFellerCooldown, mcLocale.getString("Skills.TreeFellerOn"), mcLocale.getString("Skills.TreeFellerOff"), "Skills.TreeFellerPlayer", mcLocale.getString("Skills.YourTreeFeller"), "Skills.TreeFellerPlayerOff"),
     SERRATED_STRIKES(LoadProperties.skullSplitterCooldown, mcLocale.getString("Skills.SerratedStrikesOn"), mcLocale.getString("Skills.SerratedStrikesOff"), "Skills.SerratedStrikesPlayer", mcLocale.getString("Skills.YourSerratedStrikes"), "Skills.SerratedStrikesPlayerOff"),
     BLAST_MINING(LoadProperties.blastMiningCooldown, null, null, "Skills.BlastMiningPlayer", mcLocale.getString("Skills.YourBlastMining"), null),
-    LEAF_BLOWER(0, null, null, null, null, null);
+    LEAF_BLOWER(0, null, null, null, null, null), 
+    PLAGUE(LoadProperties.plagueCooldown, mcLocale.getString("Skills.PlagueOn"), mcLocale.getString("Skills.PlagueOff"), "Skills.PlaguePlayer", mcLocale.getString("Skills.YourPlague"), "Skills.PlaguePlayerOff");
+    
     private int cooldown;
     private String abilityOn;
     private String abilityOff;

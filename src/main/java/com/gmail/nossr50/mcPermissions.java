@@ -157,4 +157,8 @@ public class mcPermissions {
         return player.hasPermission("mcmmo.skills.acrobatics");
     }
 
+    public boolean hoes(Player player) {
+        return player.hasPermission("mcmmo.skills.hoes");
+    }
+
 }
