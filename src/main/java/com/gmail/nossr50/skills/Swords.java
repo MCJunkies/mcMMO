@@ -108,6 +108,17 @@ public class Swords {
             }
         }
     }
+    
+    /**
+     * Checks for heroic strike.
+     * 
+     * @param attacker The attacker.
+     */
+    public static void heroicStrike(Player attacker) {
+        if (Math.random() * 100.0 <= 20.0) {
+            
+        }
+    }
 
     public static void slowEffect(EntityDamageByEntityEvent event) {
         // Don't want to slow stuff that's not alive?

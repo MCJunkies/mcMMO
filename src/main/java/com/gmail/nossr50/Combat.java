@@ -58,8 +58,6 @@ public class Combat {
                 combatAbilityChecks(attacker);
 
                 if (ItemChecks.isSword(itemInHand) && mcPermissions.getInstance().swords(attacker)) {
-                    // Apply our slow!
-                    Swords.slowEffect(event);
                     if (!plugin.misc.bleedTracker.contains(target)) {
                         Swords.bleedCheck(attacker, target, plugin);
                     }
