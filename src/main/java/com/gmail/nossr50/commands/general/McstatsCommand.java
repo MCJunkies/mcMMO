@@ -71,6 +71,9 @@ public class McstatsCommand implements CommandExecutor {
             if (mcPermissions.getInstance().unarmed(player)) {
                 player.sendMessage(Skills.getSkillStats(mcLocale.getString("mcPlayerListener.UnarmedSkill"), PP.getSkillLevel(SkillType.UNARMED), PP.getSkillXpLevel(SkillType.UNARMED), PP.getXpToLevel(SkillType.UNARMED)));
             }
+            if (mcPermissions.getInstance().hoes(player)) {
+                player.sendMessage(Skills.getSkillStats(mcLocale.getString("mcPlayerListener.HoesSkill"), PP.getSkillLevel(SkillType.HOES), PP.getSkillXpLevel(SkillType.HOES), PP.getXpToLevel(SkillType.HOES)));
+            }
         }
 
         if (Skills.hasMiscSkills(player)) {

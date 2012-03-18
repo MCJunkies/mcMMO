@@ -34,6 +34,7 @@ public class Leaderboard {
         Tree Unarmed = new Tree();
         Tree Taming = new Tree();
         Tree Fishing = new Tree();
+        Tree Hoes = new Tree();
         Tree PowerLevel = new Tree();
 
         //Add Data To Trees
@@ -115,6 +116,11 @@ public class Leaderboard {
                     powerLevel += Integer.valueOf(character[34]);
                 }
 
+                if (character.length > 35 && m.isInt(character[35])) {
+                    Hoes.add(p, Integer.valueOf(character[35]));
+                    powerLevel += Integer.valueOf(character[35]);
+                }
+
                 PowerLevel.add(p, powerLevel);
             }
             in.close();
@@ -135,6 +141,7 @@ public class Leaderboard {
         leaderWrite(Acrobatics.inOrder(), SkillType.ACROBATICS);
         leaderWrite(Taming.inOrder(), SkillType.TAMING);
         leaderWrite(Fishing.inOrder(), SkillType.FISHING);
+        leaderWrite(Hoes.inOrder(), SkillType.HOES);
         leaderWrite(PowerLevel.inOrder(), SkillType.ALL);
     }
 

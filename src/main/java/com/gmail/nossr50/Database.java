@@ -134,6 +134,9 @@ public class Database {
             case FISHING:
                 sql = "SELECT * FROM  `" + LoadProperties.MySQLtablePrefix + "experience` ORDER BY  `" + LoadProperties.MySQLtablePrefix + "experience`.`fishing` ASC LIMIT 0 , 30";
                 break;
+            case HOES:
+                sql = "SELECT * FROM  `" + LoadProperties.MySQLtablePrefix + "experience` ORDER BY  `" + LoadProperties.MySQLtablePrefix + "experience`.`hoes` ASC LIMIT 0 , 30";
+                break;
             default:
                 break;
         }
@@ -159,6 +162,10 @@ public class Database {
                 System.out.println("Updating mcMMO MySQL tables for Fishing...");
                 write("ALTER TABLE `" + LoadProperties.MySQLtablePrefix + "skills` ADD `fishing` int(10) NOT NULL DEFAULT '0' ;");
                 write("ALTER TABLE `" + LoadProperties.MySQLtablePrefix + "experience` ADD `fishing` int(10) NOT NULL DEFAULT '0' ;");
+            } else if (update.equals(DatabaseUpdate.HOES)) {
+                System.out.println("Updating mcMMO MySQL tables for Hoes...");
+                write("ALTER TABLE `" + LoadProperties.MySQLtablePrefix + "skills` ADD `hoes` int(10) NOT NULL DEFAULT '0' ;");
+                write("ALTER TABLE `" + LoadProperties.MySQLtablePrefix + "experience` ADD `hoes` int(10) NOT NULL DEFAULT '0' ;");
             }
         }
     }

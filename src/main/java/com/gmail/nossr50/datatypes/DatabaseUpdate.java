@@ -19,6 +19,7 @@ package com.gmail.nossr50.datatypes;
 
 public enum DatabaseUpdate {
     FISHING,
+    HOES,
     BLAST_MINING;
 
 }
