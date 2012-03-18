@@ -461,6 +461,24 @@ public class SpoutStuff {
                         mat = Material.FISHING_ROD;
                         break;
                 }
+            case HOES:
+                switch (getNotificationTier(PP.getSkillLevel(skillType))) {
+                    case 1:
+                        mat = Material.WOOD_HOE;
+                        break;
+                    case 2:
+                        mat = Material.STONE_HOE;
+                        break;
+                    case 3:
+                        mat = Material.IRON_HOE;
+                        break;
+                    case 4:
+                        mat = Material.GOLD_HOE;
+                        break;
+                    case 5:
+                        mat = Material.DIAMOND_HOE;
+                        break;
+                }
             default:
                 mat = Material.WATCH;
                 break;
