@@ -89,7 +89,7 @@ public class Combat {
                     if (PPa.getPlagueMode()) {
                         applyAbilityAoE(attacker, target, damage, plugin, SkillType.HOES);
                     }
-                    
+
                 } else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
                     Unarmed.unarmedBonus(PPa, event);
 
@@ -165,6 +165,8 @@ public class Combat {
             Skills.abilityCheck(attacker, SkillType.AXES);
         } else if (PPa.getSwordsPreparationMode()) {
             Skills.abilityCheck(attacker, SkillType.SWORDS);
+        } else if (PPa.getHoePreparationMode()) {
+            Skills.abilityCheck(attacker, SkillType.HOES);
         } else if (PPa.getFistsPreparationMode()) {
             Skills.abilityCheck(attacker, SkillType.UNARMED);
         }
@@ -362,7 +364,7 @@ public class Combat {
                         if (type.equals(SkillType.HOES)) {
                             Hoes.performPlague(defender);
                         }
-                        
+
                         defender.sendMessage(message);
 
                         if (type.equals(SkillType.SWORDS)) {
