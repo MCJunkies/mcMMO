@@ -26,6 +26,7 @@ import com.gmail.nossr50.runnables.GainXp;
 import com.gmail.nossr50.skills.Acrobatics;
 import com.gmail.nossr50.skills.Archery;
 import com.gmail.nossr50.skills.Axes;
+import com.gmail.nossr50.skills.Hoes;
 import com.gmail.nossr50.skills.Skills;
 import com.gmail.nossr50.skills.Swords;
 import com.gmail.nossr50.skills.Taming;
@@ -82,6 +83,7 @@ public class Combat {
 
                     startGainXp(attacker, PPa, target, SkillType.AXES, plugin);
                 } else if (ItemChecks.isHoe(itemInHand) && mcPermissions.getInstance().hoes(attacker)) {
+                    Hoes.criticalStrikes(attacker, target, event);
                     
                 } else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
                     Unarmed.unarmedBonus(PPa, event);
