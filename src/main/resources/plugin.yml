@@ -203,6 +203,7 @@ permissions:
             mcmmo.skills.acrobatics: true
             mcmmo.skills.blastmining: true
             mcmmo.skills.hoes: true
+            mcmmo.skills.plague: true
     mcmmo.skills.taming:
         description: Allows access to the Taming skill
     mcmmo.skills.mining:
@@ -231,3 +232,5 @@ permissions:
         description: Allows access to the Acrobatics skill
     mcmmo.skills.blastmining:
         description: Allows access to the Blast Mining subskill for Mining
+    mcmmo.skills.plague:
+        description: Allows access to the Plague subskill for Hoes

@@ -113,6 +113,10 @@ public class mcPermissions {
         return player.hasPermission("mcmmo.skills.blastmining");
     }
 
+    public boolean plague(Player player) {
+        return player.hasPermission("mcmmo.skills.plague");
+    }
+
     public boolean fishing(Player player) {
         return player.hasPermission("mcmmo.skills.fishing");
     }

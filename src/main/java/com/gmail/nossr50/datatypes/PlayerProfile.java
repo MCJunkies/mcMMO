@@ -936,7 +936,7 @@ public class PlayerProfile {
         blastMiningInformed = bool;
     }
 
-    public boolean isPlagueInformed() {
+    public boolean getPlagueInformed() {
         return plagueInformed;
     }
 

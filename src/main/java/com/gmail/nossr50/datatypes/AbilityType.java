@@ -127,6 +127,8 @@ public enum AbilityType {
                 return PP.getTreeFellerInformed();
             case SERRATED_STRIKES:
                 return PP.getSerratedStrikesInformed();
+            case PLAGUE:
+                return PP.getPlagueInformed();
         }
         return false;
     }
@@ -156,6 +158,9 @@ public enum AbilityType {
                 break;
             case SERRATED_STRIKES:
                 PP.setSerratedStrikesInformed(bool);
+                break;
+            case PLAGUE:
+                PP.setPlagueInformed(bool);
                 break;
         }
     }
