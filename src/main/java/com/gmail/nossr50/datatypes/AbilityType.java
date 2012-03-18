@@ -79,6 +79,8 @@ public enum AbilityType {
                 return PP.getTreeFellerMode();
             case SERRATED_STRIKES:
                 return PP.getSerratedStrikesMode();
+            case PLAGUE:
+                return PP.getPlagueMode();
         }
         return false;
     }
@@ -105,6 +107,9 @@ public enum AbilityType {
                 break;
             case SERRATED_STRIKES:
                 PP.setSerratedStrikesMode(bool);
+                break;
+            case PLAGUE:
+                PP.setPlagueMode(bool);
                 break;
         }
     }

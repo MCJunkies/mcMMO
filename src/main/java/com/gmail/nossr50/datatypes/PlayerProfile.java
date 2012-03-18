@@ -27,7 +27,7 @@ public class PlayerProfile {
     //TOGGLES
     private boolean loaded = false, partyhud = true, spoutcraft = false, xpbarlocked = false, placedAnvil = false, partyChatMode = false, adminChatMode = false, godMode = false, greenTerraMode, partyChatOnly = false, greenTerraInformed = true, berserkInformed = true, skullSplitterInformed = true, gigaDrillBreakerInformed = true,
             superBreakerInformed = true, blastMiningInformed = true, plagueInformed = true, serratedStrikesInformed = true, treeFellerInformed = true, abilityuse = true, treeFellerMode, superBreakerMode, gigaDrillBreakerMode,
-            serratedStrikesMode, hoePreparationMode = false, shovelPreparationMode = false, swordsPreparationMode = false, fistsPreparationMode = false, pickaxePreparationMode = false, axePreparationMode = false, skullSplitterMode, berserkMode;
+            serratedStrikesMode, hoePreparationMode = false, shovelPreparationMode = false, swordsPreparationMode = false, fistsPreparationMode = false, pickaxePreparationMode = false, axePreparationMode = false, skullSplitterMode, berserkMode, plagueMode;
 
     //TIMESTAMPS
     //ATS = (Time of) Activation Time Stamp
@@ -328,7 +328,7 @@ public class PlayerProfile {
                 if (character.length > 36) {
                     skillsDATS.put(AbilityType.BLAST_MINING, Integer.valueOf(character[36]));
                 }
-                
+
                 //Gotta love em hoes
                 if (character.length > 37) {
                     skills.put(SkillType.HOES, Integer.valueOf(character[37]));
@@ -339,7 +339,7 @@ public class PlayerProfile {
                 if (character.length > 39) {
                     skillsDATS.put(AbilityType.PLAGUE, Integer.valueOf(character[39]));
                 }
-                
+
                 in.close();
                 loaded = true;
                 return true;
@@ -862,6 +862,14 @@ public class PlayerProfile {
 
     public void setSkullSplitterMode(boolean bool) {
         skullSplitterMode = bool;
+    }
+
+    public boolean getPlagueMode() {
+        return plagueMode;
+    }
+
+    public void setPlagueMode(boolean plagueMode) {
+        this.plagueMode = plagueMode;
     }
     /*
      * SERRATED STRIKES
