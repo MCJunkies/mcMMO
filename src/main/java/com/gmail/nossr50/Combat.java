@@ -84,6 +84,7 @@ public class Combat {
                     startGainXp(attacker, PPa, target, SkillType.AXES, plugin);
                 } else if (ItemChecks.isHoe(itemInHand) && mcPermissions.getInstance().hoes(attacker)) {
                     Hoes.criticalStrikes(attacker, target, event);
+                    Hoes.slowEffect(attacker, target, event);
                     
                 } else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
                     Unarmed.unarmedBonus(PPa, event);

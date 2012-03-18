@@ -121,35 +121,6 @@ public class Swords {
         }
     }
 
-    public static void slowEffect(EntityDamageByEntityEvent event) {
-        // Don't want to slow stuff that's not alive?
-        if (!(event.getDamager() instanceof LivingEntity)) {
-            return;
-        }
-
-        if (event instanceof EntityDamageByEntityEvent) {
-            Entity f = ((EntityDamageByEntityEvent) event).getDamager();
-            if (event.getEntity() instanceof Player) {
-                Player defender = (Player) event.getEntity();
-                Player attacker = (Player) event.getDamager();
-                PlayerProfile PPd = Users.getProfile(attacker);
-
-                if (ItemChecks.isSword(attacker.getItemInHand()) && mcPermissions.getInstance().swords(attacker)) {
-                    if (Math.random() * 2000 <= PPd.getSkillLevel(SkillType.SWORDS)) {
-                        // Check to make sure player and don't re-apply slow if already on.
-                        if (!defender.hasPotionEffect(PotionEffectType.SLOW)) {
-                            defender.sendMessage(mcLocale.getString("Swords.SlowEffect"));
-                            defender.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 0));
-                        }
-                        if (f instanceof Player && !defender.hasPotionEffect(PotionEffectType.SLOW)) {
-                            ((Player) f).sendMessage(mcLocale.getString("Swords.HitSlowEffect"));
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Simulate a bleed.
      *
