@@ -26,7 +26,7 @@ public class PlayerProfile {
 
     //TOGGLES
     private boolean loaded = false, partyhud = true, spoutcraft = false, xpbarlocked = false, placedAnvil = false, partyChatMode = false, adminChatMode = false, godMode = false, greenTerraMode, partyChatOnly = false, greenTerraInformed = true, berserkInformed = true, skullSplitterInformed = true, gigaDrillBreakerInformed = true,
-            superBreakerInformed = true, blastMiningInformed = true, serratedStrikesInformed = true, treeFellerInformed = true, abilityuse = true, treeFellerMode, superBreakerMode, gigaDrillBreakerMode,
+            superBreakerInformed = true, blastMiningInformed = true, plagueInformed = true, serratedStrikesInformed = true, treeFellerInformed = true, abilityuse = true, treeFellerMode, superBreakerMode, gigaDrillBreakerMode,
             serratedStrikesMode, hoePreparationMode = false, shovelPreparationMode = false, swordsPreparationMode = false, fistsPreparationMode = false, pickaxePreparationMode = false, axePreparationMode = false, skullSplitterMode, berserkMode;
 
     //TIMESTAMPS
@@ -934,6 +934,14 @@ public class PlayerProfile {
 
     public void setBlastMiningInformed(boolean bool) {
         blastMiningInformed = bool;
+    }
+
+    public boolean isPlagueInformed() {
+        return plagueInformed;
+    }
+
+    public void setPlagueInformed(boolean plagueInformed) {
+        this.plagueInformed = plagueInformed;
     }
 
     public boolean getSuperBreakerMode() {
