@@ -115,6 +115,8 @@ public class Database {
 
         checkDatabaseStructure(DatabaseUpdate.FISHING);
         checkDatabaseStructure(DatabaseUpdate.BLAST_MINING);
+        checkDatabaseStructure(DatabaseUpdate.HOES);
+        checkDatabaseStructure(DatabaseUpdate.PLAGUE);
     }
 
     /**
@@ -130,6 +132,9 @@ public class Database {
         switch (update) {
             case BLAST_MINING:
                 sql = "SELECT * FROM  `" + LoadProperties.MySQLtablePrefix + "cooldowns` ORDER BY  `" + LoadProperties.MySQLtablePrefix + "cooldowns`.`blast_mining` ASC LIMIT 0 , 30";
+                break;
+            case PLAGUE:
+                sql = "SELECT * FROM  `" + LoadProperties.MySQLtablePrefix + "cooldowns` ORDER BY  `" + LoadProperties.MySQLtablePrefix + "cooldowns`.`plague` ASC LIMIT 0 , 30";
                 break;
             case FISHING:
                 sql = "SELECT * FROM  `" + LoadProperties.MySQLtablePrefix + "experience` ORDER BY  `" + LoadProperties.MySQLtablePrefix + "experience`.`fishing` ASC LIMIT 0 , 30";
@@ -166,6 +171,9 @@ public class Database {
                 System.out.println("Updating mcMMO MySQL tables for Hoes...");
                 write("ALTER TABLE `" + LoadProperties.MySQLtablePrefix + "skills` ADD `hoes` int(10) NOT NULL DEFAULT '0' ;");
                 write("ALTER TABLE `" + LoadProperties.MySQLtablePrefix + "experience` ADD `hoes` int(10) NOT NULL DEFAULT '0' ;");
+            } else if (update.equals(DatabaseUpdate.PLAGUE)) {
+                System.out.println("Updating mcMMO MySQL tables for Plague...");
+                write("ALTER TABLE `" + LoadProperties.MySQLtablePrefix + "cooldowns` ADD `plague` int(32) NOT NULL DEFAULT '0' ;");
             }
         }
     }
