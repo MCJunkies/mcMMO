@@ -85,6 +85,10 @@ public class Combat {
                 } else if (ItemChecks.isHoe(itemInHand) && mcPermissions.getInstance().hoes(attacker)) {
                     Hoes.criticalStrikes(attacker, target, event);
                     Hoes.slowEffect(attacker, target, event);
+
+                    if (PPa.getPlagueMode()) {
+                        applyAbilityAoE(attacker, target, damage, plugin, SkillType.HOES);
+                    }
                     
                 } else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
                     Unarmed.unarmedBonus(PPa, event);
@@ -295,6 +299,8 @@ public class Combat {
             damageAmount = damage / 2;
         } else if (type.equals(SkillType.SWORDS)) {
             damageAmount = damage / 4;
+        } else if (type.equals(SkillType.HOES)) {
+            damageAmount = 0;
         }
 
         if (damageAmount < 1) {
@@ -347,9 +353,16 @@ public class Combat {
                             message = mcLocale.getString("Axes.HitByCleave");
                         } else if (type.equals(SkillType.SWORDS)) {
                             message = mcLocale.getString("Swords.HitBySerratedStrikes");
+                        } else if (type.equals(SkillType.HOES)) {
+                            message = mcLocale.getString("Hoes.HitByPlague");
                         }
 
                         dealDamage(defender, damageAmount, attacker);
+                        //Check for hoes
+                        if (type.equals(SkillType.HOES)) {
+                            Hoes.performPlague(defender);
+                        }
+                        
                         defender.sendMessage(message);
 
                         if (type.equals(SkillType.SWORDS)) {

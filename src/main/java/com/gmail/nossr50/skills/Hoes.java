@@ -65,4 +65,8 @@ public class Hoes {
         }
     }
 
+    public static void performPlague(Player defender) {
+        defender.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 10, 2));
+    }
+
 }
