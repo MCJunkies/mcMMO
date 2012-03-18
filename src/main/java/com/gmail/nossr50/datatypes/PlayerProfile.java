@@ -327,6 +327,18 @@ public class PlayerProfile {
                 if (character.length > 36) {
                     skillsDATS.put(AbilityType.BLAST_MINING, Integer.valueOf(character[36]));
                 }
+                
+                //Gotta love em hoes
+                if (character.length > 37) {
+                    skills.put(SkillType.HOES, Integer.valueOf(character[37]));
+                }
+                if (character.length > 38) {
+                    skillsXp.put(SkillType.HOES, Integer.valueOf(character[38]));
+                }
+                if (character.length > 39) {
+                    skillsDATS.put(AbilityType.PLAGUE, Integer.valueOf(character[39]));
+                }
+                
                 in.close();
                 loaded = true;
                 return true;
@@ -369,6 +381,7 @@ public class PlayerProfile {
                     + ", axes = " + skills.get(SkillType.AXES)
                     + ", acrobatics = " + skills.get(SkillType.ACROBATICS)
                     + ", fishing = " + skills.get(SkillType.FISHING)
+                    + ", hoes = " + skills.get(SkillType.HOES)
                     + " WHERE user_id = " + this.userid);
             mcMMO.database.write("UPDATE " + LoadProperties.MySQLtablePrefix + "experience SET "
                     + "  taming = " + skillsXp.get(SkillType.TAMING)
@@ -383,6 +396,7 @@ public class PlayerProfile {
                     + ", axes = " + skillsXp.get(SkillType.AXES)
                     + ", acrobatics = " + skillsXp.get(SkillType.ACROBATICS)
                     + ", fishing = " + skillsXp.get(SkillType.FISHING)
+                    + ", hoes = " + skills.get(SkillType.HOES)
                     + " WHERE user_id = " + this.userid);
         } else {
             // otherwise save to flatfile
