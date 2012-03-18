@@ -142,7 +142,7 @@ public class PlayerProfile {
             HashMap<Integer, ArrayList<String>> users = mcMMO.database.read("SELECT lastlogin, party FROM " + LoadProperties.MySQLtablePrefix + "users WHERE id = " + id);
             //lastlogin = Integer.parseInt(users.get(1).get(0));
             party = users.get(1).get(1);
-            HashMap<Integer, ArrayList<String>> cooldowns = mcMMO.database.read("SELECT mining, woodcutting, unarmed, herbalism, excavation, swords, axes, blast_mining FROM " + LoadProperties.MySQLtablePrefix + "cooldowns WHERE user_id = " + id);
+            HashMap<Integer, ArrayList<String>> cooldowns = mcMMO.database.read("SELECT mining, woodcutting, unarmed, herbalism, excavation, swords, axes, blast_mining, plague FROM " + LoadProperties.MySQLtablePrefix + "cooldowns WHERE user_id = " + id);
             /*
              * I'm still learning MySQL, this is a fix for adding a new table
              * its not pretty but it works
@@ -158,6 +158,7 @@ public class PlayerProfile {
                 skillsDATS.put(AbilityType.SERRATED_STRIKES, Integer.valueOf(cooldowns.get(1).get(5)));
                 skillsDATS.put(AbilityType.SKULL_SPLIITER, Integer.valueOf(cooldowns.get(1).get(6)));
                 skillsDATS.put(AbilityType.BLAST_MINING, Integer.valueOf(cooldowns.get(1).get(7)));
+                skillsDATS.put(AbilityType.PLAGUE, Integer.valueOf(cooldowns.get(1).get(8)));
             }
             HashMap<Integer, ArrayList<String>> stats = mcMMO.database.read("SELECT taming, mining, repair, woodcutting, unarmed, herbalism, excavation, archery, swords, axes, acrobatics, fishing, hoes FROM " + LoadProperties.MySQLtablePrefix + "skills WHERE user_id = " + id);
             skills.put(SkillType.TAMING, Integer.valueOf(stats.get(1).get(0)));
@@ -455,6 +456,9 @@ public class PlayerProfile {
                         writer.append(skills.get(SkillType.FISHING) + ":");
                         writer.append(skillsXp.get(SkillType.FISHING) + ":");
                         writer.append(String.valueOf(skillsDATS.get(AbilityType.BLAST_MINING)) + ":");
+                        writer.append(skills.get(SkillType.HOES) + ":");
+                        writer.append(skillsXp.get(SkillType.HOES) + ":");
+                        writer.append(String.valueOf(skillsDATS.get(AbilityType.PLAGUE)) + ":");
                         writer.append("\r\n");
                     }
                 }

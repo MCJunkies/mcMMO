@@ -55,6 +55,7 @@ public class mcTimer implements Runnable {
             Skills.watchCooldown(player, PP, curTime, AbilityType.BERSERK);
             Skills.watchCooldown(player, PP, curTime, AbilityType.TREE_FELLER);
             Skills.watchCooldown(player, PP, curTime, AbilityType.BLAST_MINING);
+            Skills.watchCooldown(player, PP, curTime, AbilityType.PLAGUE);
 
             /*
              * PLAYER BLEED MONITORING

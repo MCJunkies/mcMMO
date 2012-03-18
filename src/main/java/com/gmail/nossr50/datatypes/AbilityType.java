@@ -185,6 +185,8 @@ public enum AbilityType {
                 return mcPermissions.getInstance().miningAbility(player);
             case TREE_FELLER:
                 return mcPermissions.getInstance().woodCuttingAbility(player);
+            case PLAGUE:
+                return mcPermissions.getInstance().plague(player);
         }
         return false;
     }
