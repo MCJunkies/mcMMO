@@ -210,6 +210,8 @@ public class SpoutStuff {
                 return new Color((float) LoadProperties.woodcutting_r, (float) LoadProperties.woodcutting_g, (float) LoadProperties.woodcutting_b, 1f);
             case FISHING:
                 return new Color((float) LoadProperties.fishing_r, (float) LoadProperties.fishing_g, (float) LoadProperties.fishing_b, 1f);
+            case HOES:
+                return new Color((float) LoadProperties.fishing_r, (float) LoadProperties.fishing_g, (float) LoadProperties.fishing_b, 1f);
             default:
                 return new Color(0.3f, 0.3f, 0.75f, 1f);
         }

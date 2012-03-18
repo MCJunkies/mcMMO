@@ -1149,6 +1149,7 @@ public class PlayerProfile {
             skillsXp.put(SkillType.EXCAVATION, skillsXp.get(SkillType.EXCAVATION) - newvalue);
             skillsXp.put(SkillType.AXES, skillsXp.get(SkillType.AXES) - newvalue);
             skillsXp.put(SkillType.FISHING, skillsXp.get(SkillType.FISHING) - newvalue);
+            skillsXp.put(SkillType.HOES, skillsXp.get(SkillType.HOES) - newvalue);
         } else {
             skillsXp.put(skillType, skillsXp.get(skillType) - newvalue);
         }
@@ -1181,6 +1182,7 @@ public class PlayerProfile {
             skills.put(SkillType.EXCAVATION, newvalue);
             skills.put(SkillType.AXES, newvalue);
             skills.put(SkillType.FISHING, newvalue);
+            skills.put(SkillType.HOES, newvalue);
 
             skillsXp.put(SkillType.TAMING, 0);
             skillsXp.put(SkillType.MINING, 0);
@@ -1194,6 +1196,7 @@ public class PlayerProfile {
             skillsXp.put(SkillType.EXCAVATION, 0);
             skillsXp.put(SkillType.AXES, 0);
             skillsXp.put(SkillType.FISHING, 0);
+            skillsXp.put(SkillType.HOES, 0);
         } else {
             skills.put(skillType, newvalue);
             skillsXp.put(skillType, 0);

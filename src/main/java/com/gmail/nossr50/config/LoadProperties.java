@@ -59,7 +59,7 @@ public class LoadProperties {
             mining_r, mining_g, mining_b, repair_r, repair_g, repair_b,
             swords_r, swords_g, swords_b, taming_r, taming_g, taming_b,
             unarmed_r, unarmed_g, unarmed_b, woodcutting_r, woodcutting_g,
-            woodcutting_b, pvpxprewardmodifier, tamingxpmodifier,
+            woodcutting_b, hoes_r, hoes_g, hoes_b, pvpxprewardmodifier, tamingxpmodifier,
             miningxpmodifier, repairxpmodifier, woodcuttingxpmodifier,
             fishingxpmodifier, unarmedxpmodifier, herbalismxpmodifier,
             excavationxpmodifier, archeryxpmodifier, swordsxpmodifier,
@@ -194,6 +194,9 @@ public class LoadProperties {
         fishing_r = readDouble("Spout.HUD.Retro.Colors.Fishing.RED", 0.3);
         fishing_g = readDouble("Spout.HUD.Retro.Colors.Fishing.GREEN", 0.3);
         fishing_b = readDouble("Spout.HUD.Retro.Colors.Fishing.BLUE", 0.75);
+        fishing_r = readDouble("Spout.HUD.Retro.Colors.Hoes.RED", 0.3);
+        fishing_g = readDouble("Spout.HUD.Retro.Colors.Hoes.GREEN", 0.3);
+        fishing_b = readDouble("Spout.HUD.Retro.Colors.Hoes.BLUE", 0.75);
 
         xpborder_r = readDouble("Spout.HUD.Retro.Colors.Border.RED", 0.0);
         xpborder_g = readDouble("Spout.HUD.Retro.Colors.Border.GREEN", 0.0);
