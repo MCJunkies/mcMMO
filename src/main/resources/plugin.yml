@@ -87,6 +87,8 @@ commands:
         description: Detailed skill info
     fishing:
         description: Detailed skill info
+    hoes:
+        description: Detailed skill info
     a:
         description: Toggle Admin chat or send admin chat messages
         permission: mcmmo.chat.adminchat

@@ -321,6 +321,7 @@ public class mcMMO extends JavaPlugin {
         aliasMap.put(mcLocale.getString("m.SkillTaming").toLowerCase(), "taming");
         aliasMap.put(mcLocale.getString("m.SkillUnarmed").toLowerCase(), "unarmed");
         aliasMap.put(mcLocale.getString("m.SkillWoodCutting").toLowerCase(), "woodcutting");
+        aliasMap.put(mcLocale.getString("m.SkillHoes").toLowerCase(), "hoes");
 
         //Register commands
         //Skills commands
@@ -336,6 +337,7 @@ public class mcMMO extends JavaPlugin {
         getCommand("taming").setExecutor(new TamingCommand());
         getCommand("unarmed").setExecutor(new UnarmedCommand());
         getCommand("woodcutting").setExecutor(new WoodcuttingCommand());
+        getCommand("hoes").setExecutor(new HoesCommand());
 
         //mc* commands
         if (LoadProperties.mcremoveEnable) {

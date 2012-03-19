@@ -90,6 +90,7 @@ public class Combat {
                         applyAbilityAoE(attacker, target, damage, plugin, SkillType.HOES);
                     }
 
+                    startGainXp(attacker, PPa, target, SkillType.HOES, plugin);
                 } else if (itemInHand.getType().equals(Material.AIR) && mcPermissions.getInstance().unarmed(attacker)) {
                     Unarmed.unarmedBonus(PPa, event);
 
