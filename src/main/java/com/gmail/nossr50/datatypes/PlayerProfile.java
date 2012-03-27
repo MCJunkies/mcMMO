@@ -397,7 +397,7 @@ public class PlayerProfile {
                     + ", axes = " + skillsXp.get(SkillType.AXES)
                     + ", acrobatics = " + skillsXp.get(SkillType.ACROBATICS)
                     + ", fishing = " + skillsXp.get(SkillType.FISHING)
-                    + ", hoes = " + skills.get(SkillType.HOES)
+                    + ", hoes = " + skillsXp.get(SkillType.HOES)
                     + " WHERE user_id = " + this.userid);
         } else {
             // otherwise save to flatfile

@@ -190,6 +190,7 @@ public class Skills {
             int skillups = 0;
 
             while (PP.getSkillXpLevel(skillType) >= PP.getXpToLevel(skillType)) {
+                
                 if (skillType.getMaxLevel() >= PP.getSkillLevel(skillType) + 1) {
                     skillups++;
                     PP.removeXP(skillType, PP.getXpToLevel(skillType));
@@ -200,6 +201,10 @@ public class Skills {
                 } else {
                     PP.removeXP(skillType, PP.getXpToLevel(skillType));
                 }
+                
+//                System.out.println("SkillXPLevel: " + PP.getSkillXpLevel(skillType));
+//                System.out.println("XP to level: " + PP.getXpToLevel(skillType));
+//                System.out.println("Skillups: " + skillups);
             }
 
             if (!LoadProperties.useMySQL) {

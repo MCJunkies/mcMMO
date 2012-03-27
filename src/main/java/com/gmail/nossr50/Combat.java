@@ -475,7 +475,6 @@ public class Combat {
                 }
             }
 
-            System.out.println("A: " + baseXP);
             baseXP *= 10;
         }
 

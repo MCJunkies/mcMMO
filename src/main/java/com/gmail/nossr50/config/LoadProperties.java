@@ -334,6 +334,7 @@ public class LoadProperties {
         axesxpmodifier = readDouble("Experience.Formula.Multiplier.Axes", 1.0);
         acrobaticsxpmodifier = readDouble("Experience.Formula.Multiplier.Acrobatics", 1.0);
         fishingxpmodifier = readDouble("Experience.Forumla.Multiplier.Fishing", 1.0);
+        hoesxpmodifier = readDouble("Experience.Forumla.Multiplier.Hoes", 1.0);
 
         anvilmessages = readBoolean("Skills.Repair.Anvil_Messages", true);
         anvilID = readInteger("Skills.Repair.Anvil_ID", 42);
