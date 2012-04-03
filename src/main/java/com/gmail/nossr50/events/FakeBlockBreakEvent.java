@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class FakeBlockBreakEvent extends BlockBreakEvent {
     public FakeBlockBreakEvent(Block theBlock, Player player) {
-        super(theBlock, player, new ArrayList<ItemStack>());
+        super(theBlock, player);
     }
 
 }
