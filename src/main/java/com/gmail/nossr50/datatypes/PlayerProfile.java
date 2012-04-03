@@ -40,7 +40,7 @@ public class PlayerProfile {
     private boolean godMode = false;
     private boolean greenTerraMode, treeFellerMode, superBreakerMode, gigaDrillBreakerMode, serratedStrikesMode, skullSplitterMode, berserkMode;
     private boolean greenTerraInformed = true, berserkInformed = true, skullSplitterInformed = true, gigaDrillBreakerInformed = true,
-                    superBreakerInformed = true, blastMiningInformed = true, serratedStrikesInformed = true, treeFellerInformed = true;
+                    superBreakerInformed = true, blastMiningInformed = true, serratedStrikesInformed = true, treeFellerInformed = true, plagueInformed = true;
     private boolean hoePreparationMode = false, shovelPreparationMode = false, swordsPreparationMode = false, fistsPreparationMode = false,
                     pickaxePreparationMode = false, axePreparationMode = false;
     private boolean abilityuse = true;
@@ -880,6 +880,9 @@ public class PlayerProfile {
 
         case SERRATED_STRIKES:
             return serratedStrikesInformed;
+            
+        case PLAGUE:
+            return plagueInformed;
 
         default:
             return false;
@@ -924,6 +927,10 @@ public class PlayerProfile {
 
         case SERRATED_STRIKES:
             serratedStrikesInformed = bool;
+            break;
+            
+        case PLAGUE:
+            plagueInformed = bool;
             break;
 
         default:
