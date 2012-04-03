@@ -110,13 +110,8 @@
                 <updatePolicy>always</updatePolicy>
                 <checksumPolicy>fail</checksumPolicy>
             </snapshots> 
-<<<<<<< HEAD
-            <id>spout-repo</id>
-            <url>http://nexus.getspout.org/content/groups/public/</url>
-=======
         	<id>spout-repo</id>
         	<url>http://nexus.spout.org/content/groups/public/</url>
->>>>>>> master
         </repository>
     </repositories>
     <dependencies>
