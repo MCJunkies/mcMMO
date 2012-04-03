@@ -32,9 +32,6 @@ public class AddlevelsCommand implements CommandExecutor {
 			sender.sendMessage("This command requires permissions."); //TODO: Needs more locale.
 			return true;
 		}
-            sender.sendMessage("This command requires permissions.");
-            return true;
-        }
 
 		if (!(sender instanceof Player)) {
 			if (args.length < 2) {

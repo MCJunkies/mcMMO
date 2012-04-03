@@ -54,7 +54,7 @@ public class LoadProperties extends ConfigLoader{
     /* Cooldowns */
     public static int superBreakerCooldown, blastMiningCooldown, greenTerraCooldown,
                       gigaDrillBreakerCooldown, treeFellerCooldown, berserkCooldown,
-                      serratedStrikeCooldown, skullSplitterCooldown;
+                      serratedStrikeCooldown, skullSplitterCooldown, plagueCooldown;
 
     /* Thresholds */
     public static int treeFellerThreshold;
@@ -106,7 +106,7 @@ public class LoadProperties extends ConfigLoader{
     /* Level Caps */
     public static int levelCapAcrobatics, levelCapArchery, levelCapAxes, levelCapExcavation,
                       levelCapFishing, levelCapHerbalism, levelCapMining, levelCapRepair,
-                      levelCapSwords, levelCapTaming, levelCapUnarmed, levelCapWoodcutting,
+                      levelCapSwords, levelCapTaming, levelCapUnarmed, levelCapWoodcutting, levelCapHoes,
                       powerLevelCap;
 
     /*
@@ -126,7 +126,7 @@ public class LoadProperties extends ConfigLoader{
     /* XP Formula Multiplier */
     public static double tamingxpmodifier, miningxpmodifier, repairxpmodifier, woodcuttingxpmodifier,
                          fishingxpmodifier, unarmedxpmodifier, herbalismxpmodifier, excavationxpmodifier,
-                         archeryxpmodifier, swordsxpmodifier, axesxpmodifier, acrobaticsxpmodifier;
+                         archeryxpmodifier, swordsxpmodifier, axesxpmodifier, acrobaticsxpmodifier, hoesxpmodifier;
 
     /*
      * SPOUT SETTINGS
@@ -307,6 +307,7 @@ public class LoadProperties extends ConfigLoader{
         serratedStrikeCooldown = config.getInt("Abilities.Cooldowns.Serrated_Strikes", 240);
         skullSplitterCooldown = config.getInt("Abilities.Cooldowns.Skull_Splitter", 240);
         blastMiningCooldown = config.getInt("Abilities.Cooldowns.Blast_Mining", 60);
+        plagueCooldown = config.getInt("Abilities.Cooldowns.Plague", 240);
 
         MySQLserverName = config.getString("MySQL.Server.Address", "localhost");
 
@@ -388,6 +389,7 @@ public class LoadProperties extends ConfigLoader{
         axesxpmodifier = config.getDouble("Experience.Formula.Multiplier.Axes", 1.0);
         acrobaticsxpmodifier = config.getDouble("Experience.Formula.Multiplier.Acrobatics", 1.0);
         fishingxpmodifier = config.getDouble("Experience.Forumla.Multiplier.Fishing", 1.0);
+        hoesxpmodifier = config.getDouble("Experience.Forumla.Multiplier.Hoes", 1.0);
 
         anvilmessages = config.getBoolean("Skills.Repair.Anvil_Messages", true);
         anvilID = config.getInt("Skills.Repair.Anvil_ID", 42);
@@ -412,6 +414,7 @@ public class LoadProperties extends ConfigLoader{
         levelCapTaming = config.getInt("Skills.Taming.Level_Cap", 0);
         levelCapUnarmed = config.getInt("Skills.Unarmed.Level_Cap", 0);
         levelCapWoodcutting = config.getInt("Skills.Woodcutting.Level_Cap", 0);
+        levelCapHoes = config.getInt("Skills.Hoes.Level_Cap", 0);
 
         mayDowngradeEnchants = config.getBoolean("Arcane_Forging.Downgrades.Enabled", true);
         downgradeRank1 = config.getInt("Arcane_Forging.Downgrades.Chance.Rank_1", 75);

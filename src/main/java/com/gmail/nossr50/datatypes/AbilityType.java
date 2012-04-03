@@ -52,166 +52,85 @@ public enum AbilityType {
     }
 
     public String getAbilityPlayer(Player player) {
-        return mcLocale.getString(this.abilityPlayer, new Object[]{player.getName()});
+        return mcLocale.getString(this.abilityPlayer, new Object[] {player.getName()});
     }
 
     public String getAbilityPlayerOff(Player player) {
-        return mcLocale.getString(this.abilityPlayerOff, new Object[]{player.getName()});
+        return mcLocale.getString(this.abilityPlayerOff, new Object[] {player.getName()});
     }
 
     public String getAbilityRefresh() {
         return this.abilityRefresh;
     }
 
-    public boolean getMode(PlayerProfile PP) {
-        switch (this) {
-            case BERSERK:
-                return PP.getBerserkMode();
-            case SUPER_BREAKER:
-                return PP.getSuperBreakerMode();
-            case GIGA_DRILL_BREAKER:
-                return PP.getGigaDrillBreakerMode();
-            case GREEN_TERRA:
-                return PP.getGreenTerraMode();
-            case SKULL_SPLIITER:
-                return PP.getSkullSplitterMode();
-            case TREE_FELLER:
-                return PP.getTreeFellerMode();
-            case SERRATED_STRIKES:
-                return PP.getSerratedStrikesMode();
-            case PLAGUE:
-                return PP.getPlagueMode();
-        }
-        return false;
-    }
-
-    public void setMode(PlayerProfile PP, boolean bool) {
-        switch (this) {
-            case BERSERK:
-                PP.setBerserkMode(bool);
-                break;
-            case SUPER_BREAKER:
-                PP.setSuperBreakerMode(bool);
-                break;
-            case GIGA_DRILL_BREAKER:
-                PP.setGigaDrillBreakerMode(bool);
-                break;
-            case GREEN_TERRA:
-                PP.setGreenTerraMode(bool);
-                break;
-            case SKULL_SPLIITER:
-                PP.setSkullSplitterMode(bool);
-                break;
-            case TREE_FELLER:
-                PP.setTreeFellerMode(bool);
-                break;
-            case SERRATED_STRIKES:
-                PP.setSerratedStrikesMode(bool);
-                break;
-            case PLAGUE:
-                PP.setPlagueMode(bool);
-                break;
-        }
-    }
-
-    public boolean getInformed(PlayerProfile PP) {
-        switch (this) {
-            case BERSERK:
-                return PP.getBerserkInformed();
-            case BLAST_MINING:
-                return PP.getBlastMiningInformed();
-            case SUPER_BREAKER:
-                return PP.getSuperBreakerInformed();
-            case GIGA_DRILL_BREAKER:
-                return PP.getGigaDrillBreakerInformed();
-            case GREEN_TERRA:
-                return PP.getGreenTerraInformed();
-            case SKULL_SPLIITER:
-                return PP.getSkullSplitterInformed();
-            case TREE_FELLER:
-                return PP.getTreeFellerInformed();
-            case SERRATED_STRIKES:
-                return PP.getSerratedStrikesInformed();
-            case PLAGUE:
-                return PP.getPlagueInformed();
-        }
-        return false;
-    }
-
-    public void setInformed(PlayerProfile PP, boolean bool) {
-        switch (this) {
-            case BERSERK:
-                PP.setBerserkInformed(bool);
-                break;
-            case BLAST_MINING:
-                PP.setBlastMiningInformed(bool);
-                break;
-            case SUPER_BREAKER:
-                PP.setSuperBreakerInformed(bool);
-                break;
-            case GIGA_DRILL_BREAKER:
-                PP.setGigaDrillBreakerInformed(bool);
-                break;
-            case GREEN_TERRA:
-                PP.setGreenTerraInformed(bool);
-                break;
-            case SKULL_SPLIITER:
-                PP.setSkullSplitterInformed(bool);
-                break;
-            case TREE_FELLER:
-                PP.setTreeFellerInformed(bool);
-                break;
-            case SERRATED_STRIKES:
-                PP.setSerratedStrikesInformed(bool);
-                break;
-            case PLAGUE:
-                PP.setPlagueInformed(bool);
-                break;
-        }
-    }
-
+    /**
+     * Get the permissions for this ability.
+     *
+     * @param player Player to check permissions for
+     * @return true if the player has permissions, false otherwise
+     */
     public boolean getPermissions(Player player) {
         switch (this) {
-            case BERSERK:
-                return mcPermissions.getInstance().unarmedAbility(player);
-            case BLAST_MINING:
-                return mcPermissions.getInstance().blastMining(player);
-            case GIGA_DRILL_BREAKER:
-                return mcPermissions.getInstance().excavationAbility(player);
-            case GREEN_TERRA:
-                return mcPermissions.getInstance().herbalismAbility(player);
-            case LEAF_BLOWER:
-                return mcPermissions.getInstance().woodcutting(player);
-            case SERRATED_STRIKES:
-                return mcPermissions.getInstance().swordsAbility(player);
-            case SKULL_SPLIITER:
-                return mcPermissions.getInstance().axesAbility(player);
-            case SUPER_BREAKER:
-                return mcPermissions.getInstance().miningAbility(player);
-            case TREE_FELLER:
-                return mcPermissions.getInstance().woodCuttingAbility(player);
-            case PLAGUE:
-                return mcPermissions.getInstance().plague(player);
+        case BERSERK:
+            return mcPermissions.getInstance().berserk(player);
+
+        case BLAST_MINING:
+            return mcPermissions.getInstance().blastMining(player);
+
+        case GIGA_DRILL_BREAKER:
+            return mcPermissions.getInstance().gigaDrillBreaker(player);
+
+        case GREEN_TERRA:
+            return mcPermissions.getInstance().greenTerra(player);
+
+        case LEAF_BLOWER:
+            return mcPermissions.getInstance().leafBlower(player);
+
+        case SERRATED_STRIKES:
+            return mcPermissions.getInstance().serratedStrikes(player);
+
+        case SKULL_SPLIITER:
+            return mcPermissions.getInstance().skullSplitter(player);
+
+        case SUPER_BREAKER:
+            return mcPermissions.getInstance().superBreaker(player);
+
+        case TREE_FELLER:
+            return mcPermissions.getInstance().treeFeller(player);
+
+        default:
+            return false;
         }
-        return false;
     }
 
+    /**
+     * Check if a block is affected by this ability.
+     *
+     * @param material The block type to check
+     * @return true if the block is affected by this ability, false otherwise
+     */
     public boolean blockCheck(Material material) {
         switch (this) {
-            case BERSERK:
-                return (Excavation.canBeGigaDrillBroken(material) || material.equals(Material.SNOW));
-            case GIGA_DRILL_BREAKER:
-                return Excavation.canBeGigaDrillBroken(material);
-            case GREEN_TERRA:
-                return Herbalism.makeMossy(material);
-            case LEAF_BLOWER:
-                return material.equals(Material.LEAVES);
-            case SUPER_BREAKER:
-                return Mining.canBeSuperBroken(material);
-            case TREE_FELLER:
-                return material.equals(Material.LOG);
-            default:
-                return false;
+        case BERSERK:
+            return (Excavation.canBeGigaDrillBroken(material) || material.equals(Material.SNOW));
+
+        case GIGA_DRILL_BREAKER:
+            return Excavation.canBeGigaDrillBroken(material);
+
+        case GREEN_TERRA:
+            return Herbalism.makeMossy(material);
+
+        case LEAF_BLOWER:
+            return material.equals(Material.LEAVES);
+
+        case SUPER_BREAKER:
+            return Mining.canBeSuperBroken(material);
+
+        case TREE_FELLER:
+            return material.equals(Material.LOG);
+
+        default:
+            return false;
         }
     }
 }

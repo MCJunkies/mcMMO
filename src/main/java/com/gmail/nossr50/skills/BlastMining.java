@@ -25,12 +25,8 @@ import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.locale.mcLocale;
 
 public class BlastMining {
-<<<<<<< HEAD
-=======
-
     private static Random random = new Random();
 
->>>>>>> master
     /**
      * Handler for what blocks drop from the explosion.
      *
@@ -72,11 +68,7 @@ public class BlastMining {
             while (iterator3.hasNext()) {
                 Block temp = iterator3.next();
 
-<<<<<<< HEAD
-                if ((float) Math.random() < (yield - debrisReduction)) {
-=======
-                if (random.nextFloat() < (yield - debrisReduction))
->>>>>>> master
+                if (random.nextFloat() < (yield - debrisReduction)) {
                     Mining.miningDrops(temp);
                 }
             }

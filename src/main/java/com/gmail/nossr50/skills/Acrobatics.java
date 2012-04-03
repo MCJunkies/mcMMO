@@ -15,12 +15,8 @@ import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
 
 public class Acrobatics {
-<<<<<<< HEAD
-=======
-
     private static Random random = new Random();
 
->>>>>>> master
     /**
      * Check for fall damage reduction.
      *
@@ -78,14 +74,9 @@ public class Acrobatics {
                     player.sendMessage(mcLocale.getString("Acrobatics.Roll"));
                 }
             }
-<<<<<<< HEAD
-        } else if (health - damage >= 1) {
-            PP.addXP(SkillType.ACROBATICS, event.getDamage() * FALL_XP_MODIFIER, player);
-=======
         }
         else if (health - damage >= 1) {
             PP.addXP(SkillType.ACROBATICS, event.getDamage() * FALL_XP_MODIFIER);
->>>>>>> master
             Skills.XpCheckSkill(SkillType.ACROBATICS, player);
         }
     }

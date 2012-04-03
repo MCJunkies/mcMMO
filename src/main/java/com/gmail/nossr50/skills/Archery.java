@@ -18,12 +18,8 @@ import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
 
 public class Archery {
-<<<<<<< HEAD
-=======
-
     private static Random random = new Random();
 
->>>>>>> master
     /**
      * Track arrows fired for later retrieval.
      *

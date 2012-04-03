@@ -19,8 +19,9 @@ public enum SkillType {
     SWORDS(AbilityType.SERRATED_STRIKES, LoadProperties.levelCapSwords, ToolType.SWORD, LoadProperties.swordsxpmodifier),
     TAMING(LoadProperties.levelCapTaming, LoadProperties.tamingxpmodifier),
     UNARMED(AbilityType.BERSERK, LoadProperties.levelCapUnarmed, ToolType.FISTS, LoadProperties.unarmedxpmodifier),
-    WOODCUTTING(AbilityType.TREE_FELLER, LoadProperties.levelCapWoodcutting, ToolType.AXE, LoadProperties.woodcuttingxpmodifier);
-    HOES(AbilityType.PLAGUE, LoadProperties.levelCapHoes, ToolType.HOE);
+    WOODCUTTING(AbilityType.TREE_FELLER, LoadProperties.levelCapWoodcutting, ToolType.AXE, LoadProperties.woodcuttingxpmodifier),
+    HOES(AbilityType.PLAGUE, LoadProperties.levelCapHoes, ToolType.HOE, LoadProperties.hoesxpmodifier);
+    
     private AbilityType ability;
     private int maxLevel;
     private ToolType tool;

@@ -84,7 +84,7 @@ public class McstatsCommand implements CommandExecutor {
                 player.sendMessage(Skills.getSkillStats(mcLocale.getString("mcPlayerListener.RepairSkill"), PP.getSkillLevel(SkillType.REPAIR), PP.getSkillXpLevel(SkillType.REPAIR), PP.getXpToLevel(SkillType.REPAIR)));
             }
         }
-        player.sendMessage(mcLocale.getString("mcPlayerListener.PowerLevel") + ChatColor.GREEN + (m.getPowerLevel(player, PP)));
+        player.sendMessage(mcLocale.getString("mcPlayerListener.PowerLevel") + ChatColor.GREEN + PP.getPowerLevel());
 
         return true;
     }

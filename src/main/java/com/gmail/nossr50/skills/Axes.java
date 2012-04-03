@@ -19,12 +19,8 @@ import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
 
 public class Axes {
-<<<<<<< HEAD
-=======
-
     private static Random random = new Random();
 
->>>>>>> master
     /**
      * Apply bonus to damage done by axes.
      *
@@ -81,11 +77,8 @@ public class Axes {
         int skillLevel = PPa.getSkillLevel(SkillType.AXES);
         int skillCheck = m.skillCheck(skillLevel, MAX_BONUS_LEVEL);
 
-<<<<<<< HEAD
-        if (Math.random() * 2000 <= skillCheck && !entity.isDead()) {
-=======
         if (random.nextInt(2000) <= skillCheck && !entity.isDead()){
->>>>>>> master
+
             int damage = event.getDamage();
 
             if (entity instanceof Player) {

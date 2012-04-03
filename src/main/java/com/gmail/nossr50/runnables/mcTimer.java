@@ -1,5 +1,6 @@
 package com.gmail.nossr50.runnables;
 
+import com.gmail.nossr50.Combat;
 import org.bukkit.entity.Player;
 
 import com.gmail.nossr50.Users;
@@ -37,7 +38,11 @@ public class mcTimer implements Runnable {
             Skills.monitorSkill(player, PP, curTime, SkillType.AXES);
             Skills.monitorSkill(player, PP, curTime, SkillType.EXCAVATION);
             Skills.monitorSkill(player, PP, curTime, SkillType.HERBALISM);
+            Skills.monitorSkill(player, PP, curTime, SkillType.HOES);
             Skills.monitorSkill(player, PP, curTime, SkillType.MINING);
+            Skills.monitorSkill(player, PP, curTime, SkillType.SWORDS);
+            Skills.monitorSkill(player, PP, curTime, SkillType.UNARMED);
+            Skills.monitorSkill(player, PP, curTime, SkillType.WOODCUTTING);
 
             /*
              * COOLDOWN MONITORING
@@ -51,40 +56,6 @@ public class mcTimer implements Runnable {
             Skills.watchCooldown(player, PP, curTime, AbilityType.TREE_FELLER);
             Skills.watchCooldown(player, PP, curTime, AbilityType.BLAST_MINING);
             Skills.watchCooldown(player, PP, curTime, AbilityType.PLAGUE);
-
-            /*
-             * PLAYER BLEED MONITORING
-             */
-            if (thecount % 2 == 0 && PP.getBleedTicks() >= 1) {
-                //Never kill with Bleeding
-                if (player.getHealth() - 2 < 0) {
-                    if (player.getHealth() - 1 > 0) {
-                        Combat.dealDamage(player, 1);
-                    }
-                } else {
-                    Combat.dealDamage(player, 2);
-                }
-
-                PP.decreaseBleedTicks();
-
-                if (PP.getBleedTicks() == 0) {
-                    player.sendMessage(mcLocale.getString("Swords.StoppedBleeding"));
-                }
-            }
-
-            /*
-             * NON-PLAYER BLEED MONITORING
-             */
-
-            if (thecount % 2 == 0) {
-                Swords.bleedSimulate(plugin);
-            }
-
-            //SETUP FOR HP REGEN/BLEED
-            thecount++;
-            if (thecount >= 81) {
-                thecount = 1;
-            }
         }
     }
 
