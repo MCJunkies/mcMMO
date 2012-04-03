@@ -103,7 +103,7 @@ public class Skills {
         /* Woodcutting & Axes need to be treated differently.
          * Basically the tool always needs to ready and we check to see if the cooldown is over when the user takes action
          */
-        if (skill == SkillType.WOODCUTTING || skill == SkillType.AXES) {
+        if (skill == SkillType.WOODCUTTING || skill == SkillType.AXES || skill == SkillType.HOES) {
             if (tool.inHand(inHand) && !PP.getToolPreparationMode(tool)) {
                 if (LoadProperties.enableAbilityMessages) {
                     player.sendMessage(tool.getRaiseTool());

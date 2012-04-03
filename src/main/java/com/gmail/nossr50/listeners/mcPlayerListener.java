@@ -225,6 +225,7 @@ public class mcPlayerListener implements Listener {
                     Skills.activationCheck(player, SkillType.SWORDS);
                     Skills.activationCheck(player, SkillType.UNARMED);
                     Skills.activationCheck(player, SkillType.WOODCUTTING);
+                    Skills.activationCheck(player, SkillType.HOES);
                 }
 
                 /*
