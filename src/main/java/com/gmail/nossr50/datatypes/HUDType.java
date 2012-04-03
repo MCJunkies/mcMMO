@@ -5,5 +5,4 @@ public enum HUDType {
     STANDARD,
     SMALL,
     RETRO;
-
 }

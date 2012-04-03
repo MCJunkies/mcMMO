@@ -1,35 +1,33 @@
 package com.gmail.nossr50.runnables;
 
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
 
-import com.gmail.nossr50.Combat;
 import com.gmail.nossr50.Users;
 import com.gmail.nossr50.mcMMO;
 import com.gmail.nossr50.datatypes.AbilityType;
 import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.datatypes.SkillType;
-import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.skills.Skills;
-import com.gmail.nossr50.skills.Swords;
 
 public class mcTimer implements Runnable {
     private final mcMMO plugin;
-
-    int thecount = 1;
 
     public mcTimer(final mcMMO plugin) {
         this.plugin = plugin;
     }
 
+    @Override
     public void run() {
         long curTime = System.currentTimeMillis();
+
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (player == null) {
+            if (player == null) { //Is this even possible?
                 continue;
             }
+
             PlayerProfile PP = Users.getProfile(player);
 
-            if (PP == null) {
+            if (PP == null) { //Is this even possible?
                 continue;
             }
 
@@ -40,9 +38,6 @@ public class mcTimer implements Runnable {
             Skills.monitorSkill(player, PP, curTime, SkillType.EXCAVATION);
             Skills.monitorSkill(player, PP, curTime, SkillType.HERBALISM);
             Skills.monitorSkill(player, PP, curTime, SkillType.MINING);
-            Skills.monitorSkill(player, PP, curTime, SkillType.SWORDS);
-            Skills.monitorSkill(player, PP, curTime, SkillType.UNARMED);
-            Skills.monitorSkill(player, PP, curTime, SkillType.WOODCUTTING);
 
             /*
              * COOLDOWN MONITORING

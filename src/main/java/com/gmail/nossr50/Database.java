@@ -10,18 +10,22 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import com.gmail.nossr50.config.LoadProperties;
 import com.gmail.nossr50.datatypes.DatabaseUpdate;
+import com.gmail.nossr50.datatypes.PlayerProfile;
 
 public class Database {
     private String connectionString = "jdbc:mysql://" + LoadProperties.MySQLserverName + ":" + LoadProperties.MySQLport + "/" + LoadProperties.MySQLdbName + "?user=" + LoadProperties.MySQLuserName + "&password=" + LoadProperties.MySQLdbPass;
 
-    private boolean isConnected;
 
     private Connection conn = null;
+    private mcMMO plugin = null;
+    private long reconnectTimestamp = 0;
 
     public Database(mcMMO instance) {
+        plugin = instance;
         connect(); //Connect to MySQL
 
         // Load the driver instance
@@ -43,13 +47,12 @@ public class Database {
         try {
             System.out.println("[mcMMO] Attempting connection to MySQL...");
             Properties conProperties = new Properties();
-            conProperties.put("autoReconnect", "true");
-            conProperties.put("maxReconnects", "3");
+            conProperties.put("autoReconnect", "false");
+            conProperties.put("maxReconnects", "0");
             conn = DriverManager.getConnection(connectionString, conProperties);
-            isConnected = true;
-            System.out.println("[mcMMO] Connection to MySQL established!");
+            System.out.println("[mcMMO] Connection to MySQL was a success!");
         } catch (SQLException ex) {
-            isConnected = false;
+            System.out.println("[mcMMO] Connection to MySQL failed!");
             ex.printStackTrace();
             printErrors(ex);
         }
@@ -185,7 +188,7 @@ public class Database {
      * @return true if the query was successfully written, false otherwise.
      */
     public boolean write(String sql) {
-        if (conn != null) {
+        if (isConnected()) {
             try {
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.executeUpdate();
@@ -195,13 +198,7 @@ public class Database {
                 return false;
             }
         } else {
-            isConnected = false;
-            connect(); //Attempt to reconnect
-            if (isConnected) {
-                write(sql); //Try the same operation again now that we are connected
-            } else {
-                System.out.println("[mcMMO] Unable to connect to MySQL! Make sure the SQL server is online!");
-            }
+            attemptReconnect();
         }
         return false;
     }
@@ -216,7 +213,7 @@ public class Database {
         ResultSet rs = null;
         Integer result = 0;
 
-        if (conn != null) {
+        if (isConnected()) {
             try {
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt = conn.prepareStatement(sql);
@@ -233,15 +230,54 @@ public class Database {
                 printErrors(ex);
             }
         } else {
-            isConnected = false;
-            connect(); //Attempt to reconnect
-            if (isConnected) {
-                getInt(sql); //Try the same operation again now that we are connected
-            } else {
-                System.out.println("[mcMMO] Unable to connect to MySQL! Make sure the SQL server is online!");
-            }
+            attemptReconnect();
         }
         return result;
+    }
+    
+    /**
+     * Get connection status
+     * 
+     * @return the boolean value for whether or not we are connected
+     */
+    public boolean isConnected() {
+        if(conn == null)
+            return false;
+        
+        try {
+            return conn.isValid(3);
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+    
+    /**
+     * Schedules a Sync Delayed Task with the Bukkit Scheduler to attempt reconnection after a minute has elapsed
+     * This will check for a connection being present or not to prevent unneeded reconnection attempts
+     */
+    public void attemptReconnect() {
+        if(reconnectTimestamp+60000 < System.currentTimeMillis()) //Only reconnect if another attempt hasn't been made recently
+        {
+            System.out.println("[mcMMO] Connection to MySQL was lost! Attempting to reconnect in 60 seconds...");
+            reconnectTimestamp = System.currentTimeMillis();
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,     
+            new Runnable() {
+                public void run() {
+                    if (!isConnected()) {
+                        connect();
+                        if(isConnected()) {
+                            for(PlayerProfile x : Users.players.values()) {
+                                x.save(); //Save all profiles
+                            }
+                            Users.players.clear(); //Clear the profiles
+                            for(Player x : Bukkit.getOnlinePlayers()) {
+                                Users.addUser(x); //Add in new profiles, forcing them to 'load' again from MySQL
+                            }
+                        }
+                    }
+                }
+            }, 20*60);
+        }
     }
 
     /**
@@ -254,7 +290,7 @@ public class Database {
         ResultSet rs = null;
         HashMap<Integer, ArrayList<String>> Rows = new HashMap<Integer, ArrayList<String>>();
 
-        if (conn != null) {
+        if (isConnected()) {
             try {
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 if (stmt.executeQuery() != null) {
@@ -272,13 +308,7 @@ public class Database {
                 printErrors(ex);
             }
         } else {
-            isConnected = false;
-            connect(); //Attempt to reconnect
-            if (isConnected) {
-                read(sql); //Attempt the same operation again now that we are connected
-            } else {
-                System.out.println("[mcMMO] Unable to connect to MySQL! Make sure the SQL server is online!");
-            }
+            attemptReconnect();
         }
         return Rows;
     }
@@ -288,5 +318,4 @@ public class Database {
         System.out.println("SQLState: " + ex.getSQLState());
         System.out.println("VendorError: " + ex.getErrorCode());
     }
-
 }

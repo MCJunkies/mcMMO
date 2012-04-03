@@ -4,11 +4,8 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class Treasure {
     private int xp;
-
     private Double dropChance;
-
     private int dropLevel;
-
     private ItemStack drop;
 
     public Treasure(ItemStack drop, int xp, Double dropChance, int dropLevel) {
@@ -49,5 +46,4 @@ public abstract class Treasure {
     public void setDropLevel(int dropLevel) {
         this.dropLevel = dropLevel;
     }
-
 }

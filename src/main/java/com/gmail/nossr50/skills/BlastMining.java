@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,6 +25,12 @@ import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.locale.mcLocale;
 
 public class BlastMining {
+<<<<<<< HEAD
+=======
+
+    private static Random random = new Random();
+
+>>>>>>> master
     /**
      * Handler for what blocks drop from the explosion.
      *
@@ -42,7 +49,7 @@ public class BlastMining {
         while (iterator2.hasNext()) {
             Block temp = iterator2.next();
 
-            if ((float) Math.random() < (yield + oreBonus)) {
+            if (random.nextFloat() < (yield + oreBonus)) {
                 blocksDropped.add(temp);
                 Mining.miningDrops(temp);
 
@@ -65,7 +72,11 @@ public class BlastMining {
             while (iterator3.hasNext()) {
                 Block temp = iterator3.next();
 
+<<<<<<< HEAD
                 if ((float) Math.random() < (yield - debrisReduction)) {
+=======
+                if (random.nextFloat() < (yield - debrisReduction))
+>>>>>>> master
                     Mining.miningDrops(temp);
                 }
             }
@@ -216,6 +227,12 @@ public class BlastMining {
         event.setDamage(damage);
     }
 
+    /**
+     * Remotely detonate TNT for Blast Mining.
+     *
+     * @param player Player detonating the TNT
+     * @param plugin mcMMO plugin instance
+     */
     public static void remoteDetonation(Player player, mcMMO plugin) {
         final byte SNOW = 78;
         final byte AIR = 0;
@@ -231,7 +248,7 @@ public class BlastMining {
         Block block = player.getTargetBlock(transparent, BLOCKS_AWAY);
 
         if (block.getType().equals(Material.TNT) && m.blockBreakSimulate(block, player, true) && PP.getSkillLevel(SkillType.MINING) >= 125) {
-            final int MAX_DISTANCE_AWAY = 10;
+            final double MAX_DISTANCE_AWAY = 10.0;
             AbilityType ability = AbilityType.BLAST_MINING;
 
             /*
@@ -257,12 +274,12 @@ public class BlastMining {
              * Create the TNT entity
              */
             TNTPrimed tnt = player.getWorld().spawn(block.getLocation(), TNTPrimed.class);
-            plugin.misc.tntTracker.put(tnt.getEntityId(), player);
+            plugin.tntTracker.put(tnt.getEntityId(), player);
             block.setType(Material.AIR);
             tnt.setFuseTicks(0);
 
             PP.setSkillDATS(ability, System.currentTimeMillis()); //Save DATS for Blast Mining
-            PP.setBlastMiningInformed(false);
+            PP.setAbilityInformed(ability, false);
         }
     }
 

@@ -10,14 +10,20 @@ import org.bukkit.ChatColor;
 import com.gmail.nossr50.config.LoadProperties;
 
 public class mcLocale {
-    private static final String BUNDLE_NAME = "com.gmail.nossr50.locale.locale"; //$NON-NLS-1$
-
+    private static final String BUNDLE_NAME = "com.gmail.nossr50.locale.locale";
     private static ResourceBundle RESOURCE_BUNDLE = null;
 
     public static String getString(String key) {
         return getString(key, null);
     }
 
+    /**
+     * Gets the appropriate string from the Locale files.
+     *
+     * @param key The key to look up the string with
+     * @param messageArguments Any arguements to be added to the string
+     * @return The properly formatted locale string
+     */
     public static String getString(String key, Object[] messageArguments) {
         try {
             if (RESOURCE_BUNDLE == null) {
@@ -25,8 +31,8 @@ public class mcLocale {
                 try {
                     //attempt to get the locale denoted
                     RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, new Locale(myLocale));
-                } catch (MissingResourceException e) {
-                    //System.out.println("Failed to load locale specified by mcmmo.properties '"+myLocale+"', defaulting to en_us");
+                }
+                catch (MissingResourceException e) {
                     RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, new Locale("en_us"));
                 }
             }
@@ -42,7 +48,8 @@ public class mcLocale {
             output = addColors(output);
 
             return output;
-        } catch (MissingResourceException e) {
+        }
+        catch (MissingResourceException e) {
             return '!' + key + '!';
         }
     }
@@ -67,5 +74,4 @@ public class mcLocale {
 
         return input;
     }
-
 }

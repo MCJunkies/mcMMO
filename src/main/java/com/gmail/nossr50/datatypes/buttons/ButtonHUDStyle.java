@@ -1,20 +1,14 @@
 package com.gmail.nossr50.datatypes.buttons;
 
-import org.getspout.spoutapi.gui.GenericButton;
-
 import com.gmail.nossr50.datatypes.PlayerProfile;
 
-public class ButtonHUDStyle extends GenericButton {
+public class ButtonHUDStyle extends ButtonToggle {
+
     public ButtonHUDStyle(PlayerProfile PP) {
-        this.setText("HUD Type: " + PP.getHUDType().toString());
-        this.setTooltip("Change your HUD style!");
-        this.setWidth(120).setHeight(20);
-        this.setDirty(true);
+        super("HUD Type: ", PP.getHUDType().toString(), "Change your HUD style!"); //TODO: Needs more locale
     }
 
     public void updateText(PlayerProfile PP) {
-        this.setText("HUD Type: " + PP.getHUDType().toString());
-        this.setDirty(true);
+        super.updateText("HUD Type: ", PP.getHUDType().toString()); //TODO: Needs more locale
     }
-
 }

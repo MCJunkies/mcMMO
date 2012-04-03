@@ -2,6 +2,7 @@ package com.gmail.nossr50.skills;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,20 +10,24 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.event.player.PlayerAnimationEvent;
 
-import com.gmail.nossr50.spout.SpoutStuff;
+import com.gmail.nossr50.spout.SpoutSounds;
 import com.gmail.nossr50.Users;
 import com.gmail.nossr50.m;
+import com.gmail.nossr50.mcPermissions;
 import com.gmail.nossr50.config.LoadProperties;
 import com.gmail.nossr50.config.LoadTreasures;
 import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.datatypes.treasure.ExcavationTreasure;
+import com.gmail.nossr50.events.fake.FakePlayerAnimationEvent;
 
 import org.getspout.spoutapi.sound.SoundEffect;
 
 public class Excavation {
+
+    private static Random random = new Random();
+
     /**
      * Check to see if a block can be broken by Giga Drill Breaker.
      *
@@ -31,16 +36,17 @@ public class Excavation {
      */
     public static boolean canBeGigaDrillBroken(Material type) {
         switch (type) {
-            case CLAY:
-            case DIRT:
-            case GRASS:
-            case GRAVEL:
-            case MYCEL:
-            case SAND:
-            case SOUL_SAND:
-                return true;
-            default:
-                return false;
+        case CLAY:
+        case DIRT:
+        case GRASS:
+        case GRAVEL:
+        case MYCEL:
+        case SAND:
+        case SOUL_SAND:
+            return true;
+
+        default:
+            return false;
         }
     }
 
@@ -62,7 +68,8 @@ public class Excavation {
 
         int xp = LoadProperties.mbase;
 
-        switch (type) {
+        if (mcPermissions.getInstance().excavationTreasures(player)) {
+            switch (type) {
             case DIRT:
                 treasures = LoadTreasures.excavationFromDirt;
                 break;
@@ -93,26 +100,27 @@ public class Excavation {
 
             default:
                 break;
-        }
+            }
 
-        for (ExcavationTreasure treasure : treasures) {
-            if (skillLevel >= treasure.getDropLevel()) {
-                if (Math.random() * 100 <= treasure.getDropChance()) {
-                    xp += treasure.getXp();
-                    is.add(treasure.getDrop());
+            for (ExcavationTreasure treasure : treasures) {
+                if (skillLevel >= treasure.getDropLevel()) {
+                    if (random.nextDouble() * 100 <= treasure.getDropChance()) {
+                        xp += treasure.getXp();
+                        is.add(treasure.getDrop());
+                    }
+                }
+            }
+
+            //Drop items
+            for (ItemStack x : is) {
+                if (x != null) {
+                    m.mcDropItem(loc, x);
                 }
             }
         }
 
-        //Drop items
-        for (ItemStack x : is) {
-            if (x != null) {
-                m.mcDropItem(loc, x);
-            }
-        }
-
         //Handle XP related tasks
-        PP.addXP(SkillType.EXCAVATION, xp, player);
+        PP.addXP(SkillType.EXCAVATION, xp);
         Skills.XpCheckSkill(SkillType.EXCAVATION, player);
     }
 
@@ -126,7 +134,7 @@ public class Excavation {
         Skills.abilityDurabilityLoss(player.getItemInHand(), LoadProperties.abilityDurabilityLoss);
 
         if (!block.hasMetadata("mcmmoPlacedBlock")) {
-            PlayerAnimationEvent armswing = new PlayerAnimationEvent(player);
+            FakePlayerAnimationEvent armswing = new FakePlayerAnimationEvent(player);
             Bukkit.getPluginManager().callEvent(armswing);
 
             Excavation.excavationProcCheck(block, player);
@@ -134,8 +142,7 @@ public class Excavation {
         }
 
         if (LoadProperties.spoutEnabled) {
-            SpoutStuff.playSoundForPlayer(SoundEffect.POP, player, block.getLocation());
+            SpoutSounds.playSoundForPlayer(SoundEffect.POP, player, block.getLocation());
         }
     }
-
 }

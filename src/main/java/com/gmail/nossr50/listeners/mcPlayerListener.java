@@ -33,6 +33,7 @@ import com.gmail.nossr50.commands.general.XprateCommand;
 import com.gmail.nossr50.config.LoadProperties;
 import com.gmail.nossr50.runnables.RemoveProfileFromMemoryTask;
 import com.gmail.nossr50.spout.SpoutStuff;
+import com.gmail.nossr50.datatypes.AbilityType;
 import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.locale.mcLocale;
@@ -93,11 +94,11 @@ public class mcPlayerListener implements Listener {
                     Fishing.processResults(event);
                     break;
 
-                case CAUGHT_ENTITY:
-                    if (Users.getProfile(player).getSkillLevel(SkillType.FISHING) >= 150) {
-                        Fishing.shakeMob(event);
-                    }
-                    break;
+            case CAUGHT_ENTITY:
+                if (Users.getProfile(player).getSkillLevel(SkillType.FISHING) >= 150 && mcPermissions.getInstance().shakeMob(player)) {
+                    Fishing.shakeMob(event);
+                }
+                break;
 
                 default:
                     break;
@@ -112,7 +113,7 @@ public class mcPlayerListener implements Listener {
      */
     @EventHandler(ignoreCancelled = true)
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-        if (Users.getProfile(event.getPlayer()).getBerserkMode()) {
+        if (Users.getProfile(event.getPlayer()).getAbilityMode(AbilityType.BERSERK)) {
             event.setCancelled(true);
         }
     }
@@ -151,9 +152,6 @@ public class mcPlayerListener implements Listener {
             Combat.dealDamage(player, PP.getBleedTicks() * 2);
         }
 
-        //Save PlayerData to MySQL/FlatFile on player quit
-        PP.save();
-
         //Schedule PlayerProfile removal 2 minutes after quitting
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new RemoveProfileFromMemoryTask(player), 2400);
     }
@@ -183,7 +181,7 @@ public class mcPlayerListener implements Listener {
      *
      * @param event The event to watch
      */
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
@@ -236,12 +234,10 @@ public class mcPlayerListener implements Listener {
                     Herbalism.greenThumbBlocks(is, player, block);
                 }
 
-                /*
-                 * ITEM CHECKS
-                 */
-                if (BlockChecks.abilityBlockCheck(mat)) {
-                    Item.itemchecks(player);
-                }
+            /* GREEN THUMB CHECK */
+            if (mcPermissions.getInstance().greenThumbBlocks(player) && Herbalism.makeMossy(mat) && is.getType().equals(Material.SEEDS)) {
+                Herbalism.greenThumbBlocks(is, player, block);
+            }
 
                 /*
                  * BLAST MINING CHECK
@@ -351,7 +347,7 @@ public class mcPlayerListener implements Listener {
 
             String format = color + "(" + ChatColor.WHITE + name + color + ") " + event.getMessage();
 
-            for (Player x : Bukkit.getServer().getOnlinePlayers()) {
+            for (Player x : plugin.getServer().getOnlinePlayers()) {
                 if (partyChat && Party.getInstance().inSameParty(player, x)) {
                     x.sendMessage(format);
                 } else if (adminChat && (x.isOp() || mcPermissions.getInstance().adminChat(x))) {

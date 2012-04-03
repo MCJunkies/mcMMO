@@ -1,4 +1,4 @@
-package com.gmail.nossr50.events;
+package com.gmail.nossr50.events.items;
 
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
@@ -7,13 +7,11 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Called when mcMMO is preparing to drop an item
+ * Called when mcMMO is preparing to drop an item.
  */
 public class McMMOItemSpawnEvent extends Event implements Cancellable {
     private Location location;
-
     private ItemStack itemStack;
-
     private boolean cancelled;
 
     public McMMOItemSpawnEvent(Location location, ItemStack itemStack) {
@@ -50,9 +48,7 @@ public class McMMOItemSpawnEvent extends Event implements Cancellable {
         this.itemStack = itemStack;
     }
 
-    /**
-     * Following are required for Cancellable *
-     */
+    /** Following are required for Cancellable **/
     @Override
     public boolean isCancelled() {
         return cancelled;
@@ -62,10 +58,8 @@ public class McMMOItemSpawnEvent extends Event implements Cancellable {
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
-
-    /**
-     * Rest of file is required boilerplate for custom events *
-     */
+    
+    /** Rest of file is required boilerplate for custom events **/
     private static final HandlerList handlers = new HandlerList();
 
     public HandlerList getHandlers() {
@@ -75,5 +69,4 @@ public class McMMOItemSpawnEvent extends Event implements Cancellable {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-
 }

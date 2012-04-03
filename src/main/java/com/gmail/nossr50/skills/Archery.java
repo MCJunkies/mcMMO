@@ -1,5 +1,7 @@
 package com.gmail.nossr50.skills;
 
+import java.util.Random;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -9,12 +11,19 @@ import org.bukkit.inventory.ItemStack;
 import com.gmail.nossr50.Users;
 import com.gmail.nossr50.m;
 import com.gmail.nossr50.mcMMO;
+import com.gmail.nossr50.mcPermissions;
 import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
 
 public class Archery {
+<<<<<<< HEAD
+=======
+
+    private static Random random = new Random();
+
+>>>>>>> master
     /**
      * Track arrows fired for later retrieval.
      *
@@ -26,12 +35,12 @@ public class Archery {
         final int MAX_BONUS_LEVEL = 1000;
         int skillLevel = PPa.getSkillLevel(SkillType.ARCHERY);
 
-        if (!plugin.misc.arrowTracker.containsKey(entity)) {
-            plugin.misc.arrowTracker.put(entity, 0);
+        if (!plugin.arrowTracker.containsKey(entity)) {
+            plugin.arrowTracker.put(entity, 0);
         }
 
-        if (skillLevel > MAX_BONUS_LEVEL || (Math.random() * 1000 <= skillLevel)) {
-            plugin.misc.arrowTracker.put(entity, 1);
+        if (skillLevel > MAX_BONUS_LEVEL || (random.nextInt(1000) <= skillLevel)) {
+            plugin.arrowTracker.put(entity, 1);
         }
     }
 
@@ -53,7 +62,7 @@ public class Archery {
 
         PlayerProfile PPa = Users.getProfile(attacker);
 
-        if (Math.random() * 100 <= IGNITION_CHANCE) {
+        if (random.nextInt(100) <= IGNITION_CHANCE) {
             int ignition = 20;
 
             /*
@@ -93,13 +102,13 @@ public class Archery {
         Location loc = defender.getLocation();
         int skillCheck = m.skillCheck(skillLevel, MAX_BONUS_LEVEL);
 
-        if (Math.random() * 10 > 5) {
+        if (random.nextInt(10) > 5) {
             loc.setPitch(90);
         } else {
             loc.setPitch(-90);
         }
 
-        if (Math.random() * 2000 <= skillCheck) {
+        if (random.nextInt(2000) <= skillCheck && mcPermissions.getInstance().daze(attacker)) {
             defender.teleport(loc);
             defender.sendMessage(mcLocale.getString("Combat.TouchedFuzzy"));
             attacker.sendMessage(mcLocale.getString("Combat.TargetDazed"));
@@ -113,11 +122,11 @@ public class Archery {
      * @param plugin mcMMO plugin instance
      */
     public static void arrowRetrievalCheck(Entity entity, mcMMO plugin) {
-        if (plugin.misc.arrowTracker.containsKey(entity)) {
-            m.mcDropItems(entity.getLocation(), new ItemStack(Material.ARROW), plugin.misc.arrowTracker.get(entity));
+        if (plugin.arrowTracker.containsKey(entity)) {
+            m.mcDropItems(entity.getLocation(), new ItemStack(Material.ARROW), plugin.arrowTracker.get(entity));
         }
 
-        plugin.misc.arrowTracker.remove(entity);
+        plugin.arrowTracker.remove(entity);
     }
 
 }

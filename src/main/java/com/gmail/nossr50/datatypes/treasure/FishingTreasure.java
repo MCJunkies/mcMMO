@@ -17,5 +17,4 @@ public class FishingTreasure extends Treasure {
     public void setMaxLevel(int maxLevel) {
         this.maxLevel = maxLevel;
     }
-
 }

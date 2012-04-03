@@ -1,5 +1,7 @@
 package com.gmail.nossr50.skills;
 
+import java.util.Random;
+
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -20,8 +22,11 @@ import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
+import com.gmail.nossr50.runnables.mcBleedTimer;
 
 public class Swords {
+    private static Random random = new Random();
+
     /**
      * Check for Bleed effect.
      *
@@ -53,7 +58,7 @@ public class Swords {
         int skillLevel = PPa.getSkillLevel(SkillType.SWORDS);
         int skillCheck = m.skillCheck(skillLevel, MAX_BONUS_LEVEL);
 
-        if (Math.random() * 1000 <= skillCheck && !entity.isDead()) {
+        if (random.nextInt(1000) <= skillCheck && !entity.isDead()) {
             if (entity instanceof Player) {
                 Player target = (Player) entity;
                 int bleedTicks;
@@ -66,7 +71,7 @@ public class Swords {
 
                 Users.getProfile(target).addBleedTicks(bleedTicks);
             } else {
-                plugin.misc.addToBleedQue(entity);
+                mcBleedTimer.add(entity);
             }
             attacker.sendMessage(mcLocale.getString("Swords.EnemyBleeding"));
         }
@@ -90,14 +95,14 @@ public class Swords {
             Player defender = (Player) target;
             PlayerProfile PPd = Users.getProfile(defender);
 
-            if (ItemChecks.isSword(defender.getItemInHand()) && mcPermissions.getInstance().swords(defender)) {
+            if (ItemChecks.isSword(defender.getItemInHand()) && mcPermissions.getInstance().counterAttack(defender)) {
                 final int MAX_BONUS_LEVEL = 600;
                 final int COUNTER_ATTACK_MODIFIER = 2;
 
                 int skillLevel = PPd.getSkillLevel(SkillType.SWORDS);
                 int skillCheck = m.skillCheck(skillLevel, MAX_BONUS_LEVEL);
 
-                if (Math.random() * 2000 <= skillCheck) {
+                if (random.nextInt(2000) <= skillCheck) {
                     Combat.dealDamage((LivingEntity) attacker, event.getDamage() / COUNTER_ATTACK_MODIFIER);
                     defender.sendMessage(mcLocale.getString("Swords.CounterAttacked"));
 

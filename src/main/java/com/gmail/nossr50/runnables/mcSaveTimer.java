@@ -19,5 +19,4 @@ public class mcSaveTimer implements Runnable {
             Users.getProfile(player).save();
         }
     }
-
 }

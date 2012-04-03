@@ -1,6 +1,7 @@
 package com.gmail.nossr50.skills;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
@@ -9,21 +10,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Tree;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.Bukkit;
 
 import com.gmail.nossr50.Combat;
 import com.gmail.nossr50.Users;
 import com.gmail.nossr50.m;
+import com.gmail.nossr50.mcPermissions;
 import com.gmail.nossr50.config.LoadProperties;
 import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.datatypes.SkillType;
+import com.gmail.nossr50.events.fake.FakePlayerAnimationEvent;
 import com.gmail.nossr50.locale.mcLocale;
-import com.gmail.nossr50.spout.SpoutStuff;
+import com.gmail.nossr50.spout.SpoutSounds;
 
 import org.getspout.spoutapi.sound.SoundEffect;
 
 public class WoodCutting {
+
+    private static Random random = new Random();
+
     /**
      * Handle the Tree Feller ability.
      *
@@ -35,9 +40,7 @@ public class WoodCutting {
         PlayerProfile PP = Users.getProfile(player);
         ArrayList<Block> toBeFelled = new ArrayList<Block>();
 
-        /*
-         * NOTE: Tree Feller will cut upwards like how you actually fell trees
-         */
+        /* NOTE: Tree Feller will cut upwards like how you actually fell trees */
         processTreeFelling(firstBlock, toBeFelled);
         removeBlocks(toBeFelled, player, PP);
     }
@@ -55,25 +58,21 @@ public class WoodCutting {
             return;
         }
 
-        int durabilityLoss = toBeFelled.size();
+        int durabilityLoss = durabilityLossCalulate(toBeFelled);
         int xp = 0;
         ItemStack inHand = player.getItemInHand();
 
-        /*
-         * Damage the tool
-         */
+        /* Damage the tool */
         inHand.setDurability((short) (inHand.getDurability() + durabilityLoss));
 
-        /*
-         * This is to prevent using wood axes everytime you tree fell
-         */
+        /* This is to prevent using wood axes everytime you tree fell */
         if ((inHand.getDurability() + durabilityLoss >= inHand.getType().getMaxDurability()) || inHand.getType().equals(Material.AIR)) {
             player.sendMessage(mcLocale.getString("TreeFeller.AxeSplinters"));
 
             int health = player.getHealth();
 
             if (health >= 2) {
-                Combat.dealDamage(player, (int) (Math.random() * (health - 1)));
+                Combat.dealDamage(player, random.nextInt(health - 1));
             }
             return;
         }
@@ -84,7 +83,7 @@ public class WoodCutting {
         ItemStack spruce = new ItemStack(Material.LOG, 1, (short) 0, TreeSpecies.REDWOOD.getData());
         ItemStack birch = new ItemStack(Material.LOG, 1, (short) 0, TreeSpecies.BIRCH.getData());
         ItemStack jungle = new ItemStack(Material.LOG, 1, (short) 0, TreeSpecies.JUNGLE.getData());
-
+        
         for (Block x : toBeFelled) {
             if (m.blockBreakSimulate(x, player, true)) {
                 if (x.getType() == Material.LOG) {
@@ -92,24 +91,24 @@ public class WoodCutting {
                     TreeSpecies species = tree.getSpecies();
 
                     switch (species) {
-                        case GENERIC:
-                            item = oak;
-                            break;
+                    case GENERIC:
+                        item = oak;
+                        break;
 
-                        case REDWOOD:
-                            item = spruce;
-                            break;
+                    case REDWOOD:
+                        item = spruce;
+                        break;
 
-                        case BIRCH:
-                            item = birch;
-                            break;
+                    case BIRCH:
+                        item = birch;
+                        break;
 
-                        case JUNGLE:
-                            item = jungle;
-                            break;
+                    case JUNGLE:
+                        item = jungle;
+                        break;
 
-                        default:
-                            break;
+                    default:
+                        break;
                     }
 
                     if (!x.hasMetadata("mcmmoPlacedBlock")) {
@@ -137,18 +136,15 @@ public class WoodCutting {
                         }
                     }
 
-                    /*
-                     * Remove the block
-                     */
+                    /* Remove the block */
                     x.setData((byte) 0x0);
                     x.setType(Material.AIR);
 
-                    /*
-                     * Drop the block
-                     */
+                    /* Drop the block */
                     m.mcDropItem(x.getLocation(), item);
-                } else if (x.getType() == Material.LEAVES) {
-                    final int SAPLING_DROP_CHANCE = 90;
+                }
+                else if (x.getType() == Material.LEAVES) {
+                    final int SAPLING_DROP_CHANCE = 10;
 
                     item = new ItemStack(Material.SAPLING, 1, (short) 0, (byte) (x.getData() & 3)); //Drop the right type of sapling
                     m.mcRandomDropItem(x.getLocation(), item, SAPLING_DROP_CHANCE);
@@ -160,7 +156,7 @@ public class WoodCutting {
             }
         }
 
-        PP.addXP(SkillType.WOODCUTTING, xp, player); //Tree Feller gives nerf'd XP
+        PP.addXP(SkillType.WOODCUTTING, xp); //Tree Feller gives nerf'd XP
         Skills.XpCheckSkill(SkillType.WOODCUTTING, player);
     }
 
@@ -172,13 +168,13 @@ public class WoodCutting {
      */
     private static boolean treeFellerCompatible(Block block) {
         switch (block.getType()) {
-            case LOG:
-            case LEAVES:
-            case AIR:
-                return true;
+        case LOG:
+        case LEAVES:
+        case AIR:
+            return true;
 
-            default:
-                return false;
+        default:
+            return false;
         }
     }
 
@@ -217,8 +213,10 @@ public class WoodCutting {
             if (!isTooAggressive(currentBlock, zNegative) && treeFellerCompatible(zNegative) && !toBeFelled.contains(zNegative)) {
                 processTreeFelling(zNegative, toBeFelled);
             }
+        }
 
-            if (treeFellerCompatible(yPositive) && !toBeFelled.contains(yPositive)) {
+        if (treeFellerCompatible(yPositive)) {
+            if(!currentBlock.hasMetadata("mcmmoPlacedBlock") && !toBeFelled.contains(yPositive)) {
                 processTreeFelling(yPositive, toBeFelled);
             }
         }
@@ -237,7 +235,8 @@ public class WoodCutting {
 
         if ((currentType.equals(Material.LEAVES) || currentType.equals(Material.AIR)) && (newType.equals(Material.LEAVES) || newType.equals(Material.AIR))) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -255,7 +254,7 @@ public class WoodCutting {
         byte type = block.getData();
         Material mat = Material.getMaterial(block.getTypeId());
 
-        if (skillLevel > MAX_SKILL_LEVEL || Math.random() * 1000 <= skillLevel) {
+        if ((skillLevel > MAX_SKILL_LEVEL || random.nextInt(1000) <= skillLevel) && mcPermissions.getInstance().woodcuttingDoubleDrops(player)) {
             ItemStack item = new ItemStack(mat, 1, (short) 0, type);
             m.mcDropItem(block.getLocation(), item);
         }
@@ -272,33 +271,33 @@ public class WoodCutting {
         int xp = 0;
         TreeSpecies species = TreeSpecies.getByData(block.getData());
 
-        if (block.hasMetadata("placedBlock")) {
+        if (block.hasMetadata("mcmmoPlacedBlock")) {
             return;
         }
 
         switch (species) {
-            case GENERIC:
-                xp += LoadProperties.moak;
-                break;
+        case GENERIC:
+            xp += LoadProperties.moak;
+            break;
 
-            case REDWOOD:
-                xp += LoadProperties.mspruce;
-                break;
+        case REDWOOD:
+            xp += LoadProperties.mspruce;
+            break;
 
-            case BIRCH:
-                xp += LoadProperties.mbirch;
-                break;
+        case BIRCH:
+            xp += LoadProperties.mbirch;
+            break;
 
-            case JUNGLE:
-                xp += LoadProperties.mjungle;
-                break;
+        case JUNGLE:
+            xp += LoadProperties.mjungle;
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
 
         WoodCutting.woodCuttingProcCheck(player, block);
-        PP.addXP(SkillType.WOODCUTTING, xp, player);
+        PP.addXP(SkillType.WOODCUTTING, xp);
         Skills.XpCheckSkill(SkillType.WOODCUTTING, player);
     }
 
@@ -309,7 +308,7 @@ public class WoodCutting {
      * @param block Block being broken
      */
     public static void leafBlower(Player player, Block block) {
-        PlayerAnimationEvent armswing = new PlayerAnimationEvent(player);
+        FakePlayerAnimationEvent armswing = new FakePlayerAnimationEvent(player);
         Bukkit.getPluginManager().callEvent(armswing);
 
         if (LoadProperties.woodcuttingrequiresaxe) {
@@ -317,8 +316,19 @@ public class WoodCutting {
         }
 
         if (LoadProperties.spoutEnabled) {
-            SpoutStuff.playSoundForPlayer(SoundEffect.POP, player, block.getLocation());
+            SpoutSounds.playSoundForPlayer(SoundEffect.POP, player, block.getLocation());
         }
     }
 
+    private static int durabilityLossCalulate(ArrayList<Block> toBeFelled) {
+        int durabilityLoss = 0;
+        for (Block x : toBeFelled) {
+            if (x.getType().equals(Material.LOG)) {
+                durabilityLoss++;
+                durabilityLoss = durabilityLoss + LoadProperties.abilityDurabilityLoss;
+            }
+        }
+
+        return durabilityLoss;
+    }
 }

@@ -1,5 +1,7 @@
 package com.gmail.nossr50.skills;
 
+import java.util.Random;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -13,6 +15,12 @@ import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
 
 public class Acrobatics {
+<<<<<<< HEAD
+=======
+
+    private static Random random = new Random();
+
+>>>>>>> master
     /**
      * Check for fall damage reduction.
      *
@@ -30,11 +38,15 @@ public class Acrobatics {
         int damage = event.getDamage();
         int health = player.getHealth();
 
+        if (!mcPermissions.getInstance().gracefulRoll(player)) {
+            gracefulRoll = false;
+        }
+
         if (gracefulRoll) {
             acrovar = acrovar * 2;
         }
 
-        if (acrovar > MAX_BONUS_LEVEL || Math.random() * 1000 <= acrovar) {
+        if ((acrovar > MAX_BONUS_LEVEL || random.nextInt(1000) <= acrovar) && mcPermissions.getInstance().roll(player)) {
             int threshold = 7;
 
             if (gracefulRoll) {
@@ -51,7 +63,7 @@ public class Acrobatics {
              * Check for death
              */
             if (health - damage >= 1) {
-                PP.addXP(SkillType.ACROBATICS, damage * ROLL_XP_MODIFIER, player);
+                PP.addXP(SkillType.ACROBATICS, damage * ROLL_XP_MODIFIER);
                 Skills.XpCheckSkill(SkillType.ACROBATICS, player);
 
                 event.setDamage(newDamage);
@@ -66,8 +78,14 @@ public class Acrobatics {
                     player.sendMessage(mcLocale.getString("Acrobatics.Roll"));
                 }
             }
+<<<<<<< HEAD
         } else if (health - damage >= 1) {
             PP.addXP(SkillType.ACROBATICS, event.getDamage() * FALL_XP_MODIFIER, player);
+=======
+        }
+        else if (health - damage >= 1) {
+            PP.addXP(SkillType.ACROBATICS, event.getDamage() * FALL_XP_MODIFIER);
+>>>>>>> master
             Skills.XpCheckSkill(SkillType.ACROBATICS, player);
         }
     }
@@ -100,11 +118,11 @@ public class Acrobatics {
             int skillLevel = PPd.getSkillLevel(SkillType.ACROBATICS);
             int skillCheck = m.skillCheck(skillLevel, MAX_BONUS_LEVEL);
 
-            if (Math.random() * 4000 <= skillCheck) {
+            if (random.nextInt(4000) <= skillCheck && mcPermissions.getInstance().dodge(defender)) {
                 defender.sendMessage(mcLocale.getString("Acrobatics.Dodge"));
 
                 if (System.currentTimeMillis() >= (5000 + PPd.getRespawnATS()) && defender.getHealth() >= 1) {
-                    PPd.addXP(SkillType.ACROBATICS, damage * DODGE_MODIFIER, defender);
+                    PPd.addXP(SkillType.ACROBATICS, damage * DODGE_MODIFIER);
                     Skills.XpCheckSkill(SkillType.ACROBATICS, defender);
                 }
 

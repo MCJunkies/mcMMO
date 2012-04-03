@@ -3,14 +3,15 @@ package com.gmail.nossr50.datatypes.treasure;
 import org.bukkit.inventory.ItemStack;
 
 public class ExcavationTreasure extends Treasure {
-    // dirt grass sand gravel clay mycel soulsand
-    // 00000001 - dirt		1
-    // 00000010 - grass		2
-    // 00000100 - sand		4
-    // 00001000 - gravel	8
-    // 00010000 - clay		16
-    // 00100000 - mycel		32
-    // 01000000 - soulsand	64
+
+    // dirt | grass | sand | gravel | clay | mycel | soulsand
+    // 00000001 - dirt      1
+    // 00000010 - grass     2
+    // 00000100 - sand      4
+    // 00001000 - gravel    8
+    // 00010000 - clay      16
+    // 00100000 - mycel     32
+    // 01000000 - soulsand  64
     private byte dropsFrom = 0x0;
 
     public ExcavationTreasure(ItemStack drop, int xp, Double dropChance, int dropLevel) {
@@ -124,5 +125,4 @@ public class ExcavationTreasure extends Treasure {
     private void unsetDropFromMask(int mask) {
         dropsFrom &= ~mask;
     }
-
 }

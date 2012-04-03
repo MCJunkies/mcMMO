@@ -1,16 +1,22 @@
 package com.gmail.nossr50.skills;
 
+import java.util.Random;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.gmail.nossr50.Users;
 import com.gmail.nossr50.m;
+import com.gmail.nossr50.mcPermissions;
 import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.locale.mcLocale;
 
 public class Unarmed {
+
+    private static Random random = new Random();
 
     /**
      * Apply bonus to Unarmed damage.
@@ -43,15 +49,33 @@ public class Unarmed {
         int skillLevel = PPa.getSkillLevel(SkillType.UNARMED);
         int skillCheck = m.skillCheck(skillLevel, MAX_BONUS_LEVEL);
 
-        if (defender.getItemInHand().getType().equals(Material.AIR)) {
-            if (Math.random() * 3000 <= skillCheck) {
-                ItemStack item = defender.getItemInHand();
+        ItemStack inHand = defender.getItemInHand();
 
+        if (!inHand.getType().equals(Material.AIR)) {
+            if (random.nextInt(3000) <= skillCheck) {
                 defender.sendMessage(mcLocale.getString("Skills.Disarmed"));
 
-                m.mcDropItem(defender.getLocation(), item);
+                m.mcDropItem(defender.getLocation(), inHand);
                 defender.setItemInHand(new ItemStack(Material.AIR));
             }
+        }
+    }
+
+    /**
+     * Check for arrow deflection.
+     *
+     * @param defender The defending player
+     * @param event The event to modify
+     */
+    public static void deflectCheck(Player defender, EntityDamageByEntityEvent event) {
+        final int MAX_BONUS_LEVEL = 1000;
+
+        int skillLevel = Users.getProfile(defender).getSkillLevel(SkillType.UNARMED);
+        int skillCheck = m.skillCheck(skillLevel, MAX_BONUS_LEVEL);
+
+        if (random.nextInt(2000) <= skillCheck && mcPermissions.getInstance().deflect(defender)) {
+            event.setCancelled(true);
+            defender.sendMessage(mcLocale.getString("Combat.ArrowDeflect"));
         }
     }
 }

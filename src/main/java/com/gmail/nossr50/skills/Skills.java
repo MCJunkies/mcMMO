@@ -20,13 +20,13 @@ import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.datatypes.PlayerStat;
 import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.datatypes.ToolType;
-import com.gmail.nossr50.events.McMMOPlayerLevelUpEvent;
+import com.gmail.nossr50.events.experience.McMMOPlayerLevelUpEvent;
 import com.gmail.nossr50.locale.mcLocale;
 
 public class Skills {
     private final static int TIME_CONVERSION_FACTOR = 1000;
 
-    private final static int MAX_DISTANCE_AWAY = 10;
+    private final static double MAX_DISTANCE_AWAY = 10.0;
 
     /**
      * Checks to see if the cooldown for an item or ability is expired.
@@ -65,8 +65,8 @@ public class Skills {
      * @param ability The ability to watch cooldowns for
      */
     public static void watchCooldown(Player player, PlayerProfile PP, long curTime, AbilityType ability) {
-        if (!ability.getInformed(PP) && curTime - (PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR) >= (ability.getCooldown() * TIME_CONVERSION_FACTOR)) {
-            ability.setInformed(PP, true);
+        if (!PP.getAbilityInformed(ability) && curTime - (PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR) >= (ability.getCooldown() * TIME_CONVERSION_FACTOR)) {
+            PP.setAbilityInformed(ability, true);
             player.sendMessage(ability.getAbilityRefresh());
         }
     }
@@ -90,26 +90,31 @@ public class Skills {
         /*
          * Check if any abilities are active
          */
-        if (!PP.getAbilityUse() || PP.getSuperBreakerMode() || PP.getSerratedStrikesMode() || PP.getTreeFellerMode() || PP.getGreenTerraMode() || PP.getBerserkMode() || PP.getGigaDrillBreakerMode()) {
+        if (!PP.getAbilityUse()) {
             return;
         }
 
-        /*
-         * Woodcutting & Axes need to be treated differently. Basically the tool
-         * always needs to ready and we check to see if the cooldown is over
-         * when the user takes action
+        for (AbilityType x : AbilityType.values()) {
+            if (PP.getAbilityMode(x)) {
+                return;
+            }
+        }
+
+        /* Woodcutting & Axes need to be treated differently.
+         * Basically the tool always needs to ready and we check to see if the cooldown is over when the user takes action
          */
         if (skill == SkillType.WOODCUTTING || skill == SkillType.AXES) {
-            if (tool.inHand(inHand) && !tool.getToolMode(PP)) {
+            if (tool.inHand(inHand) && !PP.getToolPreparationMode(tool)) {
                 if (LoadProperties.enableAbilityMessages) {
                     player.sendMessage(tool.getRaiseTool());
                 }
 
-                tool.setToolATS(PP, System.currentTimeMillis());
-                tool.setToolMode(PP, true);
+                PP.setToolPreparationATS(tool, System.currentTimeMillis());
+                PP.setToolPreparationMode(tool, true);
             }
-        } else if (ability.getPermissions(player) && tool.inHand(inHand) && !tool.getToolMode(PP)) {
-            if (!ability.getMode(PP) && !cooldownOver(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown())) {
+        }
+        else if (ability.getPermissions(player) && tool.inHand(inHand) && !PP.getToolPreparationMode(tool)) {
+            if (!PP.getAbilityMode(ability) && !cooldownOver(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown())) {
                 player.sendMessage(mcLocale.getString("Skills.TooTired") + ChatColor.YELLOW + " (" + calculateTimeLeft(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown()) + "s)");
                 return;
             }
@@ -118,8 +123,8 @@ public class Skills {
                 player.sendMessage(tool.getRaiseTool());
             }
 
-            tool.setToolATS(PP, System.currentTimeMillis());
-            tool.setToolMode(PP, true);
+            PP.setToolPreparationATS(tool, System.currentTimeMillis());
+            PP.setToolPreparationMode(tool, true);
         }
     }
 
@@ -137,15 +142,15 @@ public class Skills {
         ToolType tool = skill.getTool();
         AbilityType ability = skill.getAbility();
 
-        if (tool.getToolMode(PP) && curTime - (tool.getToolATS(PP) * TIME_CONVERSION_FACTOR) >= FOUR_SECONDS) {
-            tool.setToolMode(PP, false);
+        if (PP.getToolPreparationMode(tool) && curTime - (PP.getToolPreparationATS(tool) * TIME_CONVERSION_FACTOR) >= FOUR_SECONDS) {
+            PP.setToolPreparationMode(tool, false);
             player.sendMessage(tool.getLowerTool());
         }
 
         if (ability.getPermissions(player)) {
-            if (ability.getMode(PP) && (PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR) <= curTime) {
-                ability.setMode(PP, false);
-                ability.setInformed(PP, false);
+            if (PP.getAbilityMode(ability) && (PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR) <= curTime) {
+                PP.setAbilityMode(ability, false);
+                PP.setAbilityInformed(ability, false);
                 player.sendMessage(ability.getAbilityOff());
 
                 for (Player y : player.getWorld().getPlayers()) {
@@ -170,7 +175,7 @@ public class Skills {
         if (skillType != SkillType.ALL) {
             ps.statVal = PP.getSkillLevel(skillType);
         } else {
-            ps.statVal = m.getPowerLevel(player, PP);
+            ps.statVal = PP.getPowerLevel();
         }
 
         ps.name = player.getName();
@@ -185,21 +190,19 @@ public class Skills {
      */
     public static void XpCheckSkill(SkillType skillType, Player player) {
         PlayerProfile PP = Users.getProfile(player);
-
+        int skillups = 0;
+        
         if (PP.getSkillXpLevel(skillType) >= PP.getXpToLevel(skillType)) {
-            int skillups = 0;
 
             while (PP.getSkillXpLevel(skillType) >= PP.getXpToLevel(skillType)) {
-                
-                if (skillType.getMaxLevel() >= PP.getSkillLevel(skillType) + 1) {
+                if ((skillType.getMaxLevel() >= PP.getSkillLevel(skillType) + 1) && (m.getPowerLevelCap() >= PP.getPowerLevel() + 1)) {
                     skillups++;
-                    PP.removeXP(skillType, PP.getXpToLevel(skillType));
-                    PP.skillUp(skillType, 1);
+                    PP.addLevels(skillType, 1);
 
                     McMMOPlayerLevelUpEvent eventToFire = new McMMOPlayerLevelUpEvent(player, skillType);
                     Bukkit.getPluginManager().callEvent(eventToFire);
                 } else {
-                    PP.removeXP(skillType, PP.getXpToLevel(skillType));
+                    PP.addLevels(skillType, 0);
                 }
                 
 //                System.out.println("SkillXPLevel: " + PP.getSkillXpLevel(skillType));
@@ -231,6 +234,16 @@ public class Skills {
                 }
             } else {
                 player.sendMessage(mcLocale.getString("Skills." + capitalized + "Up", new Object[]{String.valueOf(skillups), PP.getSkillLevel(skillType)}));
+            }
+        }
+
+        /* Always update XP Bar (Check if no levels were gained first to remove redundancy) */
+        if (skillups == 0 && LoadProperties.spoutEnabled && player instanceof SpoutPlayer) {
+            SpoutPlayer sPlayer = (SpoutPlayer) player;
+            if (sPlayer.isSpoutCraftEnabled()) {
+                if (LoadProperties.xpbar) {
+                    SpoutStuff.updateXpBar(sPlayer);
+                }
             }
         }
     }
@@ -373,10 +386,11 @@ public class Skills {
     public static void abilityCheck(Player player, SkillType type) {
         PlayerProfile PP = Users.getProfile(player);
         AbilityType ability = type.getAbility();
+        ToolType tool = type.getTool();
 
         if (type.getTool().inHand(player.getItemInHand())) {
-            if (type.getTool().getToolMode(PP)) {
-                type.getTool().setToolMode(PP, false);
+            if (PP.getToolPreparationMode(tool)) {
+                PP.setToolPreparationMode(tool, false);
             }
 
             /*
@@ -384,7 +398,7 @@ public class Skills {
              * show them the too tired message when they take action.
              */
             if (type == SkillType.WOODCUTTING || type == SkillType.AXES) {
-                if (!ability.getMode(PP) && !cooldownOver(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown())) {
+                if (!PP.getAbilityMode(ability) && !cooldownOver(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown())) {
                     player.sendMessage(mcLocale.getString("Skills.TooTired") + ChatColor.YELLOW + " (" + calculateTimeLeft(PP.getSkillDATS(ability) * TIME_CONVERSION_FACTOR, ability.getCooldown()) + "s)");
                     return;
                 }
@@ -392,7 +406,7 @@ public class Skills {
 
             int ticks = 2 + (PP.getSkillLevel(type) / 50);
 
-            if (!ability.getMode(PP) && cooldownOver(PP.getSkillDATS(ability), ability.getCooldown())) {
+            if (!PP.getAbilityMode(ability) && cooldownOver(PP.getSkillDATS(ability), ability.getCooldown())) {
                 player.sendMessage(ability.getAbilityOn());
 
                 for (Player y : player.getWorld().getPlayers()) {
@@ -402,7 +416,7 @@ public class Skills {
                 }
 
                 PP.setSkillDATS(ability, System.currentTimeMillis() + (ticks * TIME_CONVERSION_FACTOR));
-                ability.setMode(PP, true);
+                PP.setAbilityMode(ability, true);
             }
         }
     }

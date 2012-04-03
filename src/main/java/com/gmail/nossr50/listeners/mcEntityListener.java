@@ -30,9 +30,10 @@ import com.gmail.nossr50.mcPermissions;
 import com.gmail.nossr50.config.LoadProperties;
 import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.datatypes.SkillType;
-import com.gmail.nossr50.events.FakeEntityDamageByEntityEvent;
-import com.gmail.nossr50.events.FakeEntityDamageEvent;
+import com.gmail.nossr50.events.fake.FakeEntityDamageByEntityEvent;
+import com.gmail.nossr50.events.fake.FakeEntityDamageEvent;
 import com.gmail.nossr50.party.Party;
+import com.gmail.nossr50.runnables.mcBleedTimer;
 import com.gmail.nossr50.skills.Acrobatics;
 import com.gmail.nossr50.skills.Archery;
 import com.gmail.nossr50.skills.BlastMining;
@@ -111,6 +112,9 @@ public class mcEntityListener implements Listener {
                     event.setCancelled(true);
                     return;
                 }
+                else if (cause == DamageCause.BLOCK_EXPLOSION && mcPermissions.getInstance().demolitionsExpertise(player)) {
+                    BlastMining.demolitionsExpertise(player, event);
+                }
 
                 if (!m.isInvincible(player, event)) {
                     if (cause == DamageCause.FALL && mcPermissions.getInstance().acrobatics(player)) {
@@ -148,17 +152,13 @@ public class mcEntityListener implements Listener {
         LivingEntity x = event.getEntity();
         x.setFireTicks(0);
 
-        /*
-         * Remove bleed track
-         */
-        if (plugin.misc.bleedTracker.contains(x)) {
-            plugin.misc.addToBleedRemovalQue(x);
-        }
+        /* Remove bleed track */
+        mcBleedTimer.remove(x);
 
         Archery.arrowRetrievalCheck(x, plugin);
 
         if (x instanceof Player) {
-            Users.getProfile((Player) x).setBleedTicks(0);
+            Users.getProfile((Player)x).resetBleedTicks();
         }
     }
 
@@ -186,9 +186,12 @@ public class mcEntityListener implements Listener {
         if (entity instanceof TNTPrimed) {
             int id = entity.getEntityId();
 
-            if (plugin.misc.tntTracker.containsKey(id)) {
-                Player player = plugin.misc.tntTracker.get(id);
-                BlastMining.biggerBombs(player, event);
+            if (plugin.tntTracker.containsKey(id)) {
+                Player player = plugin.tntTracker.get(id);
+
+                if (mcPermissions.getInstance().biggerBombs(player)) {
+                    BlastMining.biggerBombs(player, event);
+                }
             }
         }
     }
@@ -205,10 +208,10 @@ public class mcEntityListener implements Listener {
         if (event.getEntity() instanceof TNTPrimed) {
             int id = entity.getEntityId();
 
-            if (plugin.misc.tntTracker.containsKey(id)) {
-                Player player = plugin.misc.tntTracker.get(id);
+            if (plugin.tntTracker.containsKey(id)) {
+                Player player = plugin.tntTracker.get(id);
                 BlastMining.dropProcessing(player, event);
-                plugin.misc.tntTracker.remove(id);
+                plugin.tntTracker.remove(id);
             }
         }
     }
@@ -324,7 +327,7 @@ public class mcEntityListener implements Listener {
                     break;
             }
 
-            PP.addXP(SkillType.TAMING, xp, player);
+            PP.addXP(SkillType.TAMING, xp);
             Skills.XpCheckSkill(SkillType.TAMING, player);
         }
     }

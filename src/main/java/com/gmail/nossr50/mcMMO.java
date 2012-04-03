@@ -1,7 +1,6 @@
 package com.gmail.nossr50;
 
 import com.gmail.nossr50.datatypes.PlayerProfile;
-import com.gmail.nossr50.datatypes.SkillType;
 import com.gmail.nossr50.commands.skills.*;
 import com.gmail.nossr50.commands.spout.*;
 import com.gmail.nossr50.commands.mc.*;
@@ -9,8 +8,6 @@ import com.gmail.nossr50.commands.party.*;
 import com.gmail.nossr50.commands.general.*;
 import com.gmail.nossr50.config.*;
 import com.gmail.nossr50.runnables.*;
-import com.gmail.nossr50.skills.Skills;
-import com.gmail.nossr50.spout.SpoutStuff;
 import com.gmail.nossr50.listeners.mcBlockListener;
 import com.gmail.nossr50.listeners.mcEntityListener;
 import com.gmail.nossr50.listeners.mcPlayerListener;
@@ -18,17 +15,13 @@ import com.gmail.nossr50.locale.mcLocale;
 import com.gmail.nossr50.party.Party;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -36,12 +29,11 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.block.Block;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.player.FileManager;
 
 public class mcMMO extends JavaPlugin {
     public static String maindirectory = "plugins" + File.separator + "mcMMO";
@@ -67,10 +59,10 @@ public class mcMMO extends JavaPlugin {
 
     //Alias - Command
     public HashMap<String, String> aliasMap = new HashMap<String, String>();
+    public HashMap<Entity, Integer> arrowTracker = new HashMap<Entity, Integer>();
+    public HashMap<Integer, Player> tntTracker = new HashMap<Integer, Player>();
 
     public static Database database = null;
-
-    public Misc misc = new Misc(this);
 
     //Config file stuff
     LoadProperties config;
@@ -119,11 +111,11 @@ public class mcMMO extends JavaPlugin {
 
         PluginManager pm = getServer().getPluginManager();
 
-        if (pm.getPlugin("Spout") != null) {
-            LoadProperties.spoutEnabled = true;
-        } else {
-            LoadProperties.spoutEnabled = false;
-        }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, new SpoutStart(this), 20); //Schedule Spout Activation 1 second after start-up
+
+
+
+
 
         //Register events
         pm.registerEvents(playerListener, this);
@@ -146,23 +138,16 @@ public class mcMMO extends JavaPlugin {
 
         System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 
-        //Periodic save timer (Saves every 10 minutes)
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, mcMMO_SaveTimer, 0, LoadProperties.saveInterval * 1200);
+        BukkitScheduler scheduler = getServer().getScheduler();
 
-        //Bleed & Regen timer (Runs every 20 seconds)
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, mcMMO_Timer, 0, 20);
+        //Periodic save timer (Saves every 10 minutes)
+        scheduler.scheduleSyncRepeatingTask(this, new mcSaveTimer(this), 0, LoadProperties.saveInterval * 1200);
+        //Regen & Cooldown timer (Runs every second)
+        scheduler.scheduleSyncRepeatingTask(this, new mcTimer(this), 0, 20);
+        //Bleed timer (Runs every two seconds)
+        scheduler.scheduleSyncRepeatingTask(this, new mcBleedTimer(this), 0, 40);
 
         registerCommands();
-
-        //Spout Stuff
-        if (LoadProperties.spoutEnabled) {
-            SpoutStuff.setupSpoutConfigs();
-            SpoutStuff.registerCustomEvent();
-            SpoutStuff.extractFiles(); //Extract source materials
-
-            FileManager FM = SpoutManager.getFileManager();
-            FM.addToPreLoginCache(this, SpoutStuff.getFiles());
-        }
 
         if (LoadProperties.statsTracking) {
             //Plugin Metrics running in a new thread
@@ -294,8 +279,8 @@ public class mcMMO extends JavaPlugin {
     public void onDisable() {
 
         //Make sure to save player information if the server shuts down
-        for (Player x : Bukkit.getOnlinePlayers()) {
-            Users.getProfile(x).save();
+        for (PlayerProfile x : Users.getProfiles().values()) {
+            x.save();
         }
 
         Bukkit.getServer().getScheduler().cancelTasks(this); //This removes our tasks
@@ -407,7 +392,7 @@ public class mcMMO extends JavaPlugin {
         }
 
         if (LoadProperties.mmoeditEnable) {
-            getCommand("mmoedit").setExecutor(new MmoeditCommand(this));
+            getCommand("mmoedit").setExecutor(new MmoeditCommand());
         }
 
         if (LoadProperties.inspectEnable) {

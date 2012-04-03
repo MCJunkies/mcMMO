@@ -15,7 +15,6 @@ public enum ToolType {
     SWORD(mcLocale.getString("Skills.LowerSword"), mcLocale.getString("Skills.ReadySword"));
 
     private String lowerTool;
-
     private String raiseTool;
 
     private ToolType(String lowerTool, String raiseTool) {
@@ -24,111 +23,41 @@ public enum ToolType {
     }
 
     public String getLowerTool() {
-        return this.lowerTool;
+        return lowerTool;
     }
 
     public String getRaiseTool() {
-        return this.raiseTool;
+        return raiseTool;
     }
 
-    public boolean getToolMode(PlayerProfile PP) {
-        switch (this) {
-            case AXE:
-                return PP.getAxePreparationMode();
-            case FISTS:
-                return PP.getFistsPreparationMode();
-            case HOE:
-                return PP.getHoePreparationMode();
-            case PICKAXE:
-                return PP.getPickaxePreparationMode();
-            case SHOVEL:
-                return PP.getShovelPreparationMode();
-            case SWORD:
-                return PP.getSwordsPreparationMode();
-        }
-        return false;
-    }
-
-    public void setToolMode(PlayerProfile PP, boolean bool) {
-        switch (this) {
-            case AXE:
-                PP.setAxePreparationMode(bool);
-                break;
-            case FISTS:
-                PP.setFistsPreparationMode(bool);
-                break;
-            case HOE:
-                PP.setHoePreparationMode(bool);
-                break;
-            case PICKAXE:
-                PP.setPickaxePreparationMode(bool);
-                break;
-            case SHOVEL:
-                PP.setShovelPreparationMode(bool);
-                break;
-            case SWORD:
-                PP.setSwordsPreparationMode(bool);
-                break;
-        }
-    }
-
-    public long getToolATS(PlayerProfile PP) {
-        switch (this) {
-            case AXE:
-                return PP.getAxePreparationATS();
-            case FISTS:
-                return PP.getFistsPreparationATS();
-            case HOE:
-                return PP.getHoePreparationATS();
-            case PICKAXE:
-                return PP.getPickaxePreparationATS();
-            case SHOVEL:
-                return PP.getShovelPreparationATS();
-            case SWORD:
-                return PP.getSwordsPreparationATS();
-        }
-        return 0;
-    }
-
-    public void setToolATS(PlayerProfile PP, long ats) {
-        switch (this) {
-            case AXE:
-                PP.setAxePreparationATS(ats);
-                break;
-            case FISTS:
-                PP.setFistsPreparationATS(ats);
-                break;
-            case HOE:
-                PP.setHoePreparationATS(ats);
-                break;
-            case PICKAXE:
-                PP.setPickaxePreparationATS(ats);
-                break;
-            case SHOVEL:
-                PP.setShovelPreparationATS(ats);
-                break;
-            case SWORD:
-                PP.setSwordsPreparationATS(ats);
-                break;
-        }
-    }
-
+    /**
+     * Check to see if the item is of the appropriate type.
+     *
+     * @param is The item to check
+     * @return true if the item is the right type, false otherwise
+     */
     public boolean inHand(ItemStack is) {
         switch (this) {
-            case AXE:
-                return ItemChecks.isAxe(is);
-            case FISTS:
-                return is.getType().equals(Material.AIR);
-            case HOE:
-                return ItemChecks.isHoe(is);
-            case PICKAXE:
-                return ItemChecks.isMiningPick(is);
-            case SHOVEL:
-                return ItemChecks.isShovel(is);
-            case SWORD:
-                return ItemChecks.isSword(is);
-        }
-        return false;
-    }
+        case AXE:
+            return ItemChecks.isAxe(is);
 
+        case FISTS:
+            return is.getType().equals(Material.AIR);
+
+        case HOE:
+            return ItemChecks.isHoe(is);
+
+        case PICKAXE:
+            return ItemChecks.isMiningPick(is);
+
+        case SHOVEL:
+            return ItemChecks.isShovel(is);
+
+        case SWORD:
+            return ItemChecks.isSword(is);
+
+        default:
+            return false;
+        }
+    }
 }
