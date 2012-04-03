@@ -60,6 +60,7 @@ public class McrefreshCommand implements CommandExecutor {
 		PP.setAbilityMode(AbilityType.SUPER_BREAKER, false);
 		PP.setAbilityMode(AbilityType.TREE_FELLER, false);
 		PP.setAbilityMode(AbilityType.BERSERK, false);
+		PP.setAbilityMode(AbilityType.PLAGUE, false);
 
 		player.sendMessage(mcLocale.getString("mcPlayerListener.AbilitiesRefreshed"));
 

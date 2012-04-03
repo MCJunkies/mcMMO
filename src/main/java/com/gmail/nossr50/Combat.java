@@ -98,6 +98,8 @@ public class Combat {
                     if (PPa.getAbilityMode(AbilityType.PLAGUE)) {
                         applyAbilityAoE(attacker, target, event.getDamage(), plugin, SkillType.HOES);
                     }
+                    
+                    itemInHand.setDurability((short) (itemInHand.getDurability() + 1));
 
                     startGainXp(attacker, PPa, target, SkillType.HOES, plugin);
 
